@@ -1,12 +1,16 @@
 <template>
-    <div>您好！</div>
-
+    <div>
+        <common-header></common-header>
+    </div>
 </template>
 
 <script>
+import CommonHeader from '@/components/CommonHeader.vue';
 export default {
     name: "MainPage",
-    components: {},
+    components: {
+        CommonHeader
+    },
     data() {
         return {};
     },

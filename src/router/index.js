@@ -25,7 +25,7 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 const routes = [
     {
         path: '/',
-        name: 'Main',
+        name: 'MainPage',
         component: () => import('@/views/Main.vue'),
         redirect: '/MainPage',
         children: [
