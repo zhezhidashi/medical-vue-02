@@ -1,6 +1,6 @@
 <template>
     <div>
-        <common-header></common-header>
+        <common-header :activeIndex="'0'"></common-header>
     </div>
 </template>
 

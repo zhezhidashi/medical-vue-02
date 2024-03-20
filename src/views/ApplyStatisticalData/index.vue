@@ -1,13 +1,14 @@
 <template>
     <div>
-        <common-header :activeIndex="'1'"></common-header>
+        <common-header :activeIndex="'4'"></common-header>
     </div>
+
 </template>
 
 <script>
 import CommonHeader from '@/components/CommonHeader.vue';
 export default {
-    name: "MetadataList",
+    name: "TemplatePage",
     components: {
         CommonHeader,
     },

@@ -1,13 +1,14 @@
 <template>
     <div>
-        <common-header :activeIndex="'1'"></common-header>
+        <common-header :activeIndex="'5-2'"></common-header>
     </div>
+
 </template>
 
 <script>
 import CommonHeader from '@/components/CommonHeader.vue';
 export default {
-    name: "MetadataList",
+    name: "ApprovalPageHasNetwork",
     components: {
         CommonHeader,
     },

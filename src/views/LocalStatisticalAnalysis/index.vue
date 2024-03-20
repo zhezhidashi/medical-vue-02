@@ -1,12 +1,17 @@
 <template>
-    <div>您好！</div>
+    <div>
+        <common-header :activeIndex="'3'"></common-header>
+    </div>
 
 </template>
 
 <script>
+import CommonHeader from '@/components/CommonHeader.vue';
 export default {
     name: "TemplatePage",
-    components: {},
+    components: {
+        CommonHeader,
+    },
     data() {
         return {};
     },
