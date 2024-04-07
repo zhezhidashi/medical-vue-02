@@ -70,20 +70,12 @@ const routes = [
                 component: () => import('@/views/ApplyStatisticalData')
             },
             {
-                path: '/ApprovalPage',
-                name: 'ApprovalPage',
+                path: '/DigitalObjectFerry',
+                name: 'DigitalObjectFerry',
                 meta: {
-                    title: '审批页面'
+                    title: '数字对象摆渡'
                 },
-                component: () => import('@/views/ApprovalPage')
-            },
-            {
-                path: '/ApprovalPageHasNetwork',
-                name: 'ApprovalPageHasNetwork',
-                meta: {
-                    title: '审批单页面-有网'
-                },
-                component: () => import('@/views/ApprovalPageHasNetwork')
+                component: () => import('@/views/DigitalObjectFerry')
             }
         ]
     },
