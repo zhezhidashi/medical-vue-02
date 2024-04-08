@@ -47,6 +47,10 @@ export default {
                 this.$router.push('/DigitalObjectFerry');
             }
         },
+        logOut() {
+            console.log('logOut');
+            this.$router.push('/Login');
+        },
     },
 }
 </script>

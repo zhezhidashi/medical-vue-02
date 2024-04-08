@@ -10,7 +10,7 @@
         </div>
 
         <div style="margin: 20px; display: flex; justify-content: center;">
-            <div style="display: flex; flex-direction: column; justify-content: center; width: 70vw; 
+            <div style="display: flex; flex-direction: column; justify-content: center; width: 70vw; padding: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
             <div v-for="(item, index) in digitalObjectList" :key="index">
                 <el-checkbox style="margin: 5px;" v-model="item.selected">{{ item.name }}</el-checkbox>
@@ -20,7 +20,7 @@
         
 
         <div style="text-align: center;">
-            <el-button type="primary">摆渡</el-button>
+            <el-button type="primary" @click="ferry">摆渡</el-button>
         </div>
 
     </div>
@@ -45,7 +45,7 @@ export default {
                     selected: false,
                 },
                 {
-                    name: '数字对象3333',
+                    name: '数字对象333',
                     selected: false,
                 },
             ],
@@ -82,7 +82,11 @@ export default {
     methods: {
         queryDigitalObject() {
             console.log(this.dateValue);
-        }
+        },
+        ferry() {
+            const selectedDigitalObject = this.digitalObjectList.filter(item => item.selected);
+            console.log(selectedDigitalObject);
+        },
     },
 }
 </script>

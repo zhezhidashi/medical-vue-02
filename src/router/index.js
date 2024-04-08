@@ -76,6 +76,14 @@ const routes = [
                     title: '数字对象摆渡'
                 },
                 component: () => import('@/views/DigitalObjectFerry')
+            },
+            {
+                path: '/Login',
+                name: 'Login',
+                meta: {
+                    title: '登录'
+                },
+                component: () => import('@/views/Login')
             }
         ]
     },
