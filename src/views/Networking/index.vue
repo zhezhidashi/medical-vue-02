@@ -7,7 +7,7 @@
 <script>
 import CommonHeader from '@/components/CommonHeader.vue';
 export default {
-    name: "MetadataList",
+    name: "Networking",
     components: {
         CommonHeader,
     },

@@ -1,14 +1,13 @@
 <template>
     <div>
-        <common-header :activeIndex="'4'"></common-header>
+        <common-header :activeIndex="'7'"></common-header>
     </div>
-
 </template>
 
 <script>
 import CommonHeader from '@/components/CommonHeader.vue';
 export default {
-    name: "TemplatePage",
+    name: "DigitalObjectSearch",
     components: {
         CommonHeader,
     },

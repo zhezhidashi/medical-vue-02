@@ -3,18 +3,14 @@
         <common-header :activeIndex="'0'"></common-header>
         <div>
             <el-row class="home" :gutter="20">
-                <el-col :span="20" style="margin-top: 20px">
+                <el-col :span="8" style="margin-top: 20px">
                     <el-card shadow="hover">
-                        <div class="user">
+                        <div class="user" style="text-align: center;">
                             <img src="userImg.png" />
                             <div class="userinfo">
-                                <p class="name">User</p>
-                                <p class="access">普通用户</p>
+                                <div style="font-size: 18px; line-height: 200%;">{{ user.username }}</div>
+                                <div style="font-size: 18px; line-height: 200%;"> {{ user.userType }} </div>
                             </div>
-                        </div>
-                        <div class="login-info">
-                            <p>上次登录的时间：<span>2024-1-1</span></p>
-                            <p>上次登录的地点：<span>北京</span></p>
                         </div>
                     </el-card>
                 </el-col>
@@ -31,9 +27,22 @@ export default {
         CommonHeader
     },
     data() {
-        return {};
+        return {
+            user: {
+                username: '',
+                userType: '',
+            }
+        };
     },
-    mounted() { },
+    mounted() { 
+        this.user.username = this.$store.state.user.username;
+        const userType = this.$store.state.user.userType;
+        if (userType === 'admin') {
+            this.user.userType = '管理员';
+        } else if (userType === 'user') {
+            this.user.userType = '普通用户';
+        }
+    },
     methods: {},
 }
 </script>

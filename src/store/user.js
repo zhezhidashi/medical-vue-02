@@ -1,7 +1,9 @@
 import Cookie from 'js-cookie'
 export default {
     state: {
-        token: ""
+        token: "",
+        username: "",
+        userType: "",
     },
     mutations: {
         setToken(state, val) {
@@ -14,6 +16,28 @@ export default {
         },
         getToken(state) {
             state.token = state.token || Cookie.get("token")
+        },
+        setUsername(state, val) {
+            state.username = val
+            Cookie.set('username', val)
+        },
+        clearUsername(state) {
+            state.username = ''
+            Cookie.remove('username')
+        },
+        getUsername(state) {
+            state.username = state.username || Cookie.get("username")
+        },
+        setUserType(state, val) {
+            state.userType = val
+            Cookie.set('userType', val)
+        },
+        clearUserType(state) {
+            state.userType = ''
+            Cookie.remove('userType')
+        },
+        getUserType(state) {
+            state.userType = state.userType || Cookie.get("userType")
         }
     }
 }

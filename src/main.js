@@ -10,7 +10,7 @@ Vue.use(ElementUI);
 
 // 引入router
 import router from './router'
-// page title修改
+// page title修改 以及 登录保护
 router.beforeEach((to, from, next) => {
     document.body.scrollTop = 0
     // 兼容firefox
@@ -20,6 +20,21 @@ router.beforeEach((to, from, next) => {
     // 鼠标点击
     if (to.meta.title) {
         document.title = to.meta.title;
+    }
+    // 没登录的话强制跳到登录页面
+    store.commit('getToken')
+    const token = store.state.user.token
+    const username = store.state.user.username
+    const userType = store.state.user.userType
+    if ((!token || !username || !userType) && to.name !== 'Login') {
+        next({
+            name: 'Login'
+        })
+    }
+    else if (token && username && userType && to.name === 'Login') {
+        next({ name: 'MainPage' })
+    }
+    else {
         next()
     }
 })

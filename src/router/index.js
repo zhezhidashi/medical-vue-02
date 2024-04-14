@@ -38,36 +38,68 @@ const routes = [
                 component: () => import('@/views/MainPage')
             },
             {
-                path: '/MetadataList',
-                name: 'MetadataList',
+                path: '/Login',
+                name: 'Login',
                 meta: {
-                    title: '项目元数据列表'
+                    title: '登录'
                 },
-                component: () => import('@/views/MetadataList')
+                component: () => import('@/views/Login')
             },
             {
-                path: '/ApplyData',
-                name: 'ApplyData',
+                path: '/Networking',
+                name: 'Networking',
                 meta: {
-                    title: '申请数据'
+                    title: '组网'
                 },
-                component: () => import('@/views/ApplyData')
+                component: () => import('@/views/Networking')
             },
             {
-                path: '/LocalStatisticalAnalysis',
-                name: 'LocalStatisticalAnalysis',
+                path: '/ProjectManage',
+                name: 'ProjectManage',
                 meta: {
-                    title: '本地统计分析'
+                    title: '项目管理'
                 },
-                component: () => import('@/views/LocalStatisticalAnalysis')
+                component: () => import('@/views/ProjectManage')
             },
             {
-                path: '/ApplyStatisticalData',
-                name: 'ApplyStatisticalData',
+                path: '/AccountManage',
+                name: 'AccountManage',
                 meta: {
-                    title: '申请统计数据'
+                    title: '账号管理'
                 },
-                component: () => import('@/views/ApplyStatisticalData')
+                component: () => import('@/views/AccountManage')
+            },
+            {
+                path: '/RelationshipSystem',
+                name: 'RelationshipSystem',
+                meta: {
+                    title: '关系系统'
+                },
+                component: () => import('@/views/RelationshipSystem')
+            },
+            {
+                path: '/DigitalObjectApply',
+                name: 'DigitalObjectApply',
+                meta: {
+                    title: '数字对象申请'
+                },
+                component: () => import('@/views/DigitalObjectApply')
+            },
+            {
+                path: '/DigitalObjectApproval',
+                name: 'DigitalObjectApproval',
+                meta: {
+                    title: '数字对象审批'
+                },
+                component: () => import('@/views/DigitalObjectApproval')
+            },
+            {
+                path: '/DigitalObjectSearch',
+                name: 'DigitalObjectSearch',
+                meta: {
+                    title: '数字对象检索'
+                },
+                component: () => import('@/views/DigitalObjectSearch')
             },
             {
                 path: '/DigitalObjectFerry',
@@ -77,14 +109,6 @@ const routes = [
                 },
                 component: () => import('@/views/DigitalObjectFerry')
             },
-            {
-                path: '/Login',
-                name: 'Login',
-                meta: {
-                    title: '登录'
-                },
-                component: () => import('@/views/Login')
-            }
         ]
     },
 ]
