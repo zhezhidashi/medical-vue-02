@@ -1,67 +1,38 @@
 <template>
     <div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                <el-menu-item index="0">主页</el-menu-item>
-                <el-menu-item v-show="isAdmin" index="1">组网</el-menu-item>
-                <el-menu-item v-show="isAdmin" index="2">项目管理</el-menu-item>
-                <el-menu-item v-show="isAdmin" index="3">账号管理</el-menu-item>
-                <el-menu-item index="4">关系系统</el-menu-item>
-                <el-menu-item index="5">数字对象申请</el-menu-item>
-                <el-menu-item v-show="isAdmin" index="6">数字对象审批</el-menu-item>
-                <el-menu-item index="7">数字对象检索</el-menu-item>
-                <el-menu-item index="8">数字对象摆渡</el-menu-item>
-                
-            </el-menu>
-            <div class="r-content">
-                <el-dropdown trigger="click" size="mini">
-                    <div class="block"><el-avatar :size="50" src="userImg.png"></el-avatar></div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex;">
+                <img src="favicon.png" style="height: 50px; margin-right: 10px;" />
+                <div style="font-size: 25px; line-height: 200%;">医学临床数据交换系统</div>
+            </div>
+            <div class="r-content" v-show="path !== '/Login'">
+                <el-dropdown trigger="click" size="mini"  style="display: flex; align-items: center;">
+                    <el-avatar :size="50" src="userImg.png"></el-avatar>
                     <el-dropdown-menu>
                         <el-dropdown-item @click.native="logOut">登出</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
         </div>
+
     </div>
 </template>
 
 <script>
 export default {
-    name: "CommonHeader",
+    name: "CommonAside",
     data() {
         return {
-            isAdmin: false,
-        };
+            path: ''
+        }  
     },
     props: {
         activeIndex: String,
     },
     mounted() {
-        this.isAdmin = this.$store.state.user.userType === 'admin';
+        this.path = this.$router.currentRoute.path;
     },
     methods: {
-        handleSelect(key, keyPath) {
-            console.log(key, keyPath);
-            if (key === '0') {
-                this.$router.push('/MainPage')
-            } else if (key === '1') {
-                this.$router.push('/Networking')
-            } else if (key === '2') {
-                this.$router.push('/ProjectManage')
-            } else if (key === '3') {
-                this.$router.push('/AccountManage')
-            } else if (key === '4') {
-                this.$router.push('/RelationshipSystem')
-            } else if (key === '5') {
-                this.$router.push('/DigitalObjectApply')
-            } else if (key === '6') {
-                this.$router.push('/DigitalObjectApproval')
-            } else if (key === '7') {
-                this.$router.push('/DigitalObjectSearch')
-            } else if (key === '8') {
-                this.$router.push('/DigitalObjectFerry')
-            }
-        },
         logOut() {
             this.$store.commit('clearToken');
             this.$store.commit('clearUsername');

@@ -1,26 +1,28 @@
 <template>
-    <div>
-        <common-header activeIndex="8"></common-header>
-        <div style="text-align: center; line-height:200%; font-size: 20px; height: 60px;">选择导出的时间段</div>
-        <div style="display: flex; align-items: center; justify-content: center;">
-            <el-date-picker v-model="dateValue" type="daterange" unlink-panels range-separator="至"
-                start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
-            </el-date-picker>
-            <el-button style="margin-left: 10px;" type="primary" @click="queryDigitalObject">查询</el-button>
-        </div>
-
-        <div style="margin: 20px; display: flex; justify-content: center;">
-            <div style="display: flex; flex-direction: column; justify-content: center; width: 70vw; padding: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
-            <div v-for="(item, index) in digitalObjectList" :key="index">
-                <el-checkbox style="margin: 5px;" v-model="item.selected">{{ item.name }}</el-checkbox>
+    <div style="display: flex;">
+        <common-aside activeIndex="8"></common-aside>
+        <div style="display: flex; flex-direction: column; align-items: center; background-color: aqua; width: 100%;">
+            <div style="text-align: center; line-height:200%; font-size: 20px; height: 60px;">选择导出的时间段</div>
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <el-date-picker v-model="dateValue" type="daterange" unlink-panels range-separator="至"
+                    start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+                </el-date-picker>
+                <el-button style="margin-left: 10px;" type="primary" @click="queryDigitalObject">查询</el-button>
             </div>
-        </div>
-        </div>
-        
 
-        <div style="text-align: center;">
-            <el-button type="primary" @click="ferry">摆渡</el-button>
+            <div style="margin: 20px; display: flex; justify-content: center;">
+                <div style="display: flex; flex-direction: column; justify-content: center; width: 70vw; padding: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
+                    <div v-for="(item, index) in digitalObjectList" :key="index">
+                        <el-checkbox style="margin: 5px;" v-model="item.selected">{{ item.name }}</el-checkbox>
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="text-align: center;">
+                <el-button type="primary" @click="ferry">摆渡</el-button>
+            </div>
         </div>
 
     </div>
@@ -28,10 +30,10 @@
 </template>
 
 <script>
-import CommonHeader from '@/components/CommonHeader.vue';
+import CommonAside from '@/components/CommonAside.vue';
 export default {
     name: "MainPage",
-    components: { CommonHeader },
+    components: { CommonAside },
     data() {
         return {
             dateValue: '',

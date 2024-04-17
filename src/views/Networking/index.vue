@@ -1,15 +1,15 @@
 <template>
-    <div>
-        <common-header :activeIndex="'1'"></common-header>
+    <div style="display: flex;">
+        <common-aside :activeIndex="'1'"></common-aside>
     </div>
 </template>
 
 <script>
-import CommonHeader from '@/components/CommonHeader.vue';
+import CommonAside from '@/components/CommonAside.vue';
 export default {
     name: "Networking",
     components: {
-        CommonHeader,
+        CommonAside,
     },
     data() {
         return {};

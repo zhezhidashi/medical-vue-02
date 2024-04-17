@@ -1,28 +1,34 @@
 <template>
-    <div>
-        <common-header :activeIndex="'6'"></common-header>
-        <el-table :data="approvalTable" stripe border>
-            <el-table-column prop="dataItem" label="数据条目"></el-table-column>
-            <el-table-column prop="infoItem" label="信息项"></el-table-column>
-            <el-table-column prop="doi" label="待审批DOI"></el-table-column>
-            <el-table-column prop="applyFile" label="申请审批文件"></el-table-column>
-            <el-table-column prop="applyType" label="申请类型"></el-table-column>
-            <el-table-column prop="operation" label="操作">
-                <template slot-scope="scope">
-                    <el-button type="primary" @click="passApply(scope.row, scope.$index)" size="mini">通过</el-button>
-                    <el-button type="danger" @click="rejectApply(scope.row, scope.$index)" size="mini">拒绝</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+    <div style="display: flex;">
+        <common-aside :activeIndex="'6'"></common-aside>
+
+        <div style="display: flex; flex-direction: column; align-items: center; background-color: aqua; width: 100%;">
+            <el-table :data="approvalTable" style="width: 95%;" stripe border>
+                <el-table-column prop="dataItem" label="数据条目"></el-table-column>
+                <el-table-column prop="infoItem" label="信息项"></el-table-column>
+                <el-table-column prop="doi" label="待审批DOI"></el-table-column>
+                <el-table-column prop="applyFile" label="申请审批文件"></el-table-column>
+                <el-table-column prop="applyType" label="申请类型"></el-table-column>
+                <el-table-column prop="operation" label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="primary" @click="passApply(scope.row, scope.$index)"
+                            size="mini">通过</el-button>
+                        <el-button type="danger" @click="rejectApply(scope.row, scope.$index)"
+                            size="mini">拒绝</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+
     </div>
 </template>
 
 <script>
-import CommonHeader from '@/components/CommonHeader.vue';
+import CommonAside from '@/components/CommonAside.vue';
 export default {
     name: "DigitalObjectApproval",
     components: {
-        CommonHeader,
+        CommonAside,
     },
     data() {
         return {
@@ -34,7 +40,7 @@ export default {
             ],
         };
     },
-    mounted() {},
+    mounted() { },
     methods: {
         // 通过审批
         passApply(row, index) {
@@ -48,5 +54,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

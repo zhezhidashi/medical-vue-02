@@ -1,6 +1,8 @@
 <template>
 	<el-container>
-        <!-- <el-header :height="'5vh'"></el-header> -->
+        <el-header style="height: 50px;">
+            <common-header ></common-header>
+        </el-header>
         <el-main>
             <router-view></router-view>
         </el-main>
@@ -10,10 +12,12 @@
 
 
 <script>
-
+import CommonHeader from '@/components/CommonHeader.vue';
 export default {
 	name: "Main",
-	components: {},
+	components: {
+        CommonHeader,
+    },
 	data() {
 		return {};
 	},

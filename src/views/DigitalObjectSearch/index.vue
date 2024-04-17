@@ -1,15 +1,17 @@
 <template>
-    <div>
-        <common-header :activeIndex="'7'"></common-header>
+    <div style="display: flex;">
+        <common-aside :activeIndex="'7'"></common-aside>
+        <div style="display: flex; flex-direction: column; align-items: center; background-color: aqua; width: 100%;">
+        </div>
     </div>
 </template>
 
 <script>
-import CommonHeader from '@/components/CommonHeader.vue';
+import CommonAside from '@/components/CommonAside.vue';
 export default {
     name: "DigitalObjectSearch",
     components: {
-        CommonHeader,
+        CommonAside,
     },
     data() {
         return {};

@@ -1,15 +1,17 @@
 <template>
-    <div>
-        <common-header :activeIndex="'4'"></common-header>
+    <div style="display: flex;">
+        <common-aside :activeIndex="'4'"></common-aside>
+        <div style="display: flex; flex-direction: column; align-items: center; background-color: aqua; width: 100%;">
+        </div>
     </div>
 </template>
 
 <script>
-import CommonHeader from '@/components/CommonHeader.vue';
+import CommonAside from '@/components/CommonAside.vue';
 export default {
     name: "RelationshipSystem",
     components: {
-        CommonHeader,
+        CommonAside,
     },
     data() {
         return {};
