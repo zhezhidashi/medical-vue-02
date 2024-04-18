@@ -5,11 +5,11 @@
             <el-menu-item v-show="isAdmin" index="1">组网</el-menu-item>
             <el-menu-item v-show="isAdmin" index="2">项目管理</el-menu-item>
             <el-menu-item v-show="isAdmin" index="3">账号管理</el-menu-item>
-            <el-menu-item index="4">关系系统</el-menu-item>
-            <el-menu-item index="5">数字对象申请</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="4">关系系统</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="5">数字对象申请</el-menu-item>
             <el-menu-item v-show="isAdmin" index="6">数字对象审批</el-menu-item>
-            <el-menu-item index="7">数字对象检索</el-menu-item>
-            <el-menu-item index="8">数字对象摆渡</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="7">数字对象检索</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="8">数字对象摆渡</el-menu-item>
         </el-menu>
     </div>
 </template>

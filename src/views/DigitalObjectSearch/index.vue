@@ -1,7 +1,7 @@
 <template>
     <div style="display: flex;">
         <common-aside :activeIndex="'7'"></common-aside>
-        <div style="display: flex; flex-direction: column; align-items: center; background-color: aqua; width: 100%;">
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
         </div>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
     <div style="display: flex;">
         <common-aside activeIndex="8"></common-aside>
-        <div style="display: flex; flex-direction: column; align-items: center; background-color: aqua; width: 100%;">
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <div style="text-align: center; line-height:200%; font-size: 20px; height: 60px;">选择导出的时间段</div>
             <div style="display: flex; align-items: center; justify-content: center;">
                 <el-date-picker v-model="dateValue" type="daterange" unlink-panels range-separator="至"

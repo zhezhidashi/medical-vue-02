@@ -39,13 +39,13 @@ export const postForm = (requestUrl, params, This, callback) => {
 
 // 登录模拟
 export const login = (requestUrl, params, This, callback) => {
-    if(params.loginType === "user" && params.username === 'user' && params.password === 'user') {
+    if(params.username === 'user' && params.password === 'user') {
         store.commit('setToken', 'user')
         store.commit('setUsername', params.username)
         store.commit('setUserType', 'user')
         callback({code: 200, msg: '登录成功'})
     }
-    else if(params.loginType === "admin" && params.username === 'admin' && params.password === 'admin') {
+    else if(params.username === 'admin' && params.password === 'admin') {
         store.commit('setToken', 'admin')
         store.commit('setUsername', params.username)
         store.commit('setUserType', 'admin')

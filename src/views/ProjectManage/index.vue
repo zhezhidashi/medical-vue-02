@@ -1,12 +1,33 @@
 <template>
     <div style="display: flex;">
         <common-aside :activeIndex="'2'"></common-aside>
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
 
-        <div style="display: flex; flex-direction: column; align-items: center; background-color: aqua; width: 100%;">
+            <el-form :model="searchForm" label-width="auto" class="SearchForm">
+                <el-form-item prop="projectType" label="项目类型" class="SearchFormItem">
+                    <el-select v-model="searchForm.projectType" placeholder="请选择">
+                        <el-option label="本机构牵头项目" value="0"></el-option>
+                        <el-option label="本机构参与项目" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="projectName" label="项目名称" class="SearchFormItem">
+                    <el-input v-model="searchForm.projectName"></el-input>
+                </el-form-item>
+                <el-form-item prop="approvalStatus" label="审批状态" class="SearchFormItem">
+                    <el-select v-model="searchForm.approvalStatus" placeholder="请选择">
+                        <el-option label="已通过" value="0"></el-option>
+                        <el-option label="不通过" value="1"></el-option>
+                        <el-option label="待审批" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+
+            <el-button type="primary" style="margin: 20px;">搜索</el-button>
+            <el-divider></el-divider>
+
             <div style="display: flex; align-items: center; justify-content: center;">
                 <el-button @click="addProject" type="primary" style="margin: 10px;">增加项目</el-button>
             </div>
-
             <el-table :data="projectTable" stripe border style="width: 95%;">
                 <el-table-column prop="institutionDoi" label="项目所属机构"></el-table-column>
                 <el-table-column prop="name" label="项目名称"></el-table-column>
@@ -44,7 +65,7 @@
 
             <el-dialog title="增加项目" :visible.sync="addProjectDialogVisible" width="80%"
                 :before-close="addProjectCancel">
-                <el-form :model="addProjectItem" label-width="auto" class="demo-ruleForm">
+                <el-form :model="addProjectItem" label-width="auto">
                     <el-form-item prop="institutionDoi" label="项目所属机构">
                         <el-input v-model="addProjectItem.institutionDoi"></el-input>
                     </el-form-item>
@@ -74,6 +95,13 @@ export default {
     },
     data() {
         return {
+            // 搜索表单
+            searchForm: {
+                projectType: "",
+                projectName: "",
+                approvalStatus: "",
+            },
+
             // 项目列表
             projectTable: [
                 {
@@ -182,4 +210,13 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.SearchForm {
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+.SearchFormItem {
+    margin: 0 20px 0 20px;
+}
+</style>

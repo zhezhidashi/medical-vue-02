@@ -2,7 +2,7 @@
     <div style="display: flex;">
         <common-aside :activeIndex="'6'"></common-aside>
 
-        <div style="display: flex; flex-direction: column; align-items: center; background-color: aqua; width: 100%;">
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <el-table :data="approvalTable" style="width: 95%;" stripe border>
                 <el-table-column prop="dataItem" label="数据条目"></el-table-column>
                 <el-table-column prop="infoItem" label="信息项"></el-table-column>

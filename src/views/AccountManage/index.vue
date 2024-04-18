@@ -2,7 +2,7 @@
     <div style="display: flex;">
         <common-aside :activeIndex="'3'"></common-aside>
 
-        <div style="display: flex; flex-direction: column; align-items: center; background-color: aqua; width: 100%;">
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <div style="display: flex; align-items: center; justify-content: center;">
                 <el-button @click="addUser" type="primary" style="margin: 10px;">增加用户</el-button>
             </div>

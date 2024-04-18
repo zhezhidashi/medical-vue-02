@@ -1,6 +1,8 @@
 <template>
     <div style="display: flex;">
         <common-aside :activeIndex="'1'"></common-aside>
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+        </div> 
     </div>
 </template>
 
