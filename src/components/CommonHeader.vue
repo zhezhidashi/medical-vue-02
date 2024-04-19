@@ -9,6 +9,7 @@
                 <el-avatar :size="50" src="userImg.png"></el-avatar>
                 <el-dropdown-menu>
                     <el-dropdown-item @click.native="logOut">登出</el-dropdown-item>
+                    <el-dropdown-item @click.native="goToUserCenter">用户中心</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -41,6 +42,9 @@ export default {
             this.$store.commit('clearUserType');
             this.$router.push('/Login');
         },
+        goToUserCenter() {
+            this.$router.push('/UserCenter');
+        }
     },
 }
 </script>
