@@ -8,7 +8,6 @@
             </div>
             <el-table :data="userTable" style="width: 95%;" stripe border>
                 <el-table-column prop="username" label="用户名"></el-table-column>
-                <el-table-column prop="password" label="密码"></el-table-column>
                 <el-table-column prop="userType" label="用户类型"></el-table-column>
                 <el-table-column prop="projects" label="已授权项目">
                     <template slot-scope="props">
@@ -31,12 +30,15 @@
 
             <el-dialog title="增加用户" :visible.sync="addUserDialogVisible" width="90%"
                 :before-close="addUserCancel">
-                <el-form :model="addUserForm" ref="addUserForm" label-width="auto" class="demo-ruleForm">
+                <el-form :model="addUserForm" ref="addUserForm" label-width="auto" >
                     <el-form-item prop="username" label="用户名">
                         <el-input v-model="addUserForm.username"></el-input>
                     </el-form-item>
                     <el-form-item prop="password" label="密码">
                         <el-input v-model="addUserForm.password"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="confirmPassword" label="确认密码">
+                        <el-input v-model="addUserForm.confirmPassword"></el-input>
                     </el-form-item>
                     <el-form-item prop="userType" label="用户类型">
                         <el-select v-model="addUserForm.userType" placeholder="请选择">
@@ -73,13 +75,14 @@
 
             <el-dialog title="修改用户" :visible.sync="modifyUserDialogVisible" width="90%"
                 :before-close="modifyUserCancel">
-                <el-form :model="modifyUserForm" ref="modifyUserForm" label-width="auto" class="demo-ruleForm">
+                <el-form :model="modifyUserForm" ref="modifyUserForm" label-width="auto">
                     <el-form-item prop="username" label="用户名">
                         <el-input v-model="modifyUserForm.username"></el-input>
                     </el-form-item>
                     <el-form-item prop="password" label="密码">
                         <el-input v-model="modifyUserForm.password"></el-input>
                     </el-form-item>
+                    
                     <el-form-item prop="userType" label="用户类型">
                         <el-select v-model="modifyUserForm.userType" placeholder="请选择">
                             <el-option label="管理员" value="管理员"></el-option>
@@ -146,6 +149,7 @@ export default {
             addUserForm: {
                 username: '',
                 password: '',
+                confirmPassword: '',
                 userType: '',
                 projects: [],
             },
@@ -176,6 +180,7 @@ export default {
             this.addUserForm = {
                 username: '',
                 password: '',
+                confirmPassword: '',
                 userType: '',
                 projects: [],
             };
@@ -237,6 +242,15 @@ export default {
             if (!this.addUserForm.userType) {
                 this.$message({
                     message: '用户类型不能为空',
+                    type: 'warning'
+                });
+                return;
+            }
+
+            // 检查密码是否一致
+            if (this.addUserForm.password !== this.addUserForm.confirmPassword) {
+                this.$message({
+                    message: '两次输入的密码不一致',
                     type: 'warning'
                 });
                 return;

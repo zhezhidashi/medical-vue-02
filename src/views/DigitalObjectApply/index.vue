@@ -17,7 +17,7 @@
 
             <el-dialog title="增加申请" :visible.sync="addApplyDialogVisible" width="80%"
                 :before-close="addApplyCancel">
-                <el-form :model="applyForm" ref="applyForm" class="demo-ruleForm" label-width="auto">
+                <el-form :model="applyForm" ref="applyForm" label-width="auto">
 
                     <el-form-item label="数据条目" prop="dataItem">
                         <el-input v-model="applyForm.dataItem"></el-input>

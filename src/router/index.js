@@ -109,14 +109,6 @@ const routes = [
                 },
                 component: () => import('@/views/DigitalObjectFerry')
             },
-            {
-                path: '/UserCenter',
-                name: 'UserCenter',
-                meta: {
-                    title: '用户中心'
-                },
-                component: () => import('@/views/UserCenter')
-            },
         ]
     },
 ]

@@ -9,10 +9,26 @@
                 <el-avatar :size="50" src="userImg.png"></el-avatar>
                 <el-dropdown-menu>
                     <el-dropdown-item @click.native="logOut">登出</el-dropdown-item>
-                    <el-dropdown-item @click.native="goToUserCenter">用户中心</el-dropdown-item>
+                    <el-dropdown-item @click.native="modifyPassword">修改密码</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
+
+        <el-dialog title="修改密码" :visible.sync="modifyPasswordDialogVisible" width="50%"
+            :before-close="modifyPasswordCancel">
+            <el-form :model="passwordForm" label-width="auto" >
+                <el-form-item prop="newPassword" label="新密码">
+                    <el-input v-model="passwordForm.newPassword" type="password"></el-input>
+                </el-form-item>
+                <el-form-item prop="confirmPassword" label="确认密码">
+                    <el-input v-model="passwordForm.confirmPassword" type="password"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="modifyPasswordCancel">取 消</el-button>
+                <el-button type="primary" @click="modifyPasswordConfirm">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -21,7 +37,12 @@ export default {
     name: "CommonAside",
     data() {
         return {
-            path: ''
+            path: '',
+            passwordForm: {
+                newPassword: '',
+                confirmPassword: ''
+            },
+            modifyPasswordDialogVisible: false,
         }  
     },
     props: {
@@ -42,8 +63,33 @@ export default {
             this.$store.commit('clearUserType');
             this.$router.push('/Login');
         },
-        goToUserCenter() {
-            this.$router.push('/UserCenter');
+        modifyPassword() {
+            this.modifyPasswordDialogVisible = true;
+        },
+        modifyPasswordCancel() {
+            this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.modifyPasswordDialogVisible = false;
+                this.passwordForm.newPassword = '';
+                this.passwordForm.confirmPassword = '';
+            }).catch(() => { });
+        },
+        modifyPasswordConfirm() {
+            if (this.passwordForm.newPassword === '') {
+                this.$message.error('密码不能为空');
+                return;
+            }
+            if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
+                this.$message.error('两次密码不一致');
+                return;
+            }
+            this.$message.success('修改成功');
+            this.modifyPasswordDialogVisible = false;
+            this.passwordForm.newPassword = '';
+            this.passwordForm.confirmPassword = '';
         }
     },
 }

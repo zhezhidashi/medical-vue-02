@@ -46,7 +46,7 @@
 
             <el-dialog title="修改项目" :visible.sync="modifyProjectDialogVisible" width="80%"
                 :before-close="modifyProjectCancel">
-                <el-form :model="modifyProjectItem" label-width="auto" class="demo-ruleForm">
+                <el-form :model="modifyProjectItem" label-width="auto">
                     <el-form-item prop="institutionDoi" label="项目所属机构">
                         <el-input v-model="modifyProjectItem.institutionDoi"></el-input>
                     </el-form-item>
