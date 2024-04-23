@@ -5,16 +5,18 @@
 
             <el-form :model="searchForm" label-width="auto" class="SearchForm">
                 <el-form-item prop="projectType" label="项目类型" class="SearchFormItem">
-                    <el-select v-model="searchForm.projectType" placeholder="请选择">
+                    <el-select v-model="searchForm.projectType" placeholder="请选择" style="width: 200px;">
                         <el-option label="本机构牵头项目" value="0"></el-option>
                         <el-option label="本机构参与项目" value="1"></el-option>
                     </el-select>
                 </el-form-item>
+
                 <el-form-item prop="projectName" label="项目名称" class="SearchFormItem">
-                    <el-input v-model="searchForm.projectName"></el-input>
+                    <el-input v-model="searchForm.projectName" style="width: 200px;"></el-input>
                 </el-form-item>
+
                 <el-form-item prop="approvalStatus" label="审批状态" class="SearchFormItem">
-                    <el-select v-model="searchForm.approvalStatus" placeholder="请选择">
+                    <el-select v-model="searchForm.approvalStatus" placeholder="请选择" style="width: 200px;">
                         <el-option label="已通过" value="0"></el-option>
                         <el-option label="不通过" value="1"></el-option>
                         <el-option label="待审批" value="2"></el-option>
@@ -22,12 +24,13 @@
                 </el-form-item>
             </el-form>
 
-            <el-button type="primary" style="margin: 20px;">搜索</el-button>
+            <el-button type="primary">搜索</el-button>
             <el-divider></el-divider>
 
             <div style="display: flex; align-items: center; justify-content: center;">
-                <el-button @click="addProject" type="primary" style="margin: 10px;">增加项目</el-button>
+                <el-button @click="addProject" type="primary" style="margin-bottom: 24px;">增加项目</el-button>
             </div>
+
             <el-table :data="projectTable" stripe border style="width: 95%;">
                 <el-table-column prop="institutionDoi" label="项目所属机构"></el-table-column>
                 <el-table-column prop="name" label="项目名称"></el-table-column>
@@ -213,10 +216,12 @@ export default {
 <style scoped>
 .SearchForm {
     display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    
+    margin-top: 24px;
 }
 .SearchFormItem {
-    margin: 0 20px 0 20px;
+    margin: 0 24px 24px 24px;
 }
 </style>

@@ -3,11 +3,30 @@
         <common-aside :activeIndex="'5'"></common-aside>
 
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+
+            <el-form :model="searchForm" label-width="auto" class="SearchForm">
+                <el-form-item prop="dataItem" label="数据条目" class="SearchFormItem">
+                    <el-input v-model="searchForm.dataItem" style="width: 200px;"></el-input>
+                </el-form-item>
+
+                <el-form-item prop="infoItem" label="信息项" class="SearchFormItem">
+                    <el-input v-model="searchForm.infoItem" style="width: 200px;"></el-input>
+                </el-form-item>
+
+                <el-form-item prop="doi" label="待申请DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.doi" style="width: 200px;"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <el-button type="primary">搜索</el-button>
+
+            <el-divider></el-divider>
+
             <div style="display: flex; align-items: center; justify-content: center;">
-                <el-button @click="addApply" type="primary" style="margin: 10px;">增加申请</el-button>
+                <el-button @click="addApply" type="primary" style="margin-bottom: 24px;">增加申请</el-button>
             </div>
 
-            <el-table :data="applyTable" style="width: 95%;" stripe border>
+            <el-table :data="applyTable" style="width: 95%;" stripe border >
                 <el-table-column prop="dataItem" label="数据条目"></el-table-column>
                 <el-table-column prop="infoItem" label="信息项"></el-table-column>
                 <el-table-column prop="doi" label="待申请DOI"></el-table-column>
@@ -72,6 +91,7 @@ export default {
                 { dataItem: '数据条目1', infoItem: '信息项1', doi: 'doi1', applyFile: 'file1', applyType: '指针型' },
                 { dataItem: '数据条目2', infoItem: '信息项2', doi: 'doi2', applyFile: 'file2', applyType: '实体型' },
                 { dataItem: '数据条目3', infoItem: '信息项3', doi: 'doi3', applyFile: 'file3', applyType: '统计型' },
+                { dataItem: '数据条目4', infoItem: '信息项4', doi: 'doi4', applyFile: 'file4', applyType: '统计型' },
             ],
 
             // 表单数据
@@ -89,6 +109,11 @@ export default {
             },
             addApplyDialogVisible: false,
 
+            searchForm : {
+                dataItem: undefined,
+                infoItem: undefined,
+                doi: undefined,
+            }
         };
     },
     mounted() { },
@@ -125,4 +150,15 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.SearchForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+.SearchFormItem {
+    margin: 0 24px 24px 24px;
+}
+</style>

@@ -3,9 +3,21 @@
         <common-aside :activeIndex="'3'"></common-aside>
 
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+
+            <el-form :model="searchForm" label-width="auto" class="SearchForm">
+                <el-form-item prop="username" label="用户名" class="SearchFormItem">
+                    <el-input v-model="searchForm.username" style="width: 200px;"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <el-button type="primary">搜索</el-button>
+
+            <el-divider></el-divider>
+
             <div style="display: flex; align-items: center; justify-content: center;">
-                <el-button @click="addUser" type="primary" style="margin: 10px;">增加用户</el-button>
+                <el-button @click="addUser" type="primary" style="margin-bottom: 24px;">增加用户</el-button>
             </div>
+
             <el-table :data="userTable" style="width: 95%;" stripe border>
                 <el-table-column prop="username" label="用户名"></el-table-column>
                 <el-table-column prop="userType" label="用户类型"></el-table-column>
@@ -35,16 +47,10 @@
                         <el-input v-model="addUserForm.username"></el-input>
                     </el-form-item>
                     <el-form-item prop="password" label="密码">
-                        <el-input v-model="addUserForm.password"></el-input>
+                        <el-input v-model="addUserForm.password" type="password"></el-input>
                     </el-form-item>
                     <el-form-item prop="confirmPassword" label="确认密码">
-                        <el-input v-model="addUserForm.confirmPassword"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="userType" label="用户类型">
-                        <el-select v-model="addUserForm.userType" placeholder="请选择">
-                            <el-option label="管理员" value="管理员"></el-option>
-                            <el-option label="普通用户" value="普通用户"></el-option>
-                        </el-select>
+                        <el-input v-model="addUserForm.confirmPassword" type="password"></el-input>
                     </el-form-item>
                     <el-form-item prop="projects" label="已授权项目">
                         <div v-for="item in addUserForm.projects" :key="item" style="margin-right: 10px;">{{
@@ -80,14 +86,10 @@
                         <el-input v-model="modifyUserForm.username"></el-input>
                     </el-form-item>
                     <el-form-item prop="password" label="密码">
-                        <el-input v-model="modifyUserForm.password"></el-input>
+                        <el-input v-model="modifyUserForm.password" type="password"></el-input>
                     </el-form-item>
-                    
-                    <el-form-item prop="userType" label="用户类型">
-                        <el-select v-model="modifyUserForm.userType" placeholder="请选择">
-                            <el-option label="管理员" value="管理员"></el-option>
-                            <el-option label="普通用户" value="普通用户"></el-option>
-                        </el-select>
+                    <el-form-item prop="confirmPassword" label="确认密码">
+                        <el-input v-model="modifyUserForm.confirmPassword" type="password"></el-input>
                     </el-form-item>
                     <el-form-item prop="projects" label="已授权项目">
                         <div v-for="item in modifyUserForm.projects" :key="item" style="margin-right: 10px;">{{
@@ -150,7 +152,7 @@ export default {
                 username: '',
                 password: '',
                 confirmPassword: '',
-                userType: '',
+                userType: '普通用户',
                 projects: [],
             },
             modifyPermissionDialogVisible: false,
@@ -163,10 +165,14 @@ export default {
             modifyUserForm: {
                 username: '',
                 password: '',
-                userType: '',
+                confirmPassword: '',
                 projects: [],
             },
             modifyUserIndex: 0,
+
+            searchForm: {
+                username: '',
+            }
         };
     },
     mounted() { },
@@ -181,7 +187,7 @@ export default {
                 username: '',
                 password: '',
                 confirmPassword: '',
-                userType: '',
+                userType: '普通用户',
                 projects: [],
             };
             this.addUserDialogVisible = true;
@@ -235,13 +241,6 @@ export default {
             if (!this.addUserForm.password) {
                 this.$message({
                     message: '密码不能为空',
-                    type: 'warning'
-                });
-                return;
-            }
-            if (!this.addUserForm.userType) {
-                this.$message({
-                    message: '用户类型不能为空',
                     type: 'warning'
                 });
                 return;
@@ -300,9 +299,33 @@ export default {
             }).catch(() => { });
         },
         modifyUserConfirm() {
+            // 检查是否有空值
+            if (!this.modifyUserForm.username) {
+                this.$message({
+                    message: '用户名不能为空',
+                    type: 'warning'
+                });
+                return;
+            }
+            if (!this.modifyUserForm.password) {
+                this.$message({
+                    message: '密码不能为空',
+                    type: 'warning'
+                });
+                return;
+            }
+
+            // 检查密码是否一致
+            if (this.modifyUserForm.password !== this.modifyUserForm.confirmPassword) {
+                this.$message({
+                    message: '两次输入的密码不一致',
+                    type: 'warning'
+                });
+                return;
+            }
+
             this.userTable[this.modifyUserIndex].username = this.modifyUserForm.username;
             this.userTable[this.modifyUserIndex].password = this.modifyUserForm.password;
-            this.userTable[this.modifyUserIndex].userType = this.modifyUserForm.userType;
             this.userTable[this.modifyUserIndex].projects = this.modifyUserForm.projects;
             this.modifyUserDialogVisible = false;
         },
@@ -310,4 +333,15 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.SearchForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+.SearchFormItem {
+    margin: 0 24px 24px 24px;
+}
+</style>
