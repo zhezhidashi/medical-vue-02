@@ -1,6 +1,6 @@
 <template>
     <div style="display: flex;">
-        <common-aside :activeIndex="'2'"></common-aside>
+        <!-- <common-aside :activeIndex="'2-1'"></common-aside> -->
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
 
             <el-form :model="searchForm" label-width="auto" class="SearchForm">
@@ -92,7 +92,7 @@
 <script>
 import CommonAside from '@/components/CommonAside.vue';
 export default {
-    name: "ProjectManage",
+    name: "LeadingProjects",
     components: {
         CommonAside,
     },

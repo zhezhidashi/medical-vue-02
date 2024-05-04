@@ -1,15 +1,15 @@
 <template>
     <div style="display: flex;">
-        <!-- <common-aside :activeIndex="'4'"></common-aside> -->
+        <!-- <common-aside :activeIndex="'1-1'"></common-aside> -->
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-        </div>
+        </div> 
     </div>
 </template>
 
 <script>
 import CommonAside from '@/components/CommonAside.vue';
 export default {
-    name: "RelationshipSystem",
+    name: "NetworkingGroup",
     components: {
         CommonAside,
     },

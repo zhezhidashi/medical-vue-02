@@ -61,7 +61,8 @@ export default {
             this.$store.commit('clearToken');
             this.$store.commit('clearUsername');
             this.$store.commit('clearUserType');
-            this.$router.push('/Login');
+            // this.$router.push('/Login');
+            window.location.reload();
         },
         modifyPassword() {
             this.modifyPasswordDialogVisible = true;

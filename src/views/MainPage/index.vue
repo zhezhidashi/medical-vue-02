@@ -1,8 +1,7 @@
 <template>
     <div style="display: flex;">
-        <common-aside :activeIndex="'0'"></common-aside>
-        <div
-            style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+        <!-- <common-aside :activeIndex="'0'"></common-aside> -->
+        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <!-- 统计图和组网图 -->
             <div
                 style="display: flex; flex-direction: row; justify-content: space-around; width: 100%; margin-top: 24px;">
@@ -28,7 +27,18 @@
                 <el-card style="width: 90%; margin-bottom: 24px;">
                     <div class="echarts" ref="TreeEcharts" style="height: 350px;"></div>
                 </el-card>
-                <el-card style="width: 90%; height: 50px; margin-bottom: 24px;"></el-card>
+                <el-card style="width: 90%; margin-bottom: 24px;">
+
+                    <el-descriptions title="项目名字1">
+                        <el-descriptions-item label="项目所属机构">北医三院</el-descriptions-item>
+                        <el-descriptions-item label="项目负责人">张三</el-descriptions-item>
+                        <el-descriptions-item label="项目描述">苏州市</el-descriptions-item>
+                        <el-descriptions-item label="项目类型">
+                            <el-tag size="small">类型1</el-tag>
+                        </el-descriptions-item>
+                        <el-descriptions-item label="联系方式">aaaaa@pku.edu.cn</el-descriptions-item>
+                    </el-descriptions>
+                </el-card>
             </div>
         </div>
     </div>
@@ -160,7 +170,7 @@ export default {
 
             treeEchartsOptions: {
                 title: {
-                    text: '树图示例',
+                    text: '组网结构示例',
                     left: 'center',
                 },
                 series: {

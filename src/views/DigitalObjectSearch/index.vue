@@ -1,6 +1,6 @@
 <template>
     <div style="display: flex;">
-        <common-aside :activeIndex="'7'"></common-aside>
+        <!-- <common-aside :activeIndex="'7'"></common-aside> -->
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <el-form :model="searchForm" label-width="auto" class="SearchForm">
                 <el-form-item prop="project" label="项目名称" class="SearchFormItem">

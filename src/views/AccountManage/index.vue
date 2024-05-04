@@ -1,6 +1,6 @@
 <template>
     <div style="display: flex;">
-        <common-aside :activeIndex="'3'"></common-aside>
+        <!-- <common-aside :activeIndex="'3'"></common-aside> -->
 
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
 
@@ -85,11 +85,8 @@
                     <el-form-item prop="username" label="用户名">
                         <el-input v-model="modifyUserForm.username"></el-input>
                     </el-form-item>
-                    <el-form-item prop="password" label="密码">
-                        <el-input v-model="modifyUserForm.password" type="password"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="confirmPassword" label="确认密码">
-                        <el-input v-model="modifyUserForm.confirmPassword" type="password"></el-input>
+                    <el-form-item label="密码">
+                        <el-button type="primary" @click="modifyPassword">修改密码</el-button>
                     </el-form-item>
                     <el-form-item prop="projects" label="已授权项目">
                         <div v-for="item in modifyUserForm.projects" :key="item" style="margin-right: 10px;">{{
@@ -107,6 +104,21 @@
             </el-dialog>
         </div>
 
+        <el-dialog title="修改密码" :visible.sync="modifyUserPasswordDialogVisible"
+            :before-close="modifyUserPasswordCancel">
+            <el-form :model="passwordForm" label-width="auto" >
+                <el-form-item prop="newPassword" label="新密码">
+                    <el-input v-model="passwordForm.newPassword" type="password"></el-input>
+                </el-form-item>
+                <el-form-item prop="confirmPassword" label="确认密码">
+                    <el-input v-model="passwordForm.confirmPassword" type="password"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="modifyUserPasswordCancel">取 消</el-button>
+                <el-button type="primary" @click="modifyUserPasswordConfirm">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -169,6 +181,13 @@ export default {
                 projects: [],
             },
             modifyUserIndex: 0,
+
+            // 修改密码
+            passwordForm: {
+                newPassword: '',
+                confirmPassword: ''
+            },
+            modifyUserPasswordDialogVisible: false,
 
             searchForm: {
                 username: '',
@@ -307,27 +326,47 @@ export default {
                 });
                 return;
             }
-            if (!this.modifyUserForm.password) {
-                this.$message({
-                    message: '密码不能为空',
-                    type: 'warning'
-                });
-                return;
-            }
-
-            // 检查密码是否一致
-            if (this.modifyUserForm.password !== this.modifyUserForm.confirmPassword) {
-                this.$message({
-                    message: '两次输入的密码不一致',
-                    type: 'warning'
-                });
-                return;
-            }
 
             this.userTable[this.modifyUserIndex].username = this.modifyUserForm.username;
             this.userTable[this.modifyUserIndex].password = this.modifyUserForm.password;
             this.userTable[this.modifyUserIndex].projects = this.modifyUserForm.projects;
+
+            this.$message.success('修改成功');
+
             this.modifyUserDialogVisible = false;
+        },
+        modifyPassword() {
+            this.modifyUserPasswordDialogVisible = true;
+        },
+        modifyUserPasswordCancel() {
+            this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.modifyUserPasswordDialogVisible = false;
+                this.passwordForm.newPassword = '';
+                this.passwordForm.confirmPassword = '';
+            }).catch(() => { });
+        },
+        modifyUserPasswordConfirm() {
+            if (this.passwordForm.newPassword === '') {
+                this.$message.error('密码不能为空');
+                return;
+            }
+            if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
+                this.$message.error('两次密码不一致');
+                return;
+            }
+            this.$message({
+                type: 'info',
+                message: '修改密码在“修改用户”弹窗中再次点击“确定”才能生效',
+                duration: 6666
+            });
+            this.modifyUserPasswordDialogVisible = false;
+            this.modifyUserForm.password = this.passwordForm.newPassword;
+            this.passwordForm.newPassword = '';
+            this.passwordForm.confirmPassword = '';
         },
     },
 }

@@ -1,21 +1,65 @@
 <template>
     <div style="display: flex;">
-        <common-aside :activeIndex="'5'"></common-aside>
+        <!-- <common-aside :activeIndex="'5'"></common-aside> -->
 
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
 
             <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                <el-form-item prop="dataItem" label="数据条目" class="SearchFormItem">
-                    <el-input v-model="searchForm.dataItem" style="width: 200px;"></el-input>
+                <el-form-item label="DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.doi"></el-input>
+                </el-form-item>
+                <el-form-item label="数字对象名字" class="SearchFormItem">
+                    <el-input v-model="searchForm.doiName"></el-input>
+                </el-form-item>
+                <el-form-item label="数字对象来源" class="SearchFormItem">
+                    <el-input v-model="searchForm.doiSource"></el-input>
+                </el-form-item>
+                <el-form-item label="数字对象描述" class="SearchFormItem">
+                    <el-input v-model="searchForm.doiDesc"></el-input>
+                </el-form-item>
+                <el-form-item label="申请类型" class="SearchFormItem">
+                    <el-select v-model="searchForm.applyType" placeholder="请选择">
+                        <el-option label="指针型" value="1"></el-option>
+                        <el-option label="实体型" value="2"></el-option>
+                        <el-option label="统计型" value="3"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="申请人邮箱" class="SearchFormItem">
+                    <el-input v-model="searchForm.applyUserEmail"></el-input>
+                </el-form-item>
+                
+                
+                <el-form-item label="审批状态" class="SearchFormItem">
+                    <el-select v-model="searchForm.approvalStatus" placeholder="请选择">
+                        <el-option label="待审批" value="1"></el-option>
+                        <el-option label="已通过" value="2"></el-option>
+                        <el-option label="未通过" value="3"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="审批意见" class="SearchFormItem">
+                    <el-input v-model="searchForm.approvalOpinion"></el-input>
                 </el-form-item>
 
-                <el-form-item prop="infoItem" label="信息项" class="SearchFormItem">
-                    <el-input v-model="searchForm.infoItem" style="width: 200px;"></el-input>
+                <el-form-item label="申请时间" class="SearchFormTimePicker">
+                    <el-date-picker
+                        v-model="searchForm.applyTimeRange"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                    </el-date-picker>
                 </el-form-item>
 
-                <el-form-item prop="doi" label="待申请DOI" class="SearchFormItem">
-                    <el-input v-model="searchForm.doi" style="width: 200px;"></el-input>
+                <el-form-item label="审批时间" class="SearchFormTimePicker">
+                    <el-date-picker
+                        v-model="searchForm.approvalOpinionTimeRange"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                    </el-date-picker>
                 </el-form-item>
+                
             </el-form>
 
             <el-button type="primary">搜索</el-button>
@@ -27,27 +71,37 @@
             </div>
 
             <el-table :data="applyTable" style="width: 95%;" stripe border >
-                <el-table-column prop="dataItem" label="数据条目"></el-table-column>
-                <el-table-column prop="infoItem" label="信息项"></el-table-column>
                 <el-table-column prop="doi" label="待申请DOI"></el-table-column>
+                <el-table-column prop="doiName" label="数字对象名字"></el-table-column>
+                <el-table-column prop="doiSource" label="数字对象来源"></el-table-column>
+                <el-table-column prop="doiDesc" label="数字对象描述"></el-table-column>
                 <el-table-column prop="applyFile" label="申请审批文件"></el-table-column>
                 <el-table-column prop="applyType" label="申请类型"></el-table-column>
+                <el-table-column prop="applyTime" label="申请时间"></el-table-column>
+                <el-table-column prop="applyUserEmail" label="申请人邮箱"></el-table-column>
+                <el-table-column prop="approvalStatus" label="审批状态"></el-table-column>
+                <el-table-column prop="approvalOpinion" label="审批意见"></el-table-column>
+                <el-table-column prop="approvalOpinionTime" label="审批时间"></el-table-column>
             </el-table>
 
             <el-dialog title="增加申请" :visible.sync="addApplyDialogVisible" width="80%"
                 :before-close="addApplyCancel">
                 <el-form :model="applyForm" ref="applyForm" label-width="auto">
 
-                    <el-form-item label="数据条目" prop="dataItem">
-                        <el-input v-model="applyForm.dataItem"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="信息项" prop="infoItem">
-                        <el-input v-model="applyForm.infoItem"></el-input>
-                    </el-form-item>
-
                     <el-form-item label="待申请DOI" prop="doi">
                         <el-input v-model="applyForm.doi"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="数字对象名字" prop="doiName">
+                        <el-input v-model="applyForm.doiName"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="数字对象描述" prop="doiDesc">
+                        <el-input v-model="applyForm.doiDesc"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="申请人邮箱" prop="applyUserEmail">
+                        <el-input v-model="applyForm.applyUserEmail"></el-input>
                     </el-form-item>
 
                     <el-form-item label="申请审批文件" prop="applyFile">
@@ -88,31 +142,69 @@ export default {
         return {
             // 表格数据
             applyTable: [
-                { dataItem: '数据条目1', infoItem: '信息项1', doi: 'doi1', applyFile: 'file1', applyType: '指针型' },
-                { dataItem: '数据条目2', infoItem: '信息项2', doi: 'doi2', applyFile: 'file2', applyType: '实体型' },
-                { dataItem: '数据条目3', infoItem: '信息项3', doi: 'doi3', applyFile: 'file3', applyType: '统计型' },
-                { dataItem: '数据条目4', infoItem: '信息项4', doi: 'doi4', applyFile: 'file4', applyType: '统计型' },
+                {
+                    doi: '10.1000/182',
+                    doiName: '数字对象1',
+                    doiSource: '数据源1',
+                    doiDesc: '描述1',
+                    applyFile: '文件1',
+                    applyType: '指针型',
+                    applyTime: '2021-01-01',
+                    applyUserEmail: '用户1',
+                    approvalStatus: '待审批',
+                    approvalOpinion: '无',
+                    approvalOpinionTime: '2021-01-02',
+                }
             ],
 
             // 表单数据
             applyForm: {
-                // 数据条目
-                dataItem: undefined,
-                // 信息项
-                infoItem: undefined,
                 // 待申请DOI
                 doi: undefined,
+                // 数字对象名字
+                doiName: undefined,
+                // 数字对象来源
+                doiSource: undefined,
+                // 数字对象描述
+                doiDesc: undefined,
                 // 申请审批文件
                 applyFile: undefined,
                 // 申请类型
                 applyType: undefined,
+                // 申请时间
+                applyTime: undefined,
+                // 申请人邮箱
+                applyUserEmail: undefined,
+                // 审批状态
+                approvalStatus: undefined,
+                // 审批意见
+                approvalOpinion: undefined,
+                // 审批时间
+                approvalOpinionTime: undefined,
             },
             addApplyDialogVisible: false,
 
             searchForm : {
-                dataItem: undefined,
-                infoItem: undefined,
+                // doi
                 doi: undefined,
+                // 数字对象名字
+                doiName: undefined,
+                // 数字对象来源
+                doiSource: undefined,
+                // 数字对象描述
+                doiDesc: undefined,
+                // 申请类型
+                applyType: undefined,
+                // 申请人邮箱
+                applyUserEmail: undefined,
+                // 审批状态
+                approvalStatus: undefined,
+                // 审批意见
+                approvalOpinion: undefined,
+                // 申请时间范围
+                applyTimeRange: undefined,
+                // 审批时间范围
+                approvalOpinionTimeRange: undefined,
             }
         };
     },
@@ -160,5 +252,10 @@ export default {
 }
 .SearchFormItem {
     margin: 0 24px 24px 24px;
+    width: 280px;
+}
+.SearchFormTimePicker {
+    margin: 0 24px 24px 24px;
+    width: 500px;
 }
 </style>

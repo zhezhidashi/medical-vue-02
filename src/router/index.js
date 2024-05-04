@@ -46,20 +46,36 @@ const routes = [
                 component: () => import('@/views/Login')
             },
             {
-                path: '/Networking',
-                name: 'Networking',
+                path: '/NetworkingGroup',
+                name: 'NetworkingGroup',
                 meta: {
-                    title: '组网'
+                    title: '组网组管理'
                 },
-                component: () => import('@/views/Networking')
+                component: () => import('@/views/NetworkingGroup')
             },
             {
-                path: '/ProjectManage',
-                name: 'ProjectManage',
+                path: '/InstitutionNetworking',
+                name: 'InstitutionNetworking',
                 meta: {
-                    title: '项目管理'
+                    title: '机构组网管理'
                 },
-                component: () => import('@/views/ProjectManage')
+                component: () => import('@/views/InstitutionNetworking')
+            },
+            {
+                path: '/LeadingProjects',
+                name: 'LeadingProjects',
+                meta: {
+                    title: '本机构主持项目'
+                },
+                component: () => import('@/views/LeadingProjects')
+            },
+            {
+                path: '/ParticipatingProjects',
+                name: 'ParticipatingProjects',
+                meta: {
+                    title: '本机构参与项目'
+                },
+                component: () => import('@/views/ParticipatingProjects')
             },
             {
                 path: '/AccountManage',
