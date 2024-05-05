@@ -256,6 +256,6 @@ export default {
 }
 .SearchFormTimePicker {
     margin: 0 24px 24px 24px;
-    width: 500px;
+    width: 460px;
 }
 </style>

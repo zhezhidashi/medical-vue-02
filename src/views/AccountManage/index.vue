@@ -8,6 +8,42 @@
                 <el-form-item prop="username" label="用户名" class="SearchFormItem">
                     <el-input v-model="searchForm.username" style="width: 200px;"></el-input>
                 </el-form-item>
+                <el-form-item prop="status" label="账号状态" class="SearchFormItem">
+                    <el-select v-model="searchForm.status" placeholder="请选择" style="width: 200px;">
+                        <el-option label="已激活" value="0"></el-option>
+                        <el-option label="未激活" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item prop="email" label="用户联系邮箱" class="SearchFormItem">
+                    <el-input v-model="searchForm.email" style="width: 200px;"></el-input>
+                </el-form-item>
+                <el-form-item label="注册时间" class="SearchFormTimePicker">
+                    <el-date-picker
+                        v-model="searchForm.registerTimeRange"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="最近登录时间" class="SearchFormTimePicker">
+                    <el-date-picker
+                        v-model="searchForm.lastLoginTimeRange"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="最近修改密码时间" class="SearchFormTimePicker">
+                    <el-date-picker
+                        v-model="searchForm.lastModifyPasswordTimeRange"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
             </el-form>
 
             <el-button type="primary">搜索</el-button>
@@ -27,6 +63,17 @@
                             style="margin-right: 10px;">{{ projectsList[item].label }}</div>
                     </template>
                 </el-table-column>
+                
+                <el-table-column prop="registerTime" label="注册时间"></el-table-column>
+                <el-table-column prop="lastLoginTime" label="最近登录时间"></el-table-column>
+                <el-table-column prop="lastModifyPasswordTime" label="最近修改密码时间"></el-table-column>
+                <el-table-column prop="status" label="是否激活">
+                    <template slot-scope="props">
+                        <el-tag v-if="props.row.status === 0" type="success">已激活</el-tag>
+                        <el-tag v-else type="danger">未激活</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="email" label="用户联系邮箱"></el-table-column>
 
                 <el-table-column label="操作" min-width="120" align="center">
                     <template slot-scope="props">
@@ -59,6 +106,15 @@
                     <el-form-item label="项目权限">
                         <el-button type="primary"
                             @click="changeProjectPermission(addUserForm, 0)">修改项目权限</el-button>
+                    </el-form-item>
+
+                    <el-form-item prop="email" label="用户联系邮箱">
+                        <el-input v-model="addUserForm.email"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="是否激活" prop="status">
+                        <el-radio v-model="addUserForm.status" :label="0">是</el-radio>
+                        <el-radio v-model="addUserForm.status" :label="1">否</el-radio>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -95,6 +151,15 @@
                     <el-form-item label="项目权限">
                         <el-button type="primary"
                             @click="changeProjectPermission(modifyUserForm, 1)">修改项目权限</el-button>
+                    </el-form-item>
+
+                    <el-form-item prop="email" label="用户联系邮箱">
+                        <el-input v-model="modifyUserForm.email"></el-input>
+                    </el-form-item>
+
+                    <el-form-item prop="status" label="是否激活">
+                        <el-radio v-model="modifyUserForm.status" :label="0">是</el-radio>
+                        <el-radio v-model="modifyUserForm.status" :label="1">否</el-radio>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -134,22 +199,32 @@ export default {
             // 用户列表
             userTable: [
                 {
+                    // 用户名
                     username: 'admin-1',
-                    password: 'admin-1',
+                    // 用户类型
                     userType: '管理员',
+                    // 已授权项目
                     projects: [0, 1, 2],
+                    // 注册时间
+                    registerTime: '2021-01-01',
+                    // 最近登录时间
+                    lastLoginTime: '2021-01-01',
+                    // 最近修改密码时间
+                    lastModifyPasswordTime: '2021-01-01',
+                    // 是否激活
+                    status: 0,
+                    // 用户联系邮箱
+                    email: 'aaaaa@pku.edu.cn',
                 },
                 {
                     username: 'user-1',
-                    password: 'user-1',
                     userType: '普通用户',
                     projects: [0, 1],
-                },
-                {
-                    username: 'user-2',
-                    password: 'user-2',
-                    userType: '普通用户',
-                    projects: [1, 2],
+                    registerTime: '2021-01-01',
+                    lastLoginTime: '2021-01-01',
+                    lastModifyPasswordTime: '2021-01-01',
+                    status: 1,
+                    email: 'bbbbb@pku.edu.cn',
                 },
             ],
             // 项目列表
@@ -166,6 +241,8 @@ export default {
                 confirmPassword: '',
                 userType: '普通用户',
                 projects: [],
+                email: '',
+                status: 0,
             },
             modifyPermissionDialogVisible: false,
             modifyPermissionDialogList: [],
@@ -179,6 +256,8 @@ export default {
                 password: '',
                 confirmPassword: '',
                 projects: [],
+                email: '',
+                status: 0,
             },
             modifyUserIndex: 0,
 
@@ -190,7 +269,18 @@ export default {
             modifyUserPasswordDialogVisible: false,
 
             searchForm: {
+                // 用户名
                 username: '',
+                // 账号状态
+                status: '',
+                // 用户联系邮箱
+                email: '',
+                // 注册时间范围
+                registerTimeRange: '',
+                // 最近登录时间范围
+                lastLoginTimeRange: '',
+                // 最近修改密码时间范围
+                lastModifyPasswordTimeRange: '',
             }
         };
     },
@@ -208,6 +298,8 @@ export default {
                 confirmPassword: '',
                 userType: '普通用户',
                 projects: [],
+                email: '',
+                status: 0,
             };
             this.addUserDialogVisible = true;
         },
@@ -281,6 +373,8 @@ export default {
                 password: this.addUserForm.password,
                 userType: this.addUserForm.userType,
                 projects: this.addUserForm.projects,
+                email: this.addUserForm.email,
+                status: this.addUserForm.status,
             });
 
             _this.$message({
@@ -330,8 +424,12 @@ export default {
             this.userTable[this.modifyUserIndex].username = this.modifyUserForm.username;
             this.userTable[this.modifyUserIndex].password = this.modifyUserForm.password;
             this.userTable[this.modifyUserIndex].projects = this.modifyUserForm.projects;
+            this.userTable[this.modifyUserIndex].status = this.modifyUserForm.status;
+            this.userTable[this.modifyUserIndex].email = this.modifyUserForm.email;
 
             this.$message.success('修改成功');
+
+            console.log(this.modifyUserForm)
 
             this.modifyUserDialogVisible = false;
         },
@@ -373,6 +471,12 @@ export default {
 </script>
 
 <style scoped>
+.TableItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
 .SearchForm {
     display: flex;
     flex-direction: row;
@@ -382,5 +486,10 @@ export default {
 }
 .SearchFormItem {
     margin: 0 24px 24px 24px;
+    width: 280px;
+}
+.SearchFormTimePicker {
+    margin: 0 24px 24px 24px;
+    width: 460px;
 }
 </style>
