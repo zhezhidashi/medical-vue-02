@@ -52,7 +52,7 @@
 
                 <el-form-item label="审批时间" class="SearchFormTimePicker">
                     <el-date-picker
-                        v-model="searchForm.approvalOpinionTimeRange"
+                        v-model="searchForm.approvalTimeRange"
                         type="daterange"
                         range-separator="至"
                         start-placeholder="开始日期"
@@ -81,7 +81,7 @@
                 <el-table-column prop="applyUserEmail" label="申请人邮箱"></el-table-column>
                 <el-table-column prop="approvalStatus" label="审批状态"></el-table-column>
                 <el-table-column prop="approvalOpinion" label="审批意见"></el-table-column>
-                <el-table-column prop="approvalOpinionTime" label="审批时间"></el-table-column>
+                <el-table-column prop="approvalTime" label="审批时间"></el-table-column>
             </el-table>
 
             <el-dialog title="增加申请" :visible.sync="addApplyDialogVisible" width="80%"
@@ -153,7 +153,7 @@ export default {
                     applyUserEmail: '用户1',
                     approvalStatus: '待审批',
                     approvalOpinion: '无',
-                    approvalOpinionTime: '2021-01-02',
+                    approvalTime: '2021-01-02',
                 }
             ],
 
@@ -180,7 +180,7 @@ export default {
                 // 审批意见
                 approvalOpinion: undefined,
                 // 审批时间
-                approvalOpinionTime: undefined,
+                approvalTime: undefined,
             },
             addApplyDialogVisible: false,
 
@@ -204,8 +204,8 @@ export default {
                 // 申请时间范围
                 applyTimeRange: undefined,
                 // 审批时间范围
-                approvalOpinionTimeRange: undefined,
-            }
+                approvalTimeRange: undefined,
+            },
         };
     },
     mounted() { },
