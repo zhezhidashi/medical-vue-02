@@ -223,10 +223,10 @@ export default {
         } else if (userType === 'user') {
             this.user.userType = '普通用户';
         }
-        this.initPieEcharts();
+        this.initEcharts();
     },
     methods: {
-        initPieEcharts() {
+        initEcharts() {
             const pieEcharts = echarts.init(this.$refs.PieEcharts);
             pieEcharts.setOption(this.pieChartsOptions);
             // 监听窗口变化
