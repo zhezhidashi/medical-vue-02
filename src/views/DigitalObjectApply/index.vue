@@ -223,7 +223,13 @@ export default {
 
         // 取消增加申请
         addApplyCancel() {
-            this.addApplyDialogVisible = false;
+            this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.addApplyDialogVisible = false;
+            }).catch(() => {});
         },
 
         // 确定增加申请
@@ -237,6 +243,10 @@ export default {
                 applyFile: this.applyForm.applyFile,
                 applyType: this.applyForm.applyType,
             })
+            this.$message({
+                message: '增加申请成功',
+                type: 'success'
+            });
         },
     },
 }

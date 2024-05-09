@@ -10,38 +10,28 @@
                 </el-form-item>
                 <el-form-item prop="status" label="账号状态" class="SearchFormItem">
                     <el-select v-model="searchForm.status" placeholder="请选择" style="width: 200px;">
-                        <el-option label="已激活" value="0"></el-option>
-                        <el-option label="未激活" value="1"></el-option>
+                        <template slot-scope="scope">
+                            <el-tag v-if="scope.row.status === 0" type="success">已激活</el-tag>
+                            <el-tag v-else-if="scope.row.status === 1" type="danger">未激活</el-tag>
+                        </template>
                     </el-select>
                 </el-form-item>
                 <el-form-item prop="email" label="用户联系邮箱" class="SearchFormItem">
                     <el-input v-model="searchForm.email" style="width: 200px;"></el-input>
                 </el-form-item>
                 <el-form-item label="注册时间" class="SearchFormTimePicker">
-                    <el-date-picker
-                        v-model="searchForm.registerTimeRange"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                    <el-date-picker v-model="searchForm.registerTimeRange" type="daterange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="最近登录时间" class="SearchFormTimePicker">
-                    <el-date-picker
-                        v-model="searchForm.lastLoginTimeRange"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                    <el-date-picker v-model="searchForm.lastLoginTimeRange" type="daterange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="最近修改密码时间" class="SearchFormTimePicker">
-                    <el-date-picker
-                        v-model="searchForm.lastModifyPasswordTimeRange"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                    <el-date-picker v-model="searchForm.lastModifyPasswordTimeRange" type="daterange"
+                        range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
             </el-form>
@@ -59,11 +49,11 @@
                 <el-table-column prop="userType" label="用户类型"></el-table-column>
                 <el-table-column prop="projects" label="已授权项目">
                     <template slot-scope="props">
-                        <div v-for="(item, index) in props.row.projects" :key="index"
-                            style="margin-right: 10px;">{{ projectsList[item].label }}</div>
+                        <div v-for="(item, index) in props.row.projects" :key="index" style="margin-right: 10px;">{{
+                            projectsList[item].label }}</div>
                     </template>
                 </el-table-column>
-                
+
                 <el-table-column prop="registerTime" label="注册时间"></el-table-column>
                 <el-table-column prop="lastLoginTime" label="最近登录时间"></el-table-column>
                 <el-table-column prop="lastModifyPasswordTime" label="最近修改密码时间"></el-table-column>
@@ -87,9 +77,8 @@
                 </el-table-column>
             </el-table>
 
-            <el-dialog title="增加用户" :visible.sync="addUserDialogVisible" width="90%"
-                :before-close="addUserCancel">
-                <el-form :model="addUserForm" ref="addUserForm" label-width="auto" >
+            <el-dialog title="增加用户" :visible.sync="addUserDialogVisible" width="90%" :before-close="addUserCancel">
+                <el-form :model="addUserForm" ref="addUserForm" label-width="auto">
                     <el-form-item prop="username" label="用户名">
                         <el-input v-model="addUserForm.username"></el-input>
                     </el-form-item>
@@ -104,8 +93,7 @@
                             projectsList[item].label }}</div>
                     </el-form-item>
                     <el-form-item label="项目权限">
-                        <el-button type="primary"
-                            @click="changeProjectPermission(addUserForm, 0)">修改项目权限</el-button>
+                        <el-button type="primary" @click="changeProjectPermission(addUserForm, 0)">修改项目权限</el-button>
                     </el-form-item>
 
                     <el-form-item prop="email" label="用户联系邮箱">
@@ -149,8 +137,7 @@
                             projectsList[item].label }}</div>
                     </el-form-item>
                     <el-form-item label="项目权限">
-                        <el-button type="primary"
-                            @click="changeProjectPermission(modifyUserForm, 1)">修改项目权限</el-button>
+                        <el-button type="primary" @click="changeProjectPermission(modifyUserForm, 1)">修改项目权限</el-button>
                     </el-form-item>
 
                     <el-form-item prop="email" label="用户联系邮箱">
@@ -171,7 +158,7 @@
 
         <el-dialog title="修改密码" :visible.sync="modifyUserPasswordDialogVisible"
             :before-close="modifyUserPasswordCancel">
-            <el-form :model="passwordForm" label-width="auto" >
+            <el-form :model="passwordForm" label-width="auto">
                 <el-form-item prop="newPassword" label="新密码">
                     <el-input v-model="passwordForm.newPassword" type="password"></el-input>
                 </el-form-item>
@@ -477,6 +464,7 @@ export default {
     justify-content: space-between;
     align-items: center;
 }
+
 .SearchForm {
     display: flex;
     flex-direction: row;
@@ -484,10 +472,12 @@ export default {
     flex-wrap: wrap;
     margin-top: 24px;
 }
+
 .SearchFormItem {
     margin: 0 24px 24px 24px;
     width: 280px;
 }
+
 .SearchFormTimePicker {
     margin: 0 24px 24px 24px;
     width: 460px;
