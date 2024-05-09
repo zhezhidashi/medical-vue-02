@@ -2,8 +2,31 @@
     <div style="display: flex;">
         <!-- <common-aside :activeIndex="'4'"></common-aside> -->
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+            <el-form :model="searchForm" label-width="auto" class="SearchForm">
+                <el-form-item prop="doi" label="DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.doi" style="width: 200px;"></el-input>
+                </el-form-item>
+                <el-form-item prop="doiName" label="数字对象名称" class="SearchFormItem">
+                    <el-input v-model="searchForm.doiName" style="width: 200px;"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <el-button type="primary">搜索</el-button>
+            <el-divider></el-divider>
+
             <div
                 style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 100%; margin-top: 24px;">
+                <el-card style="width: 90%; margin-bottom: 24px;">
+
+                    <el-descriptions title="数字对象详情">
+                        <el-descriptions-item label="DOI">{{ doiDetail.doi }}</el-descriptions-item>
+                        <el-descriptions-item label="数字对象名称">{{ doiDetail.doiName }}</el-descriptions-item>
+                        <el-descriptions-item label="数字对象来源">{{ doiDetail.doiSource }}</el-descriptions-item>
+                        <el-descriptions-item label="数字对象描述">{{ doiDetail.doiDescription }}</el-descriptions-item>
+                        <el-descriptions-item label="数字对象所属项目">{{ doiDetail.doiProject }}</el-descriptions-item>
+                        <el-descriptions-item label="数字对象所属机构">{{ doiDetail.doiInstitution }}</el-descriptions-item>
+                    </el-descriptions>
+                </el-card>
                 <el-card style="width: 90%; margin-bottom: 24px;">
                     <div class="echarts" ref="GraphEcharts" style="height: 500px;"></div>
                 </el-card>
@@ -22,9 +45,36 @@ export default {
     },
     data() {
         return {
+            // 搜索表单
+            searchForm: {
+                // DOI
+                doi: '',
+                // 数字对象名称
+                doiName: '',
+            },
+
+            // 数字对象详情
+            doiDetail: {
+                // DOI
+                doi: '1',
+                // 数字对象名称
+                doiName: '数字对象1',
+                // 数字对象来源
+                doiSource: '北医三院',
+                // 数字对象描述
+                doiDescription: '描述',
+                // 数字对象所属项目
+                doiProject: '项目1',
+                // 数字对象所属机构
+                doiInstitution: '机构1',
+            },
+
             graphEchartsOptions: {
                 title: {
-                    text: '拓扑图示例'
+                    text: '拓扑图示例',
+                    textStyle: {
+                        fontSize: 16 // 设置标题字体大小
+                    }
                 },
                 tooltip: {},
                 series: {
@@ -102,4 +152,20 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.SearchForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+.SearchFormItem {
+    margin: 0 24px 24px 24px;
+    width: 280px;
+}
+.SearchFormTimePicker {
+    margin: 0 24px 24px 24px;
+    width: 460px;
+}
+</style>
