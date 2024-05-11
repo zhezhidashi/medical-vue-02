@@ -1,6 +1,5 @@
 <template>
     <div style="display: flex;">
-        <!-- <common-aside :activeIndex="'0'"></common-aside> -->
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <!-- 统计图和组网图 -->
             <div
@@ -45,13 +44,9 @@
 </template>
 
 <script>
-import CommonAside from '@/components/CommonAside.vue';
 import * as echarts from "echarts";
 export default {
     name: "MainPage",
-    components: {
-        CommonAside
-    },
     data() {
         return {
             user: {

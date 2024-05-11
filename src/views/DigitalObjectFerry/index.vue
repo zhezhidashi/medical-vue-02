@@ -1,6 +1,5 @@
 <template>
     <div style="display: flex;">
-        <!-- <common-aside activeIndex="8"></common-aside> -->
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <div style="text-align: center; font-size: 20px; margin: 24px;">选择导出的时间段</div>
             <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
@@ -30,10 +29,8 @@
 </template>
 
 <script>
-import CommonAside from '@/components/CommonAside.vue';
 export default {
     name: "MainPage",
-    components: { CommonAside },
     data() {
         return {
             dateValue: '',

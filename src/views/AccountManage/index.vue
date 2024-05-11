@@ -1,6 +1,5 @@
 <template>
     <div style="display: flex;">
-        <!-- <common-aside :activeIndex="'3'"></common-aside> -->
 
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
 
@@ -10,10 +9,8 @@
                 </el-form-item>
                 <el-form-item prop="status" label="账号状态" class="SearchFormItem">
                     <el-select v-model="searchForm.status" placeholder="请选择" style="width: 200px;">
-                        <template slot-scope="scope">
-                            <el-tag v-if="scope.row.status === 0" type="success">已激活</el-tag>
-                            <el-tag v-else-if="scope.row.status === 1" type="danger">未激活</el-tag>
-                        </template>
+                        <el-option label="已激活" value="0"></el-option>
+                        <el-option label="未激活" value="1"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item prop="email" label="用户联系邮箱" class="SearchFormItem">
@@ -65,7 +62,7 @@
                 </el-table-column>
                 <el-table-column prop="email" label="用户联系邮箱"></el-table-column>
 
-                <el-table-column label="操作" min-width="120" align="center">
+                <el-table-column label="操作" width="150" align="center">
                     <template slot-scope="props">
                         <el-button @click="changeUser(props.row, props.$index)" type="primary"
                             size="small">修改</el-button>
@@ -175,12 +172,8 @@
 </template>
 
 <script>
-import CommonAside from '@/components/CommonAside.vue';
 export default {
     name: "AccountManage",
-    components: {
-        CommonAside,
-    },
     data() {
         return {
             // 用户列表

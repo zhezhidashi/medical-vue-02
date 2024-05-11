@@ -1,6 +1,5 @@
 <template>
     <div style="display: flex;">
-        <!-- <common-aside :activeIndex="'5'"></common-aside> -->
 
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
 
@@ -79,7 +78,13 @@
                 <el-table-column prop="applyType" label="申请类型"></el-table-column>
                 <el-table-column prop="applyTime" label="申请时间"></el-table-column>
                 <el-table-column prop="applyUserEmail" label="申请人邮箱"></el-table-column>
-                <el-table-column prop="approvalStatus" label="审批状态"></el-table-column>
+                <el-table-column prop="approvalStatus" label="审批状态">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.approvalStatus === 0">待审批</el-tag>
+                        <el-tag v-if="scope.row.approvalStatus === 1" type="success">已通过</el-tag>
+                        <el-tag v-if="scope.row.approvalStatus === 2" type="danger">未通过</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="approvalOpinion" label="审批意见"></el-table-column>
                 <el-table-column prop="approvalTime" label="审批时间"></el-table-column>
             </el-table>
@@ -94,10 +99,6 @@
 
                     <el-form-item label="数字对象名字" prop="doiName">
                         <el-input v-model="applyForm.doiName"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="数字对象描述" prop="doiDesc">
-                        <el-input v-model="applyForm.doiDesc"></el-input>
                     </el-form-item>
 
                     <el-form-item label="申请人邮箱" prop="applyUserEmail">
@@ -132,12 +133,8 @@
 </template>
 
 <script>
-import CommonAside from '@/components/CommonAside.vue';
 export default {
     name: "DigitalObjectApply",
-    components: {
-        CommonAside,
-    },
     data() {
         return {
             // 表格数据
@@ -151,7 +148,7 @@ export default {
                     applyType: '指针型',
                     applyTime: '2021-01-01',
                     applyUserEmail: '用户1',
-                    approvalStatus: '待审批',
+                    approvalStatus: 0,
                     approvalOpinion: '无',
                     approvalTime: '2021-01-02',
                 }
@@ -163,24 +160,12 @@ export default {
                 doi: undefined,
                 // 数字对象名字
                 doiName: undefined,
-                // 数字对象来源
-                doiSource: undefined,
-                // 数字对象描述
-                doiDesc: undefined,
                 // 申请审批文件
                 applyFile: undefined,
                 // 申请类型
                 applyType: undefined,
-                // 申请时间
-                applyTime: undefined,
                 // 申请人邮箱
                 applyUserEmail: undefined,
-                // 审批状态
-                approvalStatus: undefined,
-                // 审批意见
-                approvalOpinion: undefined,
-                // 审批时间
-                approvalTime: undefined,
             },
             addApplyDialogVisible: false,
 
@@ -237,11 +222,11 @@ export default {
             console.log(this.applyForm);
             this.addApplyDialogVisible = false;
             this.applyTable.push({
-                dataItem: this.applyForm.dataItem,
-                infoItem: this.applyForm.infoItem,
                 doi: this.applyForm.doi,
+                doiName: this.applyForm.doiName,
                 applyFile: this.applyForm.applyFile,
                 applyType: this.applyForm.applyType,
+                applyUserEmail: this.applyForm.applyUserEmail,
             })
             this.$message({
                 message: '增加申请成功',

@@ -15,7 +15,12 @@
                 <el-table-column prop="createTime" label="创建时间" ></el-table-column>
                 <el-table-column prop="networkingGroupId" label="所属组网组编号" ></el-table-column>
                 <el-table-column prop="networkingGroupName" label="所属组网组名字" ></el-table-column>
-                <el-table-column prop="networkingStatus" label="机构组网状态" ></el-table-column>
+                <el-table-column prop="networkingStatus" label="机构组网状态" >
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.networkingStatus === '1'" type="success">正常</el-tag>
+                        <el-tag v-else-if="scope.row.networkingStatus === '2'" type="danger">异常</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作" width="150">
                     <template slot-scope="scope">
                         <el-button @click="editNetworking(scope.row, scope.$index)" type="primary" size="small">修改</el-button>

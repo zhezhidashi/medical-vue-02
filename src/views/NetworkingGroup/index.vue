@@ -1,6 +1,5 @@
 <template>
     <div style="display: flex;">
-        <!-- <common-aside :activeIndex="'1-1'"></common-aside> -->
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <div style="display: flex; align-items: center; justify-content: center; ">
                 <el-button @click="addNetworkingGroup" type="primary" style="margin: 24px;">增加组网组</el-button>
@@ -85,12 +84,8 @@
 </template>
 
 <script>
-import CommonAside from '@/components/CommonAside.vue';
 export default {
     name: "NetworkingGroup",
-    components: {
-        CommonAside,
-    },
     data() {
         return {
             // 表格数据

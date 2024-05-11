@@ -1,6 +1,5 @@
 <template>
     <div style="display: flex;">
-        <!-- <common-aside :activeIndex="'6'"></common-aside> -->
 
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
 
@@ -73,7 +72,7 @@
                 <el-table-column prop="applyUserEmail" label="申请人邮箱"></el-table-column>
                 <el-table-column prop="approvalStatus" label="审批状态">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.approvalStatus === 0" type="text">待审批</el-tag>
+                        <el-tag v-if="scope.row.approvalStatus === 0">待审批</el-tag>
                         <el-tag v-if="scope.row.approvalStatus === 1" type="success">已通过</el-tag>
                         <el-tag v-if="scope.row.approvalStatus === 2" type="danger">未通过</el-tag>
                     </template>
@@ -109,12 +108,8 @@
 </template>
 
 <script>
-import CommonAside from '@/components/CommonAside.vue';
 export default {
     name: "DigitalObjectApproval",
-    components: {
-        CommonAside,
-    },
     data() {
         return {
             // 审批表格数据
