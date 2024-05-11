@@ -29,9 +29,9 @@
                 </el-form-item>
                 <el-form-item label="审批状态" class="SearchFormItem">
                     <el-select v-model="searchForm.approvalStatus" placeholder="请选择">
-                        <el-option label="待审批" value="1"></el-option>
-                        <el-option label="已通过" value="2"></el-option>
-                        <el-option label="未通过" value="3"></el-option>
+                        <el-option label="待审批" value="0"></el-option>
+                        <el-option label="已通过" value="1"></el-option>
+                        <el-option label="未通过" value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="审批意见" class="SearchFormItem">
@@ -71,7 +71,13 @@
                 <el-table-column prop="applyType" label="申请类型"></el-table-column>
                 <el-table-column prop="applyTime" label="申请时间"></el-table-column>
                 <el-table-column prop="applyUserEmail" label="申请人邮箱"></el-table-column>
-                <el-table-column prop="approvalStatus" label="审批状态"></el-table-column>
+                <el-table-column prop="approvalStatus" label="审批状态">
+                    <template slot-scope="scope">
+                        <el-tag v-if="scope.row.approvalStatus === 0" type="text">待审批</el-tag>
+                        <el-tag v-if="scope.row.approvalStatus === 1" type="success">已通过</el-tag>
+                        <el-tag v-if="scope.row.approvalStatus === 2" type="danger">未通过</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="approvalOpinion" label="审批意见"></el-table-column>
                 <el-table-column prop="approvalTime" label="审批时间"></el-table-column>
                 <el-table-column prop="operation" label="操作" align="center">
@@ -131,7 +137,7 @@ export default {
                     // 申请人邮箱
                     applyUserEmail: 'email1',
                     // 审批状态
-                    approvalStatus: '待审批',
+                    approvalStatus: 0,
                     // 审批意见
                     approvalOpinion: '无',
                     // 审批时间
@@ -171,12 +177,23 @@ export default {
         },
         // 取消审批
         approvalCancel() {
-            this.approvalDialogVisible = false;
+            this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.approvalDialogVisible = false;
+            }).catch(() => {});
         },
         // 确定审批
         approvalConfirm() {
             this.approvalDialogVisible = false;
-            this.approvalTable[this.approvalIndex].approvalStatus = this.approvalForm.approvalStatus === '1' ? '已通过' : '未通过';
+            this.approvalTable[this.approvalIndex].approvalStatus = this.approvalForm.approvalStatus === '1' ? 1 : 2;
+            this.approvalTable[this.approvalIndex].approvalOpinion = this.approvalForm.approvalOpinion;
+            this.$message({
+                message: '审批完成',
+                type: 'success'
+            });
         }
     },
 }
