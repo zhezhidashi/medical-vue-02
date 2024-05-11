@@ -286,7 +286,12 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.modifyProjectDialogVisible = false;
-            }).catch(() => { });
+            }).catch(() => { 
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+            });
         },
         modifyProjectConfirm() {
             console.log(this.modifyProjectItem, this.modifyProjectIndex);
@@ -307,7 +312,12 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.addProjectDialogVisible = false;
-            }).catch(() => { });
+            }).catch(() => { 
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+            });
         },
         addProjectConfirm() {
             console.log(this.addProjectItem);

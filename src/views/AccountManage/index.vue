@@ -66,10 +66,7 @@
                     <template slot-scope="props">
                         <el-button @click="changeUser(props.row, props.$index)" type="primary"
                             size="small">修改</el-button>
-                        <el-button @click.native.prevent="deleteUser(props.$index, userTable)" type="danger"
-                            size="small">
-                            删除
-                        </el-button>
+                        <el-button @click.native.prevent="deleteUser(props.$index, userTable)" type="danger" size="small">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -309,7 +306,12 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.addUserDialogVisible = false;
-            }).catch(() => { });
+            }).catch(() => { 
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+            });
         },
         modifyPermissionCancel() {
             this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
@@ -318,7 +320,12 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.modifyPermissionDialogVisible = false;
-            }).catch(() => { });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+             });
         },
         addUserConfirm() {
             // 检查是否有空值
@@ -389,7 +396,12 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.modifyUserDialogVisible = false;
-            }).catch(() => { });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+             });
         },
         modifyUserConfirm() {
             // 检查是否有空值
@@ -425,7 +437,12 @@ export default {
                 this.modifyUserPasswordDialogVisible = false;
                 this.passwordForm.newPassword = '';
                 this.passwordForm.confirmPassword = '';
-            }).catch(() => { });
+            }).catch(() => { 
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+            });
         },
         modifyUserPasswordConfirm() {
             if (this.passwordForm.newPassword === '') {

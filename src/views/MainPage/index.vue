@@ -24,7 +24,7 @@
             <div
                 style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 100%; margin-top: 24px;">
                 <el-card style="width: 90%; margin-bottom: 24px;">
-                    <div class="echarts" ref="TreeEcharts" style="height: 350px;"></div>
+                    <div class="echarts" ref="TreeEcharts" style="height: 450px;"></div>
                 </el-card>
                 <el-card style="width: 90%; margin-bottom: 24px;">
 
@@ -171,37 +171,33 @@ export default {
                 series: {
                     type: 'tree',
                     orient: 'vertical', // 设置为垂直布局
-                    left: '0%', // 将根节点放在正中间
                     symbol: 'emptyRectangle', // 将节点形状设置为方块
-                    symbolSize: [40, 20], // 方块的大小
+                    symbolSize: [100, 30], // 方块的大小
                     data: [
                         {
-                            name: 'A',
+                            name: '药监数联网',
                             children: [
                                 {
-                                    name: 'A1',
+                                    name: '北医三院',
                                     children: [
                                         {
-                                            name: 'A11',
+                                            name: '内网',
                                         },
                                         {
-                                            name: 'A12',
+                                            name: '外网',
                                         },
                                     ],
                                 },
                                 {
-                                    name: 'A2',
-                                },
-                            ],
-                        },
-                        {
-                            name: 'B',
-                            children: [
-                                {
-                                    name: 'B1',
-                                },
-                                {
-                                    name: 'B2',
+                                    name: '北京301医院',
+                                    children: [
+                                        {
+                                            name: '内网',
+                                        },
+                                        {
+                                            name: '外网',
+                                        },
+                                    ],
                                 },
                             ],
                         },

@@ -178,7 +178,12 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.approvalDialogVisible = false;
-            }).catch(() => {});
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+            });
         },
         // 确定审批
         approvalConfirm() {

@@ -187,7 +187,12 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.addNetworkingGroupDialogVisible = false;
-            }).catch(() => {});
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+            });
         },
 
         addNetworkingGroupConfirm() {
@@ -214,7 +219,12 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.editNetworkingGroupDialogVisible = false;
-            }).catch(() => {});
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+            });
         },
 
         editNetworkingGroupConfirm() {

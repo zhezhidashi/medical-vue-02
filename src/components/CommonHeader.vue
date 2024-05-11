@@ -76,7 +76,12 @@ export default {
                 this.modifyPasswordDialogVisible = false;
                 this.passwordForm.newPassword = '';
                 this.passwordForm.confirmPassword = '';
-            }).catch(() => { });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+             });
         },
         modifyPasswordConfirm() {
             if (this.passwordForm.newPassword === '') {

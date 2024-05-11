@@ -208,7 +208,12 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.addNetworkingDialogVisible = false;
-            }).catch(() => {});
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+            });
         },
         // 确定增加组网组
         addNetworkingConfirm() {
@@ -249,7 +254,12 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.editNetworkingDialogVisible = false;
-            }).catch(() => {});
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+            });
         },
         // 确定修改组网组
         editNetworkingConfirm() {

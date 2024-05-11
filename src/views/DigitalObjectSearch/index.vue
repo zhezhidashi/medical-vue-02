@@ -2,13 +2,23 @@
     <div style="display: flex;">
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                <el-form-item prop="project" label="项目名称" class="SearchFormItem">
-                    <el-select v-model="searchForm.project" placeholder="请选择" style="width: 200px;">
-                        <el-option v-for="item in projectOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
+                <el-form-item label="DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.doi"></el-input>
                 </el-form-item>
-                <el-form-item prop="digitalObjectName" label="数字对象名称" class="SearchFormItem">
-                    <el-input v-model="searchForm.digitalObjectName" style="width: 200px;"></el-input>
+                <el-form-item label="数字对象名字" class="SearchFormItem">
+                    <el-input v-model="searchForm.doiName"></el-input>
+                </el-form-item>
+                <el-form-item label="数字对象来源" class="SearchFormItem">
+                    <el-input v-model="searchForm.doiSource"></el-input>
+                </el-form-item>
+                <el-form-item label="数字对象描述" class="SearchFormItem">
+                    <el-input v-model="searchForm.doiDesc"></el-input>
+                </el-form-item>
+                <el-form-item label="doi所属项目" class="SearchFormItem">
+                    <el-input v-model="searchForm.project"></el-input>
+                </el-form-item>
+                <el-form-item label="doi所属机构" class="SearchFormItem">
+                    <el-input v-model="searchForm.institution"></el-input>
                 </el-form-item>
             </el-form>
 
@@ -16,9 +26,12 @@
             <el-divider></el-divider>
 
             <el-table :data="resultTable" stripe border style="width: 95%;">
-                <el-table-column prop="project" label="项目名称"></el-table-column>
-                <el-table-column prop="digitalObjectName" label="数字对象名称"></el-table-column>
-                <el-table-column prop="digitalObjectDescription" label="数字对象描述"></el-table-column>
+                <el-table-column prop="doi" label="DOI"></el-table-column>
+                <el-table-column prop="doiName" label="数字对象名称"></el-table-column>
+                <el-table-column prop="doiSource" label="数字对象来源"></el-table-column>
+                <el-table-column prop="doiDesc" label="数字对象描述"></el-table-column>
+                <el-table-column prop="project" label="doi所属项目"></el-table-column>
+                <el-table-column prop="institution" label="doi所属机构"></el-table-column>
             </el-table>
         </div>
     </div>
@@ -30,17 +43,29 @@ export default {
     data() {
         return {
             searchForm: {
+                // DOI
+                doi: '',
+                // 数字对象名称
+                doiName: '',
+                // 数字对象来源
+                doiSource: '',
+                // 数字对象描述
+                doiDesc: '',
+                // doi所属项目
                 project: '',
-                digitalObjectName: '',
+                // doi所属机构
+                institution: '',
             },
-            projectOptions: [
-                { label: '项目1', value: '0' },
-                { label: '项目2', value: '1' },
-            ],
 
             resultTable: [
-                { project: '项目1', digitalObjectName: '数字对象1', digitalObjectDescription: '描述1' },
-                { project: '项目2', digitalObjectName: '数字对象2', digitalObjectDescription: '描述2' },
+                {
+                    doi: 'doi1',
+                    doiName: '数字对象1',
+                    doiSource: '来源1',
+                    doiDesc: '描述1',
+                    project: '项目1',
+                    institution: '机构1',
+                }
             ],
 
         };
