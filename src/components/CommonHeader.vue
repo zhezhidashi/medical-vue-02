@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { getForm } from '@/api/data';
 export default {
     name: "CommonAside",
     data() {
@@ -61,7 +62,7 @@ export default {
             this.$store.commit('clearToken');
             this.$store.commit('clearUsername');
             this.$store.commit('clearUserType');
-            // this.$router.push('/Login');
+            getForm('/logout?apifoxApiId=163024276', this, function(res) {})
             window.location.reload();
         },
         modifyPassword() {
