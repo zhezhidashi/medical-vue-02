@@ -169,6 +169,7 @@
 </template>
 
 <script>
+import { postForm } from '@/api/data'
 export default {
     name: "AccountManage",
     data() {
@@ -261,8 +262,23 @@ export default {
             }
         };
     },
-    mounted() { },
+    mounted() {
+        // this.getProjects();
+    },
     methods: {
+        // 获取所有项目
+        getProjects() {
+            let _this = this;
+            _this.projectsList = [];
+            postForm('/projectInfos/getProjectInfo', {}, _this, function(res) {
+                for (let item of res.data.records) {
+                    _this.projectsList.push({
+                        key: item.pid,
+                        label: item.name
+                    });
+                }
+            });
+        },
         changeProjectPermission(row, type) {
             this.modifyPermissionDialogList = row.projects
             this.modifyPermissionIndex = type

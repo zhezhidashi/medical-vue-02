@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import { postForm } from '@/api/data'
 export default {
     name: "NetworkingGroup",
     data() {
@@ -142,8 +143,25 @@ export default {
 
         };
     },
-    mounted() {},
+    mounted() {
+        this.getData();
+    },
     methods: {
+        getData(){
+            let _this = this;
+            let params = {};
+            _this.tableData = [];
+            postForm('/networkGroups/get', params, _this, function (res) {
+                for(let item of res.data.records) {
+                    _this.tableData.push({
+                        networkingGroupId: item.gid,
+                        networkingGroupName: item.publicRootName,
+                        networkingAddress: item.publicRootAddress,
+                        networkingPort: item.networkingPort,
+                    });
+                }
+            });
+        },
         addNetworkingGroup() {
             this.addNetworkingGroupDialogVisible = true;
             this.editNetworkingGroupForm.networkingGroupName = '';
@@ -167,10 +185,18 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.tableData.splice(id, 1);
-                this.$message({
-                    type: 'success',
-                    message: '删除成功!'
+                
+                
+                let _this = this;
+                let param = {
+                    gid: row.networkingGroupId,
+                }
+                postForm('/networkGroups/deleteById', param, _this, function (res) {
+                    _this.getData();
+                    _this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
                 });
             }).catch(() => {
                 this.$message({
@@ -196,19 +222,24 @@ export default {
         },
 
         addNetworkingGroupConfirm() {
+            let _this = this;
             this.addNetworkingGroupDialogVisible = false;
-            this.tableData.push({
-                networkingGroupId: this.tableData.length + 1,
-                networkingGroupName: this.addNetworkingGroupForm.networkingGroupName,
-                networkingAddress: this.addNetworkingGroupForm.networkingAddress,
-                networkingPort: this.addNetworkingGroupForm.networkingPort,
-                networkingStatus: this.addNetworkingGroupForm.networkingStatus,
-                networkingDesc: this.addNetworkingGroupForm.networkingDesc,
-                createTime: new Date().toLocaleString(),
-            });
-            this.$message({
-                message: '增加组网组成功',
-                type: 'success'
+            let param = {
+                publicRootName: this.addNetworkingGroupForm.networkingGroupName,
+                publicRootAddress: this.addNetworkingGroupForm.networkingAddress,
+                publicRootPort: this.addNetworkingGroupForm.networkingPort,
+            }
+            postForm('/networkGroups/add', param, _this, function (res) {
+                _this.tableData.push({
+                    networkingGroupId: res.data.gid,
+                    networkingGroupName: res.data.publicRootName,
+                    networkingAddress: res.data.publicRootAddress,
+                    networkingPort: res.data.networkingPort,
+                })
+                _this.$message({
+                    message: '增加组网组成功',
+                    type: 'success'
+                });
             });
         },
 
@@ -228,16 +259,25 @@ export default {
         },
 
         editNetworkingGroupConfirm() {
+            let _this = this;
+            let param = {
+                gid: this.tableData[this.editNetworkingGroupId].networkingGroupId,
+                publicRootName: this.editNetworkingGroupForm.networkingGroupName,
+                publicRootAddress: this.editNetworkingGroupForm.networkingAddress,
+                publicRootPort: this.editNetworkingGroupForm.networkingPort,
+            }
             this.editNetworkingGroupDialogVisible = false;
-            this.tableData[this.editNetworkingGroupId].networkingGroupName = this.editNetworkingGroupForm.networkingGroupName;
-            this.tableData[this.editNetworkingGroupId].networkingAddress = this.editNetworkingGroupForm.networkingAddress;
-            this.tableData[this.editNetworkingGroupId].networkingPort = this.editNetworkingGroupForm.networkingPort;
-            this.tableData[this.editNetworkingGroupId].networkingStatus = this.editNetworkingGroupForm.networkingStatus;
-            this.tableData[this.editNetworkingGroupId].networkingDesc = this.editNetworkingGroupForm.networkingDesc;
-            this.$message({
-                message: '修改组网组成功',
-                type: 'success'
-            });
+
+            postForm('/networkGroups/update', param, _this, function(res) {
+                _this.tableData[_this.editNetworkingGroupId].networkingGroupName = res.data.publicRootName;
+                _this.tableData[_this.editNetworkingGroupId].networkingAddress = res.data.publicRootAddress;
+                _this.tableData[_this.editNetworkingGroupId].networkingPort = res.data.networkingPort;
+                
+                _this.$message({
+                    message: '修改组网组成功',
+                    type: 'success'
+                });
+            })
         },
     },
 }

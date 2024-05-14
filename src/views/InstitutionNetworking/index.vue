@@ -2,7 +2,7 @@
     <div style="display: flex;">
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <div style="display: flex; align-items: center; justify-content: center; ">
-                <el-button @click="addNetworking" type="primary" style="margin: 24px;">增加组网组</el-button>
+                <el-button @click="addNetworking" type="primary" style="margin: 24px;">增加机构组网</el-button>
             </div>
 
             <el-table :data="tableData" style="width: 95%;" stripe border >
@@ -105,6 +105,8 @@
 </template>
 
 <script>
+import { postForm } from '@/api/data';
+import { get } from 'lodash';
 export default {
     name: "InstitutionNetworking",
     data() {
@@ -187,6 +189,11 @@ export default {
     },
     mounted() {},
     methods: {
+        // 获取数据
+        getData() {
+            
+        },
+
         // 增加组网组
         addNetworking() {
             this.addNetworkingDialogVisible = true;
