@@ -5,7 +5,7 @@ import "nprogress/nprogress.css";
 
 // 注：第一个页面里面两个上传文件的部分也有baseUrl，如果要改的话，一起改
 export const baseUrl = '/api'
-// export const baseUrl = 'http://47.94.142.244:8080'
+// export const baseUrl = 'http://http://47.93.215.112:8080'
 
 // post请求
 export const postForm = (requestUrl, params, This, callback) => {
@@ -18,7 +18,7 @@ export const postForm = (requestUrl, params, This, callback) => {
         method: 'post',
         data: params,
         headers: {
-            Authorization: TokenValue
+            Authorization: "Bearer " + TokenValue
         }
     }).then(({ data: res }) => {
         nprogress.done()
@@ -28,7 +28,7 @@ export const postForm = (requestUrl, params, This, callback) => {
         }
         else {
             This.$message({
-                message: res.error,
+                message: res.message,
                 type: 'error'
             });
         }
@@ -59,7 +59,7 @@ export const getForm = (requestUrl, This, callback) => {
         }
         else {
             This.$message({
-                message: res.error,
+                message: res.message,
                 type: 'error'
             });
         }
@@ -85,20 +85,20 @@ export const loginRequest = (requestUrl, params, This, callback) => {
             if(res.data.userType === 1) {
                 store.commit('setToken', res.data.accessToken)
                 store.commit('setUsername', params.username)
-                store.commit('setUserType', 'admin')
+                store.commit('setUserType', 'user')
                 callback({code: 200, msg: '登录成功'})
             }
             else {
                 store.commit('setToken', res.data.accessToken)
                 store.commit('setUsername', params.username)
-                store.commit('setUserType', 'user')
+                store.commit('setUserType', 'admin')
                 callback({code: 200, msg: '登录成功'})
             }
             callback(res) 
         }
         else {
             This.$message({
-                message: res.error,
+                message: res.message,
                 type: 'error'
             });
         }

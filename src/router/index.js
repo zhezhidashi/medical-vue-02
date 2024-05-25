@@ -46,14 +46,6 @@ const routes = [
                 component: () => import('@/views/Login')
             },
             {
-                path: '/NetworkingGroup',
-                name: 'NetworkingGroup',
-                meta: {
-                    title: '组网组管理'
-                },
-                component: () => import('@/views/NetworkingGroup')
-            },
-            {
                 path: '/InstitutionNetworking',
                 name: 'InstitutionNetworking',
                 meta: {
@@ -118,12 +110,20 @@ const routes = [
                 component: () => import('@/views/DigitalObjectSearch')
             },
             {
-                path: '/DigitalObjectFerry',
-                name: 'DigitalObjectFerry',
+                path: '/DigitalObjectImport',
+                name: 'DigitalObjectImport',
                 meta: {
-                    title: '数字对象摆渡'
+                    title: '数字对象导入'
                 },
-                component: () => import('@/views/DigitalObjectFerry')
+                component: () => import('@/views/DigitalObjectImport')
+            },
+            {
+                path: '/DigitalObjectExport',
+                name: 'DigitalObjectExport',
+                meta: {
+                    title: '数字对象导出'
+                },
+                component: () => import('@/views/DigitalObjectExport')
             },
         ]
     },

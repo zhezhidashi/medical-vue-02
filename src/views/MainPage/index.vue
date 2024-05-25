@@ -24,9 +24,6 @@
             <div
                 style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 100%; margin-top: 24px;">
                 <el-card style="width: 90%; margin-bottom: 24px;">
-                    <div class="echarts" ref="TreeEcharts" style="height: 450px;"></div>
-                </el-card>
-                <el-card style="width: 90%; margin-bottom: 24px;">
 
                     <el-descriptions title="项目名字1">
                         <el-descriptions-item label="项目所属机构">北医三院</el-descriptions-item>
@@ -163,47 +160,6 @@ export default {
                 ],
             },
 
-            treeEchartsOptions: {
-                title: {
-                    text: '组网结构示例',
-                    left: 'center',
-                },
-                series: {
-                    type: 'tree',
-                    orient: 'vertical', // 设置为垂直布局
-                    symbol: 'emptyRectangle', // 将节点形状设置为方块
-                    symbolSize: [100, 30], // 方块的大小
-                    data: [
-                        {
-                            name: '药监数联网',
-                            children: [
-                                {
-                                    name: '北医三院',
-                                    children: [
-                                        {
-                                            name: '内网',
-                                        },
-                                        {
-                                            name: '外网',
-                                        },
-                                    ],
-                                },
-                                {
-                                    name: '北京301医院',
-                                    children: [
-                                        {
-                                            name: '内网',
-                                        },
-                                        {
-                                            name: '外网',
-                                        },
-                                    ],
-                                },
-                            ],
-                        },
-                    ],
-                },
-            }
         };
     },
     mounted() {
@@ -241,12 +197,6 @@ export default {
             lineEcharts.setOption(this.lineEchartsOptions);
             window.addEventListener("resize", () => {
                 lineEcharts.resize();
-            });
-
-            const treeEcharts = echarts.init(this.$refs.TreeEcharts);
-            treeEcharts.setOption(this.treeEchartsOptions);
-            window.addEventListener("resize", () => {
-                treeEcharts.resize();
             });
         },
     },

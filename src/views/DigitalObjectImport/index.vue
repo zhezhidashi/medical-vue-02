@@ -29,7 +29,7 @@
             </el-table>
 
             <div style="text-align: center; margin: 24px;">
-                <el-button type="primary" @click="ferry">摆渡</el-button>
+                <el-button type="primary" @click="ferry">导入</el-button>
             </div>
         </div>
 
@@ -67,7 +67,7 @@
 <script>
 
 export default {
-    name: "MainPage",
+    name: "DigitalObjectImport",
     data() {
         return {
             uploadFile: "",

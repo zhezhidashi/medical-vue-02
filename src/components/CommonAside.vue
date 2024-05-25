@@ -2,11 +2,12 @@
     <div style="width: 250px;" v-show="path !== '/Login'">
         <el-menu :default-active="activeIndex" class="el-menu-demo"  @select="handleSelect" :unique-opened="false">
             <el-menu-item index="0">主页</el-menu-item>
-            <el-submenu v-show="isAdmin" index="1">
+            <el-menu-item v-show="isAdmin" index="1">组网管理</el-menu-item>
+            <!-- <el-submenu v-show="isAdmin" index="1">
                 <template slot="title">组网管理</template>
                 <el-menu-item index="1-1">组网组管理</el-menu-item>
                 <el-menu-item index="1-2">机构组网管理</el-menu-item>
-            </el-submenu>
+            </el-submenu> -->
             <el-submenu v-show="isAdmin" index="2">
                 <template slot="title">项目管理</template>
                 <el-menu-item index="2-1">本机构牵头项目</el-menu-item>
@@ -17,7 +18,12 @@
             <el-menu-item v-show="!isAdmin" index="5">数字对象申请</el-menu-item>
             <el-menu-item v-show="isAdmin" index="6">数字对象审批</el-menu-item>
             <el-menu-item v-show="!isAdmin" index="7">数字对象检索</el-menu-item>
-            <el-menu-item v-show="!isAdmin" index="8">数字对象摆渡</el-menu-item>
+            <el-submenu v-show="!isAdmin" index="8">
+                <template slot="title">数字对象摆渡</template>
+                <el-menu-item index="8-1">数字对象导入</el-menu-item>
+                <el-menu-item index="8-2">数字对象导出</el-menu-item>
+            </el-submenu>
+            <!-- <el-menu-item v-show="!isAdmin" index="8">数字对象摆渡</el-menu-item> -->
         </el-menu>
     </div>
 </template>
@@ -41,11 +47,11 @@ export default {
         else if(this.path === '/MainPage') {
             this.activeIndex = '0';
         }
-        else if (this.path === '/NetworkingGroup') {
-            this.activeIndex = '1-1';
-        }
+        // else if (this.path === '/NetworkingGroup') {
+        //     this.activeIndex = '1-1';
+        // }
         else if (this.path === '/InstitutionNetworking') {
-            this.activeIndex = '1-2';
+            this.activeIndex = '1';
         }
         else if (this.path === '/LeadingProjects') {
             this.activeIndex = '2-1';
@@ -68,8 +74,11 @@ export default {
         else if (this.path === '/DigitalObjectSearch') {
             this.activeIndex = '7';
         }
-        else if (this.path === '/DigitalObjectFerry') {
-            this.activeIndex = '8';
+        else if (this.path === 'DigitalObjectImport') {
+            this.activeIndex = '8-1'
+        }
+        else if (this.path === '/DigitalObjectExport') {
+            this.activeIndex = '8-2';
         }
     },
     watch: {
@@ -93,9 +102,11 @@ export default {
             console.log(key, keyPath);
             if (key === '0') {
                 this.$router.push('/MainPage')
-            } else if (key === '1-1') {
-                this.$router.push('/NetworkingGroup')
-            } else if (key === '1-2') {
+            } 
+            // else if (key === '1-1') {
+            //     this.$router.push('/NetworkingGroup')
+            // } 
+            else if (key === '1') {
                 this.$router.push('/InstitutionNetworking')
             } else if (key === '2-1') {
                 this.$router.push('/LeadingProjects')
@@ -111,8 +122,10 @@ export default {
                 this.$router.push('/DigitalObjectApproval')
             } else if (key === '7') {
                 this.$router.push('/DigitalObjectSearch')
-            } else if (key === '8') {
-                this.$router.push('/DigitalObjectFerry')
+            } else if (key === '8-1') {
+                this.$router.push('/DigitalObjectImport')
+            } else if (key === '8-2') {
+                this.$router.push('/DigitalObjectExport')
             }
         },
     },
