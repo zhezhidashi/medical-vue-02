@@ -6,9 +6,6 @@
                 <el-form-item prop="projectName" label="项目名称" class="SearchFormItem">
                     <el-input v-model="searchForm.projectName" placeholder="项目名称"></el-input>
                 </el-form-item>
-                <el-form-item prop="projectInstitution" label="项目所属机构" class="SearchFormItem">
-                    <el-input v-model="searchForm.projectInstitution" placeholder="项目所属机构"></el-input>
-                </el-form-item>
                 <el-form-item prop="projectLeader" label="项目负责人" class="SearchFormItem">
                     <el-input v-model="searchForm.projectLeader" placeholder="项目负责人"></el-input>
                 </el-form-item>
@@ -52,7 +49,7 @@
                 </el-form-item>
             </el-form>
 
-            <el-button type="primary">搜索</el-button>
+            <el-button type="primary" @click="searchData">搜索</el-button>
             <el-divider></el-divider>
 
             <div style="display: flex; align-items: center; justify-content: center;">
@@ -61,8 +58,6 @@
 
             <el-table :data="projectTable" stripe border style="width: 95%;">
                 <el-table-column prop="projectName" label="项目名称" min-width="120" align="center"></el-table-column>
-                <el-table-column prop="projectInstitution" label="项目所属机构" min-width="120" align="center">
-                </el-table-column>
                 <el-table-column prop="projectLeader" label="项目负责人" min-width="120" align="center"></el-table-column>
                 <el-table-column prop="projectContact" label="项目联系方式" min-width="120" align="center">
                 </el-table-column>
@@ -103,9 +98,6 @@
                     <el-form-item label="项目名称">
                         <el-input v-model="modifyProjectItem.projectName"></el-input>
                     </el-form-item>
-                    <el-form-item label="项目所属机构">
-                        <el-input v-model="modifyProjectItem.projectInstitution"></el-input>
-                    </el-form-item>
                     <el-form-item label="项目负责人">
                         <el-input v-model="modifyProjectItem.projectLeader"></el-input>
                     </el-form-item>
@@ -116,7 +108,9 @@
                         <el-input v-model="modifyProjectItem.projectDescription"></el-input>
                     </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
-                        <el-upload class="upload-demo" drag action="/api/posts/" :on-success="handleUploadSuccess">
+                        <el-upload 
+                        drag action="/api/file/upload"
+                        :headers="{'Authorization': 'Bearer ' + $store.state.user.token}" :on-success="handleUploadSuccess">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
@@ -134,11 +128,11 @@
             <el-dialog title="增加项目" :visible.sync="addProjectDialogVisible" width="80%"
                 :before-close="addProjectCancel">
                 <el-form :model="addProjectItem" label-width="auto">
+                    <el-form-item label="gid">
+                        <el-input v-model="addProjectItem.gid"></el-input>
+                    </el-form-item>
                     <el-form-item label="项目名称">
                         <el-input v-model="addProjectItem.projectName"></el-input>
-                    </el-form-item>
-                    <el-form-item label="项目所属机构">
-                        <el-input v-model="addProjectItem.projectInstitution"></el-input>
                     </el-form-item>
                     <el-form-item label="项目负责人">
                         <el-input v-model="addProjectItem.projectLeader"></el-input>
@@ -149,8 +143,14 @@
                     <el-form-item label="项目描述">
                         <el-input v-model="addProjectItem.projectDescription"></el-input>
                     </el-form-item>
+                    <el-form-item label="机构DOI">
+                        <el-input v-model="addProjectItem.institutionDoi"></el-input>
+                    </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
-                        <el-upload class="upload-demo" drag action="/api/posts/" :on-success="handleUploadSuccess">
+                        <el-upload class="upload-demo" 
+                        drag action="/api/file/upload"
+                        :headers="{'Authorization': 'Bearer ' + $store.state.user.token}"
+                        :on-success="handleUploadSuccess">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
@@ -170,6 +170,7 @@
 </template>
 
 <script>
+import { postForm } from '@/api/data';
 export default {
     name: "ParticipatingProjects",
     data() {
@@ -178,8 +179,6 @@ export default {
             searchForm: {
                 // 项目名称
                 projectName: "",
-                // 项目所属机构
-                projectInstitution: "",
                 // 项目负责人
                 projectLeader: "",
                 // 项目联系方式
@@ -203,8 +202,6 @@ export default {
                 {
                     // 项目名称
                     projectName: "项目1",
-                    // 项目所属机构
-                    projectInstitution: "机构1",
                     // 项目负责人
                     projectLeader: "负责人1",
                     // 项目联系方式
@@ -232,7 +229,6 @@ export default {
             // 项目item的拷贝
             modifyProjectItem: {
                 projectName: "",
-                projectInstitution: "",
                 projectLeader: "",
                 projectContact: "",
                 projectDescription: "",
@@ -243,18 +239,57 @@ export default {
             addProjectDialogVisible: false,
             // 项目item的拷贝
             addProjectItem: {
+                gid: "",
                 projectName: "",
-                projectInstitution: "",
                 projectLeader: "",
                 projectContact: "",
                 projectDescription: "",
                 projectApplyFile: "",
                 projectApplyEmail: "",
+                institutionDoi: "",
             },
         };
     },
-    mounted() { },
+    mounted() { 
+        this.getData({});
+    },
     methods: {
+        getData(postData){
+            let _this = this;
+            _this.projectTable = [];
+            postForm('/projectInfos/getProjectInfo', postData, _this, function(res){
+                for(let item of res.data.records) {
+                    _this.projectTable.push({
+                        pid: item.pid,
+                        gid: item.gid,
+                        projectName: item.name,
+                        projectLeader: item.user,
+                        projectContact: item.contactInfo,
+                        projectDescription: item.remark,
+                        projectApplyFile: item.applyFile,
+                        projectApplyTime: new Date(item.createTime).toLocaleDateString(),
+                        projectApplyEmail: item.contactEmail,
+                        projectApprovalStatus: item.approvalStatus,
+                        projectApprovalOpinion: item.approvalOpinion,
+                        projectApprovalTime: item.approvalTime,
+                    });
+                }
+            })
+        },
+        searchData(){
+            let postData = {
+                name: this.searchForm.projectName,
+                user: this.searchForm.projectLeader,
+                contactInfo: this.searchForm.projectContact,
+                remark: this.searchForm.projectDescription,
+                projectApplyTimeRange: this.searchForm.projectApplyTimeRange,
+                contactEmail: this.searchForm.projectApplyEmail,
+                projectApprovalStatus: this.searchForm.projectApprovalStatus,
+                projectApprovalOpinion: this.searchForm.projectApprovalOpinion,
+                projectApprovalTimeRange: this.searchForm.projectApprovalTimeRange,
+            }
+            this.getData(postData);
+        },
         changeProject(row, index) {
             this.modifyProjectDialogVisible = true;
             this.modifyProjectIndex = index;
@@ -269,7 +304,7 @@ export default {
             }).then(() => {
                 _this.$message({
                     type: 'success',
-                    message: '删除成功!'
+                    message: '删除成功'
                 });
                 this.projectTable.splice(index, 1);
             }).catch(() => {
@@ -304,6 +339,16 @@ export default {
         },
         addProject() {
             this.addProjectDialogVisible = true;
+            this.addProjectItem = {
+                gid: "",
+                projectName: "",
+                projectLeader: "",
+                projectContact: "",
+                projectDescription: "",
+                projectApplyFile: "",
+                projectApplyEmail: "",
+                institutionDoi: "",
+            }
         },
         addProjectCancel() {
             this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
@@ -320,14 +365,42 @@ export default {
             });
         },
         addProjectConfirm() {
-            console.log(this.addProjectItem);
-            this.projectTable.push(JSON.parse(JSON.stringify(this.addProjectItem)));
-            this.addProjectDialogVisible = false;
+            let _this = this;
+            // 检查有没有空值
+            if(this.addProjectItem.gid === "" || this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === "" || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "" || this.addProjectItem.institutionDoi === "") {
+                this.$message({
+                    type: 'warning',
+                    message: '请填写完整信息'
+                });
+                return;
+            }
+
+            let postData = {
+                gid: this.addProjectItem.gid,
+                name: this.addProjectItem.projectName,
+                user: this.addProjectItem.projectLeader,
+                contactInfo: this.addProjectItem.projectContact,
+                remark: this.addProjectItem.projectDescription,
+                applyFile: this.addProjectItem.projectApplyFile,
+                contactEmail: this.addProjectItem.projectApplyEmail,
+                institutionDoi: this.addProjectItem.institutionDoi,
+            }
+
+            postForm('/projectInfos/apply', postData, this, function(res){
+                if(res.code === 200) {
+                    _this.$message({
+                    type: 'success',
+                    message: '添加成功'
+                });
+                    _this.getData({});
+                    _this.addProjectDialogVisible = false;
+                }
+            })
         },
         // 处理上传成功
         handleUploadSuccess(response, file, fileList) {
             console.log(response, file, fileList);
-            this.applyForm.applyFile = response.id;
+            this.addProjectItem.applyFile = response.id;
         },
     },
 }

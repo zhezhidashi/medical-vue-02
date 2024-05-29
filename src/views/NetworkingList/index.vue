@@ -1,9 +1,35 @@
 <template>
     <div style="display: flex;">
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-            <div style="display: flex; align-items: center; justify-content: center; ">
-                <el-button @click="applyNetworking" type="primary" style="margin: 24px;">申请组网</el-button>
-            </div>
+            <el-form :model="searchForm" label-width="auto" class="SearchForm">
+                <el-form-item label="组网组编号" class="SearchFormItem">
+                    <el-input v-model="searchForm.gid"></el-input>
+                </el-form-item>
+                <el-form-item label="组网组状态" class="SearchFormItemSelect">
+                    <el-select v-model="searchForm.status" placeholder="请选择">
+                        <el-option label="正常" value="0"></el-option>
+                        <el-option label="异常" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="组网组描述" class="SearchFormItem">
+                    <el-input v-model="searchForm.description"></el-input>
+                </el-form-item>
+                <el-form-item label="组网组名字" class="SearchFormItem">
+                    <el-input v-model="searchForm.publicRootName"></el-input>
+                </el-form-item>
+                <el-form-item label="组网组地址" class="SearchFormItem">
+                    <el-input v-model="searchForm.publicRootAddress"></el-input>
+                </el-form-item>
+                <el-form-item label="组网组端口" class="SearchFormItem">
+                    <el-input v-model="searchForm.publicRootPort"></el-input>
+                </el-form-item>
+                <el-form-item label="机构DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.institutionDoi"></el-input>
+                </el-form-item>
+            </el-form>
+
+            <el-button type="primary" @click="searchData">搜索</el-button>
+            <el-divider></el-divider>
 
             <el-table :data="tableData" style="width: 95%;" stripe border >
                 <el-table-column prop="institutionDoi" label="机构DOI" ></el-table-column>
@@ -11,14 +37,13 @@
                 <el-table-column prop="institutionAddress" label="机构IP地址" ></el-table-column>
                 <el-table-column prop="institutionPort" label="机构端口" ></el-table-column>
                 <el-table-column prop="institutionPublicKey" label="机构公钥" ></el-table-column>
-                <el-table-column prop="institutionDesc" label="机构描述" ></el-table-column>
+                <el-table-column prop="institutionDesc" label="机构描述" min-width="200"></el-table-column>
                 <el-table-column prop="createTime" label="创建时间" ></el-table-column>
-                <el-table-column prop="networkingGroupId" label="所属组网组编号" ></el-table-column>
-                <el-table-column prop="networkingGroupName" label="所属组网组名字" ></el-table-column>
+                <el-table-column prop="updateTime" label="修改时间" ></el-table-column>
                 <el-table-column prop="networkingStatus" label="机构组网状态" >
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.networkingStatus === '1'" type="success">正常</el-tag>
-                        <el-tag v-else-if="scope.row.networkingStatus === '2'" type="danger">异常</el-tag>
+                        <el-tag v-if="scope.row.networkingStatus === 0" type="success">正常</el-tag>
+                        <el-tag v-else-if="scope.row.networkingStatus === 1" type="danger">异常</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="150">
@@ -28,42 +53,6 @@
                     </template>
                 </el-table-column>
             </el-table>
-
-            <el-dialog title="增加组网组" :visible.sync="applyNetworkingDialogVisible" width="90%">
-                <el-form :model="applyNetworkingForm" label-width="auto" >
-                    <el-form-item label="机构DOI" prop="institutionDoi">
-                        <el-input v-model="applyNetworkingForm.institutionDoi" placeholder="请输入机构DOI"></el-input>
-                    </el-form-item>
-                    <el-form-item label="机构名字" prop="institutionName">
-                        <el-input v-model="applyNetworkingForm.institutionName" placeholder="请输入机构名字"></el-input>
-                    </el-form-item>
-                    <el-form-item label="机构IP地址" prop="institutionAddress">
-                        <el-input v-model="applyNetworkingForm.institutionAddress" placeholder="请输入机构IP地址"></el-input>
-                    </el-form-item>
-                    <el-form-item label="机构端口" prop="institutionPort">
-                        <el-input v-model="applyNetworkingForm.institutionPort" placeholder="请输入机构端口"></el-input>
-                    </el-form-item>
-                    <el-form-item label="机构公钥" prop="institutionPublicKey">
-                        <el-input v-model="applyNetworkingForm.institutionPublicKey" placeholder="请输入机构公钥"></el-input>
-                    </el-form-item>
-                    <el-form-item label="机构描述" prop="institutionDesc">
-                        <el-input v-model="applyNetworkingForm.institutionDesc" placeholder="请输入机构描述"></el-input>
-                    </el-form-item>
-                    <el-form-item label="所属组网组编号" prop="networkingGroupId">
-                        <el-input v-model="applyNetworkingForm.networkingGroupId" placeholder="请输入所属组网组编号"></el-input>
-                    </el-form-item>
-                    <el-form-item label="所属组网组名字" prop="networkingGroupName">
-                        <el-input v-model="applyNetworkingForm.networkingGroupName" placeholder="请输入所属组网组名字"></el-input>
-                    </el-form-item>
-                    <el-form-item label="机构组网状态" prop="networkingStatus">
-                        <el-input v-model="applyNetworkingForm.networkingStatus" placeholder="请输入机构组网状态"></el-input>
-                    </el-form-item>
-                </el-form>
-                <div style="display: flex; justify-content: center;">
-                    <el-button @click="applyNetworkingCancel">取消</el-button>
-                    <el-button type="primary" @click="applyNetworkingConfirm">确定</el-button>
-                </div>
-            </el-dialog>
 
             <el-dialog title="修改组网组" :visible.sync="editNetworkingDialogVisible" width="90%" >
                 <el-form :model="editNetworkingForm" label-width="auto">
@@ -127,37 +116,12 @@ export default {
                     institutionDesc: '这是一个机构',
                     // 创建时间
                     createTime: new Date().toLocaleString(),
-                    // 所属组网组编号
-                    networkingGroupId: '1',
-                    // 所属组网组名字
-                    networkingGroupName: '组网组1',
+                    // 修改时间
+                    updateTime: new Date().toLocaleString(),
                     // 机构组网状态
-                    networkingStatus: '1',
+                    networkingStatus: 0,
                 }
             ],
-
-            // 增加数据
-            applyNetworkingForm: {
-                // 机构DOI
-                institutionDoi: '',
-                // 机构名字
-                institutionName: '',
-                // 机构IP地址
-                institutionAddress: '',
-                // 机构端口
-                institutionPort: '',
-                // 机构公钥
-                institutionPublicKey: '',
-                // 机构描述
-                institutionDesc: '',
-                // 所属组网组编号
-                networkingGroupId: '',
-                // 所属组网组名字
-                networkingGroupName: '',
-                // 机构组网状态
-                networkingStatus: '',
-            },
-            applyNetworkingDialogVisible: false,
 
             // 修改数据
             editNetworkingForm: {
@@ -184,59 +148,64 @@ export default {
             editNetworkingDialogVisible: false,
             editNetworkingId: '',
 
+            // 搜索表格
+            searchForm: {
+                // 组网组编号
+                gid: '',
+                // 组网组状态
+                status: '',
+                // 组网组描述
+                description: '',
+                // 组网组名字
+                publicRootName: '',
+                // 组网组地址
+                publicRootAddress: '',
+                // 组网组端口
+                publicRootPort: '',
+                // 机构DOI
+                institutionDoi: '',
+            },
         };
     },
-    mounted() {},
+    mounted() {
+        this.getData({})
+    },
     methods: {
         // 获取数据
-        getData() {
-            
+        getData(postData) {
+            this.tableData = [];
+            let _this = this;
+            postForm('/networkGroups/get', postData, _this, function(res){
+                for(let item of res.data.records) {
+                    _this.tableData.push({
+                        gid: item.gid,
+                        // 机构DOI
+                    institutionDoi: item.institutionDoi,
+                    // 机构名字
+                    institutionName: item.publicRootName,
+                    // 机构IP地址
+                    institutionAddress: item.publicRootAddress,
+                    // 机构端口
+                    institutionPort: item.publicRootPort,
+                    // 机构公钥
+                    institutionPublicKey: item.publicRootKey,
+                    // 机构描述
+                    institutionDesc: item.description,
+                    // 创建时间
+                    createTime: new Date(item.createTime).toLocaleString(),
+                    // 修改时间
+                    updateTime: new Date(item.updateTime).toLocaleString(),
+                    // 组网状态
+                    networkingStatus: item.status,
+                    })
+                }
+            })
         },
 
-        // 增加组网组
-        applyNetworking() {
-            this.applyNetworkingDialogVisible = true;
-            this.applyNetworkingForm.institutionDoi = '';
-            this.applyNetworkingForm.institutionName = '';
-            this.applyNetworkingForm.institutionAddress = '';
-            this.applyNetworkingForm.institutionPort = '';
-            this.applyNetworkingForm.institutionPublicKey = '';
-            this.applyNetworkingForm.institutionDesc = '';
-            this.applyNetworkingForm.networkingGroupId = '';
-            this.applyNetworkingForm.networkingGroupName = '';
-            this.applyNetworkingForm.networkingStatus = '';
+        searchData(){
+            this.getData(this.searchForm)
         },
-        // 取消增加组网组
-        applyNetworkingCancel() {
-            this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.applyNetworkingDialogVisible = false;
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消'
-                });
-            });
-        },
-        // 确定增加组网组
-        applyNetworkingConfirm() {
-            this.applyNetworkingDialogVisible = false;
-            this.tableData.push({
-                institutionDoi: this.applyNetworkingForm.institutionDoi,
-                institutionName: this.applyNetworkingForm.institutionName,
-                institutionAddress: this.applyNetworkingForm.institutionAddress,
-                institutionPort: this.applyNetworkingForm.institutionPort,
-                institutionPublicKey: this.applyNetworkingForm.institutionPublicKey,
-                institutionDesc: this.applyNetworkingForm.institutionDesc,
-                createTime: new Date().toLocaleString(),
-                networkingGroupId: this.applyNetworkingForm.networkingGroupId,
-                networkingGroupName: this.applyNetworkingForm.networkingGroupName,
-                networkingStatus: this.applyNetworkingForm.networkingStatus,
-            });
-        },
+
         // 修改组网组
         editNetworking(row, index) {
             this.editNetworkingForm.institutionDoi = row.institutionDoi;
@@ -305,4 +274,17 @@ export default {
 </script>
 
 <style scoped>
+.SearchForm {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+.SearchFormItem {
+    margin: 0 24px 24px 24px;
+}
+.SearchFormItemSelect {
+    margin: 0 24px 24px 24px;
+    width: 260px;
+}
+
 </style>
