@@ -31,6 +31,7 @@ export const postForm = (requestUrl, params, This, callback) => {
                 message: res.message,
                 type: 'error'
             });
+            callback(res)
         }
     })
     .catch((err) => {
@@ -62,6 +63,7 @@ export const getForm = (requestUrl, This, callback) => {
                 message: res.message,
                 type: 'error'
             });
+            callback(res)
         }
     })
     .catch((err) => {
@@ -108,5 +110,4 @@ export const loginRequest = (requestUrl, params, This, callback) => {
         console.log('postForm 的 error: ', requestUrl, err);
     })
 }
-
 

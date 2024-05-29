@@ -2,12 +2,12 @@
     <div style="width: 250px;" v-show="path !== '/Login'">
         <el-menu :default-active="activeIndex" class="el-menu-demo"  @select="handleSelect" :unique-opened="false">
             <el-menu-item index="0">主页</el-menu-item>
-            <el-menu-item v-show="isAdmin" index="1">组网管理</el-menu-item>
-            <!-- <el-submenu v-show="isAdmin" index="1">
+            <!-- <el-menu-item v-show="isAdmin" index="1">组网管理</el-menu-item> -->
+            <el-submenu v-show="isAdmin" index="1">
                 <template slot="title">组网管理</template>
-                <el-menu-item index="1-1">组网组管理</el-menu-item>
-                <el-menu-item index="1-2">机构组网管理</el-menu-item>
-            </el-submenu> -->
+                <el-menu-item index="1-1">申请管理</el-menu-item>
+                <el-menu-item index="1-2">组网列表</el-menu-item>
+            </el-submenu>
             <el-submenu v-show="isAdmin" index="2">
                 <template slot="title">项目管理</template>
                 <el-menu-item index="2-1">本机构牵头项目</el-menu-item>
@@ -47,11 +47,11 @@ export default {
         else if(this.path === '/MainPage') {
             this.activeIndex = '0';
         }
-        // else if (this.path === '/NetworkingGroup') {
-        //     this.activeIndex = '1-1';
-        // }
-        else if (this.path === '/InstitutionNetworking') {
-            this.activeIndex = '1';
+        else if (this.path === '/NetworkingApply') {
+            this.activeIndex = '1-1';
+        }
+        else if (this.path === '/NetworkingList') {
+            this.activeIndex = '1-2';
         }
         else if (this.path === '/LeadingProjects') {
             this.activeIndex = '2-1';
@@ -103,11 +103,11 @@ export default {
             if (key === '0') {
                 this.$router.push('/MainPage')
             } 
-            // else if (key === '1-1') {
-            //     this.$router.push('/NetworkingGroup')
-            // } 
-            else if (key === '1') {
-                this.$router.push('/InstitutionNetworking')
+            else if (key === '1-1') {
+                this.$router.push('/NetworkingApply')
+            } 
+            else if (key === '1-2') {
+                this.$router.push('/NetworkingList')
             } else if (key === '2-1') {
                 this.$router.push('/LeadingProjects')
             } else if(key === '2-2') {

@@ -2,7 +2,7 @@
     <div style="display: flex;">
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <div style="display: flex; align-items: center; justify-content: center; ">
-                <el-button @click="addNetworking" type="primary" style="margin: 24px;">增加机构组网</el-button>
+                <el-button @click="applyNetworking" type="primary" style="margin: 24px;">申请组网</el-button>
             </div>
 
             <el-table :data="tableData" style="width: 95%;" stripe border >
@@ -29,39 +29,39 @@
                 </el-table-column>
             </el-table>
 
-            <el-dialog title="增加组网组" :visible.sync="addNetworkingDialogVisible" width="90%">
-                <el-form :model="addNetworkingForm" label-width="auto" >
+            <el-dialog title="增加组网组" :visible.sync="applyNetworkingDialogVisible" width="90%">
+                <el-form :model="applyNetworkingForm" label-width="auto" >
                     <el-form-item label="机构DOI" prop="institutionDoi">
-                        <el-input v-model="addNetworkingForm.institutionDoi" placeholder="请输入机构DOI"></el-input>
+                        <el-input v-model="applyNetworkingForm.institutionDoi" placeholder="请输入机构DOI"></el-input>
                     </el-form-item>
                     <el-form-item label="机构名字" prop="institutionName">
-                        <el-input v-model="addNetworkingForm.institutionName" placeholder="请输入机构名字"></el-input>
+                        <el-input v-model="applyNetworkingForm.institutionName" placeholder="请输入机构名字"></el-input>
                     </el-form-item>
                     <el-form-item label="机构IP地址" prop="institutionAddress">
-                        <el-input v-model="addNetworkingForm.institutionAddress" placeholder="请输入机构IP地址"></el-input>
+                        <el-input v-model="applyNetworkingForm.institutionAddress" placeholder="请输入机构IP地址"></el-input>
                     </el-form-item>
                     <el-form-item label="机构端口" prop="institutionPort">
-                        <el-input v-model="addNetworkingForm.institutionPort" placeholder="请输入机构端口"></el-input>
+                        <el-input v-model="applyNetworkingForm.institutionPort" placeholder="请输入机构端口"></el-input>
                     </el-form-item>
                     <el-form-item label="机构公钥" prop="institutionPublicKey">
-                        <el-input v-model="addNetworkingForm.institutionPublicKey" placeholder="请输入机构公钥"></el-input>
+                        <el-input v-model="applyNetworkingForm.institutionPublicKey" placeholder="请输入机构公钥"></el-input>
                     </el-form-item>
                     <el-form-item label="机构描述" prop="institutionDesc">
-                        <el-input v-model="addNetworkingForm.institutionDesc" placeholder="请输入机构描述"></el-input>
+                        <el-input v-model="applyNetworkingForm.institutionDesc" placeholder="请输入机构描述"></el-input>
                     </el-form-item>
                     <el-form-item label="所属组网组编号" prop="networkingGroupId">
-                        <el-input v-model="addNetworkingForm.networkingGroupId" placeholder="请输入所属组网组编号"></el-input>
+                        <el-input v-model="applyNetworkingForm.networkingGroupId" placeholder="请输入所属组网组编号"></el-input>
                     </el-form-item>
                     <el-form-item label="所属组网组名字" prop="networkingGroupName">
-                        <el-input v-model="addNetworkingForm.networkingGroupName" placeholder="请输入所属组网组名字"></el-input>
+                        <el-input v-model="applyNetworkingForm.networkingGroupName" placeholder="请输入所属组网组名字"></el-input>
                     </el-form-item>
                     <el-form-item label="机构组网状态" prop="networkingStatus">
-                        <el-input v-model="addNetworkingForm.networkingStatus" placeholder="请输入机构组网状态"></el-input>
+                        <el-input v-model="applyNetworkingForm.networkingStatus" placeholder="请输入机构组网状态"></el-input>
                     </el-form-item>
                 </el-form>
                 <div style="display: flex; justify-content: center;">
-                    <el-button @click="addNetworkingCancel">取消</el-button>
-                    <el-button type="primary" @click="addNetworkingConfirm">确定</el-button>
+                    <el-button @click="applyNetworkingCancel">取消</el-button>
+                    <el-button type="primary" @click="applyNetworkingConfirm">确定</el-button>
                 </div>
             </el-dialog>
 
@@ -106,9 +106,8 @@
 
 <script>
 import { postForm } from '@/api/data';
-import { get } from 'lodash';
 export default {
-    name: "InstitutionNetworking",
+    name: "NetworkingList",
     data() {
         return {
             // 表格数据
@@ -138,7 +137,7 @@ export default {
             ],
 
             // 增加数据
-            addNetworkingForm: {
+            applyNetworkingForm: {
                 // 机构DOI
                 institutionDoi: '',
                 // 机构名字
@@ -158,7 +157,7 @@ export default {
                 // 机构组网状态
                 networkingStatus: '',
             },
-            addNetworkingDialogVisible: false,
+            applyNetworkingDialogVisible: false,
 
             // 修改数据
             editNetworkingForm: {
@@ -195,26 +194,26 @@ export default {
         },
 
         // 增加组网组
-        addNetworking() {
-            this.addNetworkingDialogVisible = true;
-            this.addNetworkingForm.institutionDoi = '';
-            this.addNetworkingForm.institutionName = '';
-            this.addNetworkingForm.institutionAddress = '';
-            this.addNetworkingForm.institutionPort = '';
-            this.addNetworkingForm.institutionPublicKey = '';
-            this.addNetworkingForm.institutionDesc = '';
-            this.addNetworkingForm.networkingGroupId = '';
-            this.addNetworkingForm.networkingGroupName = '';
-            this.addNetworkingForm.networkingStatus = '';
+        applyNetworking() {
+            this.applyNetworkingDialogVisible = true;
+            this.applyNetworkingForm.institutionDoi = '';
+            this.applyNetworkingForm.institutionName = '';
+            this.applyNetworkingForm.institutionAddress = '';
+            this.applyNetworkingForm.institutionPort = '';
+            this.applyNetworkingForm.institutionPublicKey = '';
+            this.applyNetworkingForm.institutionDesc = '';
+            this.applyNetworkingForm.networkingGroupId = '';
+            this.applyNetworkingForm.networkingGroupName = '';
+            this.applyNetworkingForm.networkingStatus = '';
         },
         // 取消增加组网组
-        addNetworkingCancel() {
+        applyNetworkingCancel() {
             this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.addNetworkingDialogVisible = false;
+                this.applyNetworkingDialogVisible = false;
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -223,19 +222,19 @@ export default {
             });
         },
         // 确定增加组网组
-        addNetworkingConfirm() {
-            this.addNetworkingDialogVisible = false;
+        applyNetworkingConfirm() {
+            this.applyNetworkingDialogVisible = false;
             this.tableData.push({
-                institutionDoi: this.addNetworkingForm.institutionDoi,
-                institutionName: this.addNetworkingForm.institutionName,
-                institutionAddress: this.addNetworkingForm.institutionAddress,
-                institutionPort: this.addNetworkingForm.institutionPort,
-                institutionPublicKey: this.addNetworkingForm.institutionPublicKey,
-                institutionDesc: this.addNetworkingForm.institutionDesc,
+                institutionDoi: this.applyNetworkingForm.institutionDoi,
+                institutionName: this.applyNetworkingForm.institutionName,
+                institutionAddress: this.applyNetworkingForm.institutionAddress,
+                institutionPort: this.applyNetworkingForm.institutionPort,
+                institutionPublicKey: this.applyNetworkingForm.institutionPublicKey,
+                institutionDesc: this.applyNetworkingForm.institutionDesc,
                 createTime: new Date().toLocaleString(),
-                networkingGroupId: this.addNetworkingForm.networkingGroupId,
-                networkingGroupName: this.addNetworkingForm.networkingGroupName,
-                networkingStatus: this.addNetworkingForm.networkingStatus,
+                networkingGroupId: this.applyNetworkingForm.networkingGroupId,
+                networkingGroupName: this.applyNetworkingForm.networkingGroupName,
+                networkingStatus: this.applyNetworkingForm.networkingStatus,
             });
         },
         // 修改组网组

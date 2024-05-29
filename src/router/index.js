@@ -46,12 +46,20 @@ const routes = [
                 component: () => import('@/views/Login')
             },
             {
-                path: '/InstitutionNetworking',
-                name: 'InstitutionNetworking',
+                path: '/NetworkingApply',
+                name: 'NetworkingApply',
                 meta: {
-                    title: '机构组网管理'
+                    title: '组网申请'
                 },
-                component: () => import('@/views/InstitutionNetworking')
+                component: () => import('@/views/NetworkingApply')
+            },
+            {
+                path: '/NetworkingList',
+                name: 'NetworkingList',
+                meta: {
+                    title: '组网列表'
+                },
+                component: () => import('@/views/NetworkingList')
             },
             {
                 path: '/LeadingProjects',
