@@ -119,7 +119,7 @@ export const postFormMock = (requestUrl, params, This, callback) => {
     store.commit('getToken')
     const TokenValue = store.state.user.token;
     axios.request({
-        url: mockUrl + requestUrl,
+        url: mockUrl + requestUrl + "?apifoxApiId=149513755&apifoxToken=FWfuxvo9z3Zb1yuOsKEfh",
         method: 'post',
         data: params,
         headers: {
@@ -152,7 +152,7 @@ export const getFormMock = (requestUrl, This, callback) => {
     store.commit('getToken')
     const TokenValue = store.state.user.token;
     axios.request({
-        url: mockUrl + requestUrl,
+        url: mockUrl + requestUrl + "?apifoxApiId=149513755&apifoxToken=FWfuxvo9z3Zb1yuOsKEfh",
         method: 'get',
         headers: {
             Authorization: TokenValue

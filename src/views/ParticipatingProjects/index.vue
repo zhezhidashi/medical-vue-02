@@ -29,8 +29,9 @@
                 <el-form-item prop="projectApprovalOpinion" label="审批意见" class="SearchFormItem">
                     <el-input v-model="searchForm.projectApprovalOpinion" placeholder="审批意见"></el-input>
                 </el-form-item>
-                <el-form-item prop="projectApplyTime" label="申请时间" class="SearchFormTimePicker">
+                <el-form-item prop="projectApplyTimeRange" label="申请时间" class="SearchFormTimePicker">
                     <el-date-picker
+                        value-format="timestamp"
                         v-model="searchForm.projectApplyTimeRange"
                         type="daterange"
                         range-separator="至"
@@ -38,8 +39,21 @@
                         end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item prop="projectApprovalTime" label="审批时间" class="SearchFormTimePicker">
+                
+                <el-form-item prop="projectUpdateTimeRange" label="更新时间" class="SearchFormTimePicker">
                     <el-date-picker
+                        value-format="timestamp"
+                        v-model="searchForm.projectUpdateTimeRange"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+
+                <el-form-item prop="projectApprovalTimeRange" label="审批时间" class="SearchFormTimePicker">
+                    <el-date-picker
+                        value-format="timestamp"
                         v-model="searchForm.projectApprovalTimeRange"
                         type="daterange"
                         range-separator="至"
@@ -53,7 +67,7 @@
             <el-divider></el-divider>
 
             <div style="display: flex; align-items: center; justify-content: center;">
-                <el-button @click="addProject" type="primary" style="margin-bottom: 24px;">增加项目</el-button>
+                <el-button @click="addProject" type="primary" style="margin-bottom: 24px;">申请项目</el-button>
             </div>
 
             <el-table :data="projectTable" stripe border style="width: 95%;">
@@ -66,6 +80,8 @@
                 <el-table-column prop="projectApplyFile" label="项目申请文件" min-width="120" align="center">
                 </el-table-column>
                 <el-table-column prop="projectApplyTime" label="申请时间" min-width="120" align="center">
+                </el-table-column>
+                <el-table-column prop="projectUpdateTime" label="更新时间" min-width="120" align="center">
                 </el-table-column>
                 <el-table-column prop="projectApplyEmail" label="申请人邮箱" min-width="120" align="center">
                 </el-table-column>
@@ -109,8 +125,8 @@
                     </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
                         <el-upload 
-                        drag action="/api/file/upload"
-                        :headers="{'Authorization': 'Bearer ' + $store.state.user.token}" :on-success="handleUploadSuccess">
+                        drag action="https://mock.apifox.com/m1/3980705-3616153-default/file/upload?apifoxToken=FWfuxvo9z3Zb1yuOsKEfh"
+                        :headers="{'Authorization': 'Bearer ' + $store.state.user.token}" :on-success="uploadSuccessModify">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
@@ -128,8 +144,11 @@
             <el-dialog title="增加项目" :visible.sync="addProjectDialogVisible" width="80%"
                 :before-close="addProjectCancel">
                 <el-form :model="addProjectItem" label-width="auto">
-                    <el-form-item label="gid">
-                        <el-input v-model="addProjectItem.gid"></el-input>
+                    <el-form-item label="组网组">
+                        <el-select v-model="addProjectItem.gid" placeholder="请选择">
+                            <el-option v-for="item in gidList" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="项目名称">
                         <el-input v-model="addProjectItem.projectName"></el-input>
@@ -148,9 +167,9 @@
                     </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
                         <el-upload class="upload-demo" 
-                        drag action="/api/file/upload"
+                        drag action="https://mock.apifox.com/m1/3980705-3616153-default/file/upload?apifoxToken=FWfuxvo9z3Zb1yuOsKEfh"
                         :headers="{'Authorization': 'Bearer ' + $store.state.user.token}"
-                        :on-success="handleUploadSuccess">
+                        :on-success="uploadSuccessAdd">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
@@ -171,6 +190,7 @@
 
 <script>
 import { postForm } from '@/api/data';
+import { update } from 'lodash';
 export default {
     name: "ParticipatingProjects",
     data() {
@@ -187,6 +207,8 @@ export default {
                 projectDescription: "",
                 // 申请时间范围
                 projectApplyTimeRange: "",
+                // 更新时间范围
+                projectUpdateTimeRange: "",
                 // 申请人邮箱
                 projectApplyEmail: "",
                 // 审批状态
@@ -212,6 +234,8 @@ export default {
                     projectApplyFile: "文件1",
                     // 申请时间
                     projectApplyTime: "2021-01-01",
+                    // 更新时间
+                    projectUpdateTime: "2021-01-01",
                     // 申请人邮箱
                     projectApplyEmail: "邮箱1",
                     // 审批状态
@@ -248,30 +272,46 @@ export default {
                 projectApplyEmail: "",
                 institutionDoi: "",
             },
+            // 组网组列表
+            gidList: [],
         };
     },
     mounted() { 
+        // 获取组网组列表
+        let _this = this;
+        postForm('/networkGroups/get', {}, _this, function(res){
+            for(let item of res.data.records) {
+                _this.gidList.push({
+                    label: item.publicRootName,
+                    value: item.gid,
+                });
+            }
+        })
+
+        // 获取项目信息
         this.getData({});
+
     },
     methods: {
         getData(postData){
             let _this = this;
             _this.projectTable = [];
-            postForm('/projectInfos/getProjectInfo', postData, _this, function(res){
+            postForm('/projectInfos/getApplications', postData, _this, function(res){
                 for(let item of res.data.records) {
                     _this.projectTable.push({
-                        pid: item.pid,
+                        id: item.id,
                         gid: item.gid,
                         projectName: item.name,
                         projectLeader: item.user,
                         projectContact: item.contactInfo,
-                        projectDescription: item.remark,
-                        projectApplyFile: item.applyFile,
+                        projectDescription: item.description,
+                        projectApplyFile: item.applyDocumentAddress,
                         projectApplyTime: new Date(item.createTime).toLocaleDateString(),
+                        projectUpdateTime: new Date(item.updateTime).toLocaleDateString(),
                         projectApplyEmail: item.contactEmail,
-                        projectApprovalStatus: item.approvalStatus,
-                        projectApprovalOpinion: item.approvalOpinion,
-                        projectApprovalTime: item.approvalTime,
+                        projectApprovalStatus: item.status,
+                        projectApprovalOpinion: item.reviewComments,
+                        // projectApprovalTime: new Date(item.reviewTime).toLocaleDateString(),
                     });
                 }
             })
@@ -281,13 +321,25 @@ export default {
                 name: this.searchForm.projectName,
                 user: this.searchForm.projectLeader,
                 contactInfo: this.searchForm.projectContact,
-                remark: this.searchForm.projectDescription,
-                projectApplyTimeRange: this.searchForm.projectApplyTimeRange,
+                description: this.searchForm.projectDescription,
                 contactEmail: this.searchForm.projectApplyEmail,
-                projectApprovalStatus: this.searchForm.projectApprovalStatus,
-                projectApprovalOpinion: this.searchForm.projectApprovalOpinion,
-                projectApprovalTimeRange: this.searchForm.projectApprovalTimeRange,
+                status: this.searchForm.projectApprovalStatus,
+                remarks: this.searchForm.projectApprovalOpinion,
             }
+
+            if(this.searchForm.projectApplyTimeRange !== "") {
+                postData.createBeginTime = this.searchForm.projectApplyTimeRange[0];
+                postData.createEndTime = this.searchForm.projectApplyTimeRange[1];
+            }
+            if(this.searchForm.projectUpdateTimeRange !== "") {
+                postData.updateBeginTime = this.searchForm.projectUpdateTimeRange[0];
+                postData.updateEndTime = this.searchForm.projectUpdateTimeRange[1];
+            }
+            if(this.searchForm.projectApprovalTimeRange !== "") {
+                postData.reviewBeginTime = this.searchForm.projectApprovalTimeRange[0];
+                postData.reviewEndTime = this.searchForm.projectApprovalTimeRange[1];
+            }
+
             this.getData(postData);
         },
         changeProject(row, index) {
@@ -366,8 +418,9 @@ export default {
         },
         addProjectConfirm() {
             let _this = this;
+
             // 检查有没有空值
-            if(this.addProjectItem.gid === "" || this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === "" || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "" || this.addProjectItem.institutionDoi === "") {
+            if(this.addProjectItem.gid === "" || this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === ""  || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "" || this.addProjectItem.institutionDoi === "") {
                 this.$message({
                     type: 'warning',
                     message: '请填写完整信息'
@@ -380,8 +433,8 @@ export default {
                 name: this.addProjectItem.projectName,
                 user: this.addProjectItem.projectLeader,
                 contactInfo: this.addProjectItem.projectContact,
-                remark: this.addProjectItem.projectDescription,
-                applyFile: this.addProjectItem.projectApplyFile,
+                description: this.addProjectItem.projectDescription,
+                applyDocumentAddress: this.addProjectItem.projectApplyFile,
                 contactEmail: this.addProjectItem.projectApplyEmail,
                 institutionDoi: this.addProjectItem.institutionDoi,
             }
@@ -398,9 +451,12 @@ export default {
             })
         },
         // 处理上传成功
-        handleUploadSuccess(response, file, fileList) {
-            console.log(response, file, fileList);
-            this.addProjectItem.applyFile = response.id;
+        uploadSuccessAdd(response, file, fileList) {
+            this.addProjectItem.projectApplyFile = response.data;
+        },
+
+        uploadSuccessModify(response, file, fileList) {
+            this.modifyProjectItem.projectApplyFile = response.data;
         },
     },
 }
