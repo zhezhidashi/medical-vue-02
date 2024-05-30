@@ -86,13 +86,15 @@ export const loginRequest = (requestUrl, params, This, callback) => {
         console.log('postForm 的 response: ', requestUrl, res);
         if (res.code === 200) { 
             if(res.data.userType === 1) {
-                store.commit('setToken', res.data.accessToken)
+                // store.commit('setToken', res.data.accessToken)
+                store.commit('setToken', res.data.refreshToken)
                 store.commit('setUsername', params.username)
                 store.commit('setUserType', 'user')
                 callback({code: 200, msg: '登录成功'})
             }
             else {
-                store.commit('setToken', res.data.accessToken)
+                // store.commit('setToken', res.data.accessToken)
+                store.commit('setToken', res.data.refreshToken)
                 store.commit('setUsername', params.username)
                 store.commit('setUserType', 'admin')
                 callback({code: 200, msg: '登录成功'})
@@ -119,7 +121,7 @@ export const postFormMock = (requestUrl, params, This, callback) => {
     store.commit('getToken')
     const TokenValue = store.state.user.token;
     axios.request({
-        url: mockUrl + requestUrl + "?apifoxApiId=149513755&apifoxToken=FWfuxvo9z3Zb1yuOsKEfh",
+        url: mockUrl + requestUrl + "?apifoxToken=FWfuxvo9z3Zb1yuOsKEfh",
         method: 'post',
         data: params,
         headers: {

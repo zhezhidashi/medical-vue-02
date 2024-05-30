@@ -39,17 +39,6 @@
                         end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
-                
-                <el-form-item prop="projectUpdateTimeRange" label="更新时间" class="SearchFormTimePicker">
-                    <el-date-picker
-                        value-format="timestamp"
-                        v-model="searchForm.projectUpdateTimeRange"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                    </el-date-picker>
-                </el-form-item>
 
                 <el-form-item prop="projectApprovalTimeRange" label="审批时间" class="SearchFormTimePicker">
                     <el-date-picker
@@ -80,8 +69,6 @@
                 <el-table-column prop="projectApplyFile" label="项目申请文件" min-width="120" align="center">
                 </el-table-column>
                 <el-table-column prop="projectApplyTime" label="申请时间" min-width="120" align="center">
-                </el-table-column>
-                <el-table-column prop="projectUpdateTime" label="更新时间" min-width="120" align="center">
                 </el-table-column>
                 <el-table-column prop="projectApplyEmail" label="申请人邮箱" min-width="120" align="center">
                 </el-table-column>
@@ -207,8 +194,6 @@ export default {
                 projectDescription: "",
                 // 申请时间范围
                 projectApplyTimeRange: "",
-                // 更新时间范围
-                projectUpdateTimeRange: "",
                 // 申请人邮箱
                 projectApplyEmail: "",
                 // 审批状态
@@ -234,8 +219,6 @@ export default {
                     projectApplyFile: "文件1",
                     // 申请时间
                     projectApplyTime: "2021-01-01",
-                    // 更新时间
-                    projectUpdateTime: "2021-01-01",
                     // 申请人邮箱
                     projectApplyEmail: "邮箱1",
                     // 审批状态
@@ -307,11 +290,10 @@ export default {
                         projectDescription: item.description,
                         projectApplyFile: item.applyDocumentAddress,
                         projectApplyTime: new Date(item.createTime).toLocaleDateString(),
-                        projectUpdateTime: new Date(item.updateTime).toLocaleDateString(),
                         projectApplyEmail: item.contactEmail,
                         projectApprovalStatus: item.status,
                         projectApprovalOpinion: item.reviewComments,
-                        // projectApprovalTime: new Date(item.reviewTime).toLocaleDateString(),
+                        projectApprovalTime: new Date(item.updateTime).toLocaleDateString(),
                     });
                 }
             })
@@ -324,20 +306,17 @@ export default {
                 description: this.searchForm.projectDescription,
                 contactEmail: this.searchForm.projectApplyEmail,
                 status: this.searchForm.projectApprovalStatus,
-                remarks: this.searchForm.projectApprovalOpinion,
+                reviewComments: this.searchForm.projectApprovalOpinion,
             }
 
             if(this.searchForm.projectApplyTimeRange !== "") {
                 postData.createBeginTime = this.searchForm.projectApplyTimeRange[0];
                 postData.createEndTime = this.searchForm.projectApplyTimeRange[1];
             }
-            if(this.searchForm.projectUpdateTimeRange !== "") {
-                postData.updateBeginTime = this.searchForm.projectUpdateTimeRange[0];
-                postData.updateEndTime = this.searchForm.projectUpdateTimeRange[1];
-            }
+
             if(this.searchForm.projectApprovalTimeRange !== "") {
-                postData.reviewBeginTime = this.searchForm.projectApprovalTimeRange[0];
-                postData.reviewEndTime = this.searchForm.projectApprovalTimeRange[1];
+                postData.updateBeginTime = this.searchForm.projectApprovalTimeRange[0];
+                postData.updateEndTime = this.searchForm.projectApprovalTimeRange[1];
             }
 
             this.getData(postData);

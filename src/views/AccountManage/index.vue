@@ -17,23 +17,23 @@
                     <el-input v-model="searchForm.email" style="width: 200px;"></el-input>
                 </el-form-item>
                 <el-form-item label="注册时间" class="SearchFormTimePicker">
-                    <el-date-picker v-model="searchForm.registerTimeRange" type="daterange" range-separator="至"
-                        start-placeholder="开始日期" end-placeholder="结束日期">
+                    <el-date-picker value-format="timestamp" v-model="searchForm.registerTimeRange" type="daterange"
+                        range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="最近登录时间" class="SearchFormTimePicker">
-                    <el-date-picker v-model="searchForm.lastLoginTimeRange" type="daterange" range-separator="至"
+                    <el-date-picker value-format="timestamp" v-model="searchForm.lastLoginTimeRange" type="daterange" range-separator="至"
                         start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="最近修改密码时间" class="SearchFormTimePicker">
-                    <el-date-picker v-model="searchForm.lastModifyPasswordTimeRange" type="daterange"
+                    <el-date-picker value-format="timestamp" v-model="searchForm.lastModifyPasswordTimeRange" type="daterange"
                         range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
             </el-form>
 
-            <el-button type="primary">搜索</el-button>
+            <el-button type="primary" @click="searchData">搜索</el-button>
 
             <el-divider></el-divider>
 
@@ -47,7 +47,7 @@
                 <el-table-column prop="projects" label="已授权项目">
                     <template slot-scope="props">
                         <div v-for="(item, index) in props.row.projects" :key="index" style="margin-right: 10px;">{{
-                            projectsList[item].label }}</div>
+                            projectsMap[item] }}</div>
                     </template>
                 </el-table-column>
 
@@ -66,7 +66,8 @@
                     <template slot-scope="props">
                         <el-button @click="changeUser(props.row, props.$index)" type="primary"
                             size="small">修改</el-button>
-                        <el-button @click.native.prevent="deleteUser(props.$index, userTable)" type="danger" size="small">删除</el-button>
+                        <el-button @click.native.prevent="deleteUser(props.$index, userTable)" type="danger"
+                            size="small">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -84,7 +85,7 @@
                     </el-form-item>
                     <el-form-item prop="projects" label="已授权项目">
                         <div v-for="item in addUserForm.projects" :key="item" style="margin-right: 10px;">{{
-                            projectsList[item].label }}</div>
+                            projectsMap[item] }}</div>
                     </el-form-item>
                     <el-form-item label="项目权限">
                         <el-button type="primary" @click="changeProjectPermission(addUserForm, 0)">修改项目权限</el-button>
@@ -128,7 +129,7 @@
                     </el-form-item>
                     <el-form-item prop="projects" label="已授权项目">
                         <div v-for="item in modifyUserForm.projects" :key="item" style="margin-right: 10px;">{{
-                            projectsList[item].label }}</div>
+                            projectsMap[item] }}</div>
                     </el-form-item>
                     <el-form-item label="项目权限">
                         <el-button type="primary" @click="changeProjectPermission(modifyUserForm, 1)">修改项目权限</el-button>
@@ -169,7 +170,7 @@
 </template>
 
 <script>
-import { postForm } from '@/api/data'
+import { postForm, postFormMock } from '@/api/data'
 export default {
     name: "AccountManage",
     data() {
@@ -206,11 +207,11 @@ export default {
                 },
             ],
             // 项目列表
-            projectsList: [
-                { key: 0, label: "项目1" },
-                { key: 1, label: "项目2" },
-                { key: 2, label: "项目3" },
-            ],
+            projectsMap: {
+                0: "项目1",
+                1: "项目2",
+            },
+            projectsList: [],
             addUserDialogVisible: false,
 
             addUserForm: {
@@ -263,22 +264,69 @@ export default {
         };
     },
     mounted() {
-        // this.getProjects();
+        this.getData({});
     },
     methods: {
-        // 获取所有项目
-        getProjects() {
+        searchData() {
+            let postData = {
+                username: this.searchForm.username,
+                status: this.searchForm.status,
+                email: this.searchForm.email,
+            }
+            // 注册时间范围
+            if (this.searchForm.registerTimeRange) {
+                postData.registerTimeStart = this.searchForm.registerTimeRange[0];
+                postData.registerTimeEnd = this.searchForm.registerTimeRange[1];
+            }
+            // 最近登录时间范围
+            if (this.searchForm.lastLoginTimeRange) {
+                postData.lastLoginTimeStart = this.searchForm.lastLoginTimeRange[0];
+                postData.lastLoginTimeEnd = this.searchForm.lastLoginTimeRange[1];
+            }
+            // 最近修改密码时间范围
+            if (this.searchForm.lastModifyPasswordTimeRange) {
+                postData.lastModifyPasswordTimeStart = this.searchForm.lastModifyPasswordTimeRange[0];
+                postData.lastModifyPasswordTimeEnd = this.searchForm.lastModifyPasswordTimeRange[1];
+            }
+            this.getData(postData);
+        },
+
+        // 获取数据
+        getData(postData) {
             let _this = this;
             _this.projectsList = [];
-            postForm('/projectInfos/getProjectInfo', {}, _this, function(res) {
+            _this.projectsMap = {}
+            _this.userTable = [];
+
+            postForm('/projectInfos/getProjectInfo', {}, _this, function (res) {
                 for (let item of res.data.records) {
-                    _this.projectsList.push({
-                        key: item.pid,
-                        label: item.name
-                    });
+                    _this.projectsMap[item.pid] = item.name;
+                    _this.projectsList.push(
+                        {
+                            key: item.pid,
+                            label: item.name
+                        }
+                    )
                 }
+
+                postFormMock('/users/getUsers', postData, _this, function (res) {
+                    for (let item of res.data.records) {
+                        _this.userTable.push({
+                            uid: item.uid,
+                            username: item.username,
+                            userType: item.type,
+                            projects: item.pids.slice(0),
+                            registerTime: item.createTime,
+                            lastLoginTime: item.lastLoginTime,
+                            lastModifyPasswordTime: item.updateTime,
+                            status: item.status === undefined ? 1 : item.status,
+                            email: item.email,
+                        });
+                    }
+                })
             });
         },
+
         changeProjectPermission(row, type) {
             this.modifyPermissionDialogList = row.projects
             this.modifyPermissionIndex = type
@@ -322,7 +370,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.addUserDialogVisible = false;
-            }).catch(() => { 
+            }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消'
@@ -341,7 +389,7 @@ export default {
                     type: 'info',
                     message: '已取消'
                 });
-             });
+            });
         },
         addUserConfirm() {
             // 检查是否有空值
@@ -417,7 +465,7 @@ export default {
                     type: 'info',
                     message: '已取消'
                 });
-             });
+            });
         },
         modifyUserConfirm() {
             // 检查是否有空值
@@ -437,8 +485,6 @@ export default {
 
             this.$message.success('修改成功');
 
-            console.log(this.modifyUserForm)
-
             this.modifyUserDialogVisible = false;
         },
         modifyPassword() {
@@ -453,7 +499,7 @@ export default {
                 this.modifyUserPasswordDialogVisible = false;
                 this.passwordForm.newPassword = '';
                 this.passwordForm.confirmPassword = '';
-            }).catch(() => { 
+            }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消'
