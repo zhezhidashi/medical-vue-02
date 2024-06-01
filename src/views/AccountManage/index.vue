@@ -43,7 +43,12 @@
 
             <el-table :data="userTable" style="width: 95%;" stripe border>
                 <el-table-column prop="username" label="用户名"></el-table-column>
-                <el-table-column prop="userType" label="用户类型"></el-table-column>
+                <el-table-column prop="userType" label="用户类型">
+                    <template slot-scope="props">
+                        <el-tag v-if="props.row.userType === 2" type="success">管理员</el-tag>
+                        <el-tag v-else>普通用户</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="projects" label="已授权项目">
                     <template slot-scope="props">
                         <div v-for="(item, index) in props.row.projects" :key="index" style="margin-right: 10px;">{{
@@ -298,7 +303,7 @@ export default {
             _this.projectsMap = {}
             _this.userTable = [];
 
-            postForm('/projectInfos/getProjectInfo', {}, _this, function (res) {
+            postFormMock('/projectInfos/getProjectInfo', {}, _this, function (res) {
                 for (let item of res.data.records) {
                     _this.projectsMap[item.pid] = item.name;
                     _this.projectsList.push(
@@ -316,10 +321,10 @@ export default {
                             username: item.username,
                             userType: item.type,
                             projects: item.pids.slice(0),
-                            registerTime: item.createTime,
-                            lastLoginTime: item.lastLoginTime,
-                            lastModifyPasswordTime: item.updateTime,
-                            status: item.status === undefined ? 1 : item.status,
+                            registerTime: new Date(item.createTime).toLocaleString(),
+                            lastLoginTime: new Date(item.lastLoginTime).toLocaleString(),
+                            lastModifyPasswordTime: new Date(item.updateTime).toLocaleString(),
+                            status: item.status === undefined ? 0 : item.status,
                             email: item.email,
                         });
                     }

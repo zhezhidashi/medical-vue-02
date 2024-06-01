@@ -14,10 +14,10 @@
             <div
                 style="display: flex; flex-direction: row; justify-content: space-around; width: 100%; margin-top: 24px;">
                 <el-card style="width: 40%;">
-                    <div class="echarts" ref="ScatterEcharts" style="height: 250px;"></div>
+                    <div class="echarts" ref="LineEcharts1" style="height: 250px;"></div>
                 </el-card>
                 <el-card style="width: 40%;">
-                    <div class="echarts" ref="LineEcharts" style="height: 250px;"></div>
+                    <div class="echarts" ref="LineEcharts2" style="height: 250px;"></div>
                 </el-card>
             </div>
             <!-- 卡片 -->
@@ -52,48 +52,56 @@ export default {
             },
             pieChartsOptions: {
                 legend: {
-                    data: ["山东", "山西", "河北", "河南"],
+                    data: ["北京协和医院", "北京大学人民医院", "北京大学第三医院", "其他"],
                     orient: "vertical",
                     right: "0%",
                     top: "10%",
                 },
                 title: {
-                    text: "地区分布",
+                    text: "机构牵头项目数量",
                     left: "center",
                 },
                 series: {
-                    name: "地区分布",
+                    name: "机构牵头项目数量",
                     type: "pie",
                     radius: "65%",
                     center: ["50%", "60%"],
                     data: [
                         {
                             value: 463,
-                            name: "山东"
+                            name: "北京协和医院"
                         },
                         {
-                            value: 100,
-                            name: "山西"
+                            value: 150,
+                            name: "北京大学人民医院"
                         },
                         {
-                            value: 157,
-                            name: "河北"
+                            value: 130,
+                            name: "北京大学第三医院"
                         },
                         {
-                            value: 149,
-                            name: "河南"
-                        },
+                            value: 201,
+                            name: "其他"
+                        }
                     ],
                 },
             },
             barEchartsOptions: {
                 title: {
-                    text: "用户分布",
+                    text: "机构参与项目数量",
                     left: "center",
                 },
                 xAxis: {
                     type: "category",
-                    data: ["山东", "山西", "河北", "河南"],
+                    data: ["北京协和医院", "中国人民解放军总医院", "北京大学第三医院", "其他"],
+                    axisLabel: {
+                        showMinLabel: true,
+                        showMaxLabel: true,
+                        formatter: function (value) {
+                            // 自定义格式化函数，实现多行显示
+                            return value.replace(/(.{4})/g, '$1\n'); // 每4个字符换行
+                        },
+                    }
                 },
                 yAxis: {
                     type: "value",
@@ -105,61 +113,44 @@ export default {
                     },
                 ],
             },
-            scatterEchartsOptions: {
+            lineEcharts1Options: {
                 title: {
-                    text: '散点图示例',
-                    left: 'center',
-                },
-                tooltip: {
-                    trigger: 'item',
-                    formatter: '({c})',
-                },
-                xAxis: {
-                    type: 'value',
-                    name: 'X轴',
-                    nameLocation: 'middle',
-                    nameGap: 30,
-                },
-                yAxis: {
-                    type: 'value',
-                    name: 'Y轴',
-                    nameLocation: 'middle',
-                    nameGap: 40,
-                },
-                series: [
-                    {
-                        type: 'scatter',
-                        data: [
-                            [10, 20],
-                            [15, 25],
-                            [30, 40],
-                            [45, 35],
-                            [50, 50],
-                        ],
-                        symbolSize: 10,
-                    },
-                ],
-            },
-            lineEchartsOptions: {
-                title: {
-                    text: '折线图示例',
+                    text: '机构数量',
                     left: 'center',
                 },
                 xAxis: {
                     type: 'category',
-                    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    data: ['2022年5月', '2022年9月', '2023年1月', '2023年5月', '2023年9月', '2024年1月', '2024年5月'],
                 },
                 yAxis: {
                     type: 'value',
                 },
                 series: [
                     {
-                        data: [120, 200, 150, 80, 70, 110, 130],
+                        data: [3, 10, 14, 28, 34, 49, 78],
                         type: 'line',
                     },
                 ],
             },
-
+            lineEcharts2Options: {
+                title: {
+                    text: '项目数量',
+                    left: 'center',
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['2022年5月', '2022年9月', '2023年1月', '2023年5月', '2023年9月', '2024年1月', '2024年5月'],
+                },
+                yAxis: {
+                    type: 'value',
+                },
+                series: [
+                    {
+                        data: [120, 201, 250, 280, 370, 410, 430],
+                        type: 'line',
+                    },
+                ],
+            },
         };
     },
     mounted() {
@@ -187,16 +178,16 @@ export default {
                 barEcharts.resize();
             });
 
-            const scatterEcharts = echarts.init(this.$refs.ScatterEcharts);
-            scatterEcharts.setOption(this.scatterEchartsOptions);
+            const lineEcharts1 = echarts.init(this.$refs.LineEcharts1);
+            lineEcharts1.setOption(this.lineEcharts1Options);
             window.addEventListener("resize", () => {
-                scatterEcharts.resize();
+                lineEcharts1.resize();
             });
 
-            const lineEcharts = echarts.init(this.$refs.LineEcharts);
-            lineEcharts.setOption(this.lineEchartsOptions);
+            const lineEcharts2 = echarts.init(this.$refs.LineEcharts2);
+            lineEcharts2.setOption(this.lineEcharts2Options);
             window.addEventListener("resize", () => {
-                lineEcharts.resize();
+                lineEcharts2.resize();
             });
         },
     },

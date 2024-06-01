@@ -16,10 +16,10 @@
                 <el-form-item label="数字对象描述" class="SearchFormItem">
                     <el-input v-model="searchForm.doiDesc"></el-input>
                 </el-form-item>
-                <el-form-item label="doi所属项目" class="SearchFormItem">
+                <el-form-item label="数字对象所属项目" class="SearchFormItem">
                     <el-input v-model="searchForm.project"></el-input>
                 </el-form-item>
-                <el-form-item label="doi所属机构" class="SearchFormItem">
+                <el-form-item label="数字对象所属机构" class="SearchFormItem">
                     <el-input v-model="searchForm.institution"></el-input>
                 </el-form-item>
 
@@ -77,12 +77,12 @@
             </div>
 
             <el-table :data="applyTable" style="width: 95%;" stripe border >
-                <el-table-column prop="doi" label="待申请DOI"></el-table-column>
+                <el-table-column prop="doi" label="DOI"></el-table-column>
                 <el-table-column prop="doiName" label="数字对象名字"></el-table-column>
                 <el-table-column prop="doiSource" label="数字对象来源"></el-table-column>
                 <el-table-column prop="doiDesc" label="数字对象描述"></el-table-column>
-                <el-table-column prop="project" label="doi所属项目"></el-table-column>
-                <el-table-column prop="institution" label="doi所属机构"></el-table-column>
+                <el-table-column prop="project" label="数字对象所属项目"></el-table-column>
+                <el-table-column prop="institution" label="数字对象所属机构"></el-table-column>
                 <el-table-column prop="applyFile" label="申请审批文件"></el-table-column>
                 <el-table-column prop="applyType" label="申请类型"></el-table-column>
                 <el-table-column prop="applyTime" label="申请时间"></el-table-column>
@@ -109,7 +109,7 @@
                 :before-close="addApplyCancel">
                 <el-form :model="applyForm" ref="applyForm" label-width="auto">
 
-                    <el-form-item label="待申请DOI" prop="doi">
+                    <el-form-item label="DOI" prop="doi">
                         <el-input v-model="applyForm.doi"></el-input>
                     </el-form-item>
 
@@ -147,7 +147,7 @@
                 :before-close="modifyCancel">
                 <el-form :model="modifyForm" ref="modifyForm" label-width="auto">
 
-                    <el-form-item label="待申请DOI" prop="doi">
+                    <el-form-item label="DOI" prop="doi">
                         <el-input v-model="modifyForm.doi"></el-input>
                     </el-form-item>
 

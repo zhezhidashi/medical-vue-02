@@ -18,8 +18,8 @@
                 <el-table-column prop="doiName" label="数字对象名称"></el-table-column>
                 <el-table-column prop="doiSource" label="数字对象来源"></el-table-column>
                 <el-table-column prop="doiDesc" label="数字对象描述"></el-table-column>
-                <el-table-column prop="project" label="doi所属项目"></el-table-column>
-                <el-table-column prop="institution" label="doi所属机构"></el-table-column>
+                <el-table-column prop="project" label="数字对象所属项目"></el-table-column>
+                <el-table-column prop="institution" label="数字对象所属机构"></el-table-column>
                 <el-table-column label="操作" width="150">
                     <template slot-scope="scope">
                         <el-button type="primary" size="small" @click="modifyDo(scope.row, scope.$index)">修改</el-button>
@@ -47,10 +47,10 @@
                 <el-form-item label="数字对象描述" class="ModifyFormItem">
                     <el-input v-model="modifyForm.doiDesc"></el-input>
                 </el-form-item>
-                <el-form-item label="doi所属项目" class="ModifyFormItem">
+                <el-form-item label="数字对象所属项目" class="ModifyFormItem">
                     <el-input v-model="modifyForm.project"></el-input>
                 </el-form-item>
-                <el-form-item label="doi所属机构" class="ModifyFormItem">
+                <el-form-item label="数字对象所属机构" class="ModifyFormItem">
                     <el-input v-model="modifyForm.institution"></el-input>
                 </el-form-item>
             </el-form>
