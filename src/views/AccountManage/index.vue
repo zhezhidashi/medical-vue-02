@@ -52,7 +52,8 @@
                 <el-table-column prop="projects" label="已授权项目">
                     <template slot-scope="props">
                         <div v-for="(item, index) in props.row.projects" :key="index" style="margin-right: 10px;">{{
-                            projectsMap[item] }}</div>
+                            projectsMap[item] }}
+                        </div>
                     </template>
                 </el-table-column>
 
@@ -98,12 +99,7 @@
 
                     <el-form-item prop="email" label="用户联系邮箱">
                         <el-input v-model="addUserForm.email"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="是否激活" prop="status">
-                        <el-radio v-model="addUserForm.status" :label="0">是</el-radio>
-                        <el-radio v-model="addUserForm.status" :label="1">否</el-radio>
-                    </el-form-item>
+                    </el-form-item> 
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="addUserCancel">取 消</el-button>
@@ -142,11 +138,6 @@
 
                     <el-form-item prop="email" label="用户联系邮箱">
                         <el-input v-model="modifyUserForm.email"></el-input>
-                    </el-form-item>
-
-                    <el-form-item prop="status" label="是否激活">
-                        <el-radio v-model="modifyUserForm.status" :label="0">是</el-radio>
-                        <el-radio v-model="modifyUserForm.status" :label="1">否</el-radio>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
@@ -303,7 +294,7 @@ export default {
             _this.projectsMap = {}
             _this.userTable = [];
 
-            postFormMock('/projectInfos/getProjectInfo', {}, _this, function (res) {
+            postForm('/projectInfos/getProjectInfo', {}, _this, function (res) {
                 for (let item of res.data.records) {
                     _this.projectsMap[item.pid] = item.name;
                     _this.projectsList.push(
@@ -314,7 +305,7 @@ export default {
                     )
                 }
 
-                postFormMock('/users/getUsers', postData, _this, function (res) {
+                postForm('/users/getUsers', postData, _this, function (res) {
                     for (let item of res.data.records) {
                         _this.userTable.push({
                             uid: item.uid,
@@ -342,32 +333,12 @@ export default {
                 username: '',
                 password: '',
                 confirmPassword: '',
-                userType: '普通用户',
                 projects: [],
                 email: '',
-                status: 0,
             };
             this.addUserDialogVisible = true;
         },
-        deleteUser(index, rows) {
-            let _this = this;
-            this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                _this.$message({
-                    type: 'success',
-                    message: '删除成功!'
-                });
-                rows.splice(index, 1);
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                });
-            });
-        },
+        
         addUserCancel() {
             this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
                 confirmButtonText: '确定',
@@ -422,21 +393,26 @@ export default {
                 return;
             }
 
-            this.addUserDialogVisible = false;
             let _this = this;
-            _this.userTable.push({
+            let postData = {
                 username: this.addUserForm.username,
                 password: this.addUserForm.password,
                 userType: this.addUserForm.userType,
-                projects: this.addUserForm.projects,
+                projectIds: this.addUserForm.projects,
                 email: this.addUserForm.email,
-                status: this.addUserForm.status,
+            };
+
+            postForm("/users/addUser", postData, _this, function (res) {
+                if(res.code === 200) {
+                    _this.$message({
+                        type: 'success',
+                        message: '添加成功!'
+                    });
+                    _this.addUserDialogVisible = false;
+                    _this.getData({});
+                }
             });
 
-            _this.$message({
-                type: 'success',
-                message: '已添加至表格最下方!'
-            });
         },
         modifyPermissionConfirm() {
             if (this.modifyPermissionIndex === 0) {
@@ -482,15 +458,26 @@ export default {
                 return;
             }
 
-            this.userTable[this.modifyUserIndex].username = this.modifyUserForm.username;
-            this.userTable[this.modifyUserIndex].password = this.modifyUserForm.password;
-            this.userTable[this.modifyUserIndex].projects = this.modifyUserForm.projects;
-            this.userTable[this.modifyUserIndex].status = this.modifyUserForm.status;
-            this.userTable[this.modifyUserIndex].email = this.modifyUserForm.email;
+            let postData = {
+                uid: this.userTable[this.modifyUserIndex].uid,
+                username: this.modifyUserForm.username,
+                password: this.modifyUserForm.password,
+                pids: this.modifyUserForm.projects.slice(0),
+                email: this.modifyUserForm.email,
+            }
 
-            this.$message.success('修改成功');
-
-            this.modifyUserDialogVisible = false;
+            let _this = this;
+            postForm('/users/update', postData, _this, function (res) {
+                if(res.code === 200) {
+                    _this.$message({
+                        type: 'success',
+                        message: '修改成功!'
+                    });
+                    _this.modifyUserDialogVisible = false;
+                    _this.getData({});
+                }
+               
+            });
         },
         modifyPassword() {
             this.modifyUserPasswordDialogVisible = true;
@@ -529,6 +516,37 @@ export default {
             this.modifyUserForm.password = this.passwordForm.newPassword;
             this.passwordForm.newPassword = '';
             this.passwordForm.confirmPassword = '';
+        },
+
+        deleteUser(index, rows) {
+            let _this = this;
+            if (rows[index].userType === 2) {
+                this.$message({
+                    type: 'warning',
+                    message: '不能删除管理员账号!'
+                });
+                return;
+            }
+            this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                postForm(`/users/deleteById?uid=${rows[index].uid}`, {}, _this, function (res) {
+                    if(res.code === 200) {
+                        _this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        _this.getData({});
+                    }
+                });
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         },
     },
 }

@@ -31,3 +31,24 @@ git commit -m "版本更新标注"
 git push origin master
 git status
 ```
+
+### screen 的使用
+```
+# 新建 session
+screen -S <session名称>
+
+# 列出当前所有的 session
+screen -ls
+
+# 回到某个session
+screen -r <session名称>
+
+# 离开作业
+ctrl + A + D
+
+# 离开当前session
+detach -d <session名称>
+
+# 结束当前session
+exit
+```
