@@ -52,3 +52,8 @@ detach -d <session名称>
 # 结束当前session
 exit
 ```
+
+### 服务器运行前端
+```
+npx http-server -p 8082
+```

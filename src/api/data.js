@@ -4,8 +4,8 @@ import nprogress from 'nprogress';
 import "nprogress/nprogress.css";
 
 // 注：第一个页面里面两个上传文件的部分也有baseUrl，如果要改的话，一起改
-export const baseUrl = '/api'
-// export const baseUrl = 'http://http://47.93.215.112:8080'
+// export const baseUrl = '/api'
+export const baseUrl = 'http://47.93.215.112:8080'
 export const mockUrl = "https://mock.apifox.com/m1/3980705-3616153-default"
 
 // post请求
@@ -37,7 +37,7 @@ export const postForm = (requestUrl, params, This, callback) => {
     })
     .catch((err) => {
         nprogress.done()
-        console.log('postForm 的 error: ', requestUrl, err);
+        console.log('postForm 的 error: ', baseUrl + requestUrl, err);
     })
 }
 
@@ -110,7 +110,7 @@ export const loginRequest = (requestUrl, params, This, callback) => {
     })
     .catch((err) => {
         nprogress.done()
-        console.log('postForm 的 error: ', requestUrl, err);
+        console.log('loginRequest 的 error: ', requestUrl, err);
     })
 }
 
@@ -143,7 +143,7 @@ export const postFormMock = (requestUrl, params, This, callback) => {
     })
     .catch((err) => {
         nprogress.done()
-        console.log('postForm 的 error: ', requestUrl, err);
+        console.log('postFormMock 的 error: ', requestUrl, err);
     })
 }
 
@@ -175,6 +175,6 @@ export const getFormMock = (requestUrl, This, callback) => {
     })
     .catch((err) => {
         nprogress.done()
-        console.log('getForm 的 error: ', requestUrl, err);
+        console.log('getFormMock 的 error: ', requestUrl, err);
     })
 }
