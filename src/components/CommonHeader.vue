@@ -1,7 +1,7 @@
 <template>
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex;">
-            <img src="favicon.png" style="height: 50px; margin-right: 10px;" />
+            <img src="favicon.ico" style="height: 50px; margin-right: 10px;" />
             <div style="font-size: 25px; line-height: 200%;">医学临床数据交换系统</div>
         </div>
         <div class="r-content" v-show="path !== '/Login'">

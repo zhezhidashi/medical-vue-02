@@ -57,3 +57,9 @@ exit
 ```
 npx http-server -p 8082
 ```
+
+### docker
+```
+docker build -t frontend -f Dockerfile docker
+docker run -d -p 8082:80 frontend
+```
