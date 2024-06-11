@@ -4,8 +4,8 @@ import nprogress from 'nprogress';
 import "nprogress/nprogress.css";
 
 // 注：第一个页面里面两个上传文件的部分也有baseUrl，如果要改的话，一起改
-// export const baseUrl = '/api'
-export const baseUrl = 'http://47.93.215.112:8080'
+export const baseUrl = '/api'
+// export const baseUrl = 'http://47.93.215.112:8080'
 export const mockUrl = "https://mock.apifox.com/m1/3980705-3616153-default"
 
 // post请求
