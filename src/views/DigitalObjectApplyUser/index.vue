@@ -116,7 +116,7 @@
                     </el-form-item>
 
                     <el-form-item label="申请审批文件" prop="applyFile">
-                        <el-upload class="upload-demo" drag action="/api/posts/" :on-success="handleUploadSuccess">
+                        <el-upload class="upload-demo" drag action="/api/file/upload" :on-success="handleUploadSuccess">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
@@ -153,7 +153,7 @@
                     </el-form-item>
 
                     <el-form-item label="申请审批文件" prop="applyFile">
-                        <el-upload class="upload-demo" drag action="/api/posts/" :on-success="handleUploadSuccess">
+                        <el-upload class="upload-demo" drag action="/api/file/upload" :on-success="handleUploadSuccess">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
@@ -181,7 +181,7 @@
 <script>
 import { postForm } from '@/api/data'
 export default {
-    name: "DigitalObjectApply",
+    name: "DigitalObjectApplyUser",
     data() {
         return {
             searchForm : {

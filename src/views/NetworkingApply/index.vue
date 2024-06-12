@@ -7,9 +7,9 @@
                 :headers="{'Authorization': 'Bearer ' + $store.state.user.token}"
                 :show-file-list="false"
                 :on-success="ImportKey"
-            >
-                <el-button type="primary" style="margin: 24px;">导入公钥</el-button>
-            </el-upload>
+                >
+                    <el-button type="primary" style="margin: 24px;">导入公钥</el-button>
+                </el-upload>
                 
                 <el-button @click="ExportKey" type="primary" style="margin: 24px;">导出公钥</el-button>
             </div>
@@ -88,7 +88,7 @@ export default {
             }
             else {
                 this.$message({
-                    message: response.msg,
+                    message: response.message,
                     type: 'error'
                 });
             }

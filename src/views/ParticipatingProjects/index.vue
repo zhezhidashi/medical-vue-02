@@ -21,7 +21,7 @@
                 </el-form-item>
                 <el-form-item prop="projectApprovalStatus" label="审批状态" class="SearchFormItem">
                     <el-select v-model="searchForm.projectApprovalStatus" placeholder="请选择">
-                        <el-option label="未审批" value="0"></el-option>
+                        <el-option label="待审批" value="0"></el-option>
                         <el-option label="已通过" value="1"></el-option>
                         <el-option label="未通过" value="2"></el-option>
                     </el-select>
@@ -112,7 +112,7 @@
                     </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
                         <el-upload 
-                        drag action="https://mock.apifox.com/m1/3980705-3616153-default/file/upload?apifoxToken=FWfuxvo9z3Zb1yuOsKEfh"
+                        drag action="/api/file/upload"
                         :headers="{'Authorization': 'Bearer ' + $store.state.user.token}" :on-success="uploadSuccessModify">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -154,7 +154,7 @@
                     </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
                         <el-upload class="upload-demo" 
-                        drag action="https://mock.apifox.com/m1/3980705-3616153-default/file/upload?apifoxToken=FWfuxvo9z3Zb1yuOsKEfh"
+                        drag action="/api/file/upload"
                         :headers="{'Authorization': 'Bearer ' + $store.state.user.token}"
                         :on-success="uploadSuccessAdd">
                             <i class="el-icon-upload"></i>
@@ -177,7 +177,6 @@
 
 <script>
 import { postForm } from '@/api/data';
-import { update } from 'lodash';
 export default {
     name: "ParticipatingProjects",
     data() {

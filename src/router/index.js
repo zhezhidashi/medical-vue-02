@@ -73,7 +73,7 @@ const routes = [
                 path: '/ParticipatingProjects',
                 name: 'ParticipatingProjects',
                 meta: {
-                    title: '本机构参与项目'
+                    title: '项目管理'
                 },
                 component: () => import('@/views/ParticipatingProjects')
             },
@@ -94,12 +94,12 @@ const routes = [
                 component: () => import('@/views/RelationshipSystem')
             },
             {
-                path: '/DigitalObjectApply',
-                name: 'DigitalObjectApply',
+                path: '/DigitalObjectApplyUser',
+                name: 'DigitalObjectApplyUser',
                 meta: {
                     title: '数字对象申请'
                 },
-                component: () => import('@/views/DigitalObjectApply')
+                component: () => import('@/views/DigitalObjectApplyUser')
             },
             {
                 path: '/DigitalObjectApproval',
@@ -108,6 +108,14 @@ const routes = [
                     title: '数字对象审批'
                 },
                 component: () => import('@/views/DigitalObjectApproval')
+            },
+            {
+                path: '/DigitalObjectApplyInstitution',
+                name: 'DigitalObjectApplyInstitution',
+                meta: {
+                    title: '机构申请列表'
+                },
+                component: () => import('@/views/DigitalObjectApplyInstitution')
             },
             {
                 path: '/DigitalObjectSearch',

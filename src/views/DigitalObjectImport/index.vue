@@ -3,7 +3,7 @@
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <el-upload
                 class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action="/api/file/upload"
                 :onSuccess="handleSuccess"
                 :before-upload="beforeUpload"
                 style="margin-top: 24px;"
