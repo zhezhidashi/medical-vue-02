@@ -4,26 +4,26 @@
             <!-- 统计图和组网图 -->
             <div
                 style="display: flex; flex-direction: row; justify-content: space-around; width: 100%; margin-top: 24px;">
-                <el-card style="width: 40%;">
+                <el-card style="width: 45%;">
                     <div class="echarts" ref="PieEcharts" style="height: 250px;"></div>
                 </el-card>
-                <el-card style="width: 40%;">
+                <el-card style="width: 45%;">
                     <div class="echarts" ref="BarEcharts" style="height: 250px;"></div>
                 </el-card>
             </div>
             <div
                 style="display: flex; flex-direction: row; justify-content: space-around; width: 100%; margin-top: 24px;">
-                <el-card style="width: 40%;">
+                <el-card style="width: 45%;">
                     <div class="echarts" ref="LineEcharts1" style="height: 250px;"></div>
                 </el-card>
-                <el-card style="width: 40%;">
+                <el-card style="width: 45%;">
                     <div class="echarts" ref="LineEcharts2" style="height: 250px;"></div>
                 </el-card>
             </div>
             <!-- 卡片 -->
             <div
                 style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 100%; margin-top: 24px;">
-                <el-card style="width: 90%; margin-bottom: 24px;">
+                <el-card style="width: 95%; margin-bottom: 24px;">
 
                     <el-descriptions title="项目名字1">
                         <el-descriptions-item label="项目所属机构">北医三院</el-descriptions-item>

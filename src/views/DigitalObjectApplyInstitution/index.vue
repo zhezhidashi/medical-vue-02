@@ -161,12 +161,12 @@ export default {
                 appStatus: this.searchForm.appStatus,
             }
             if(this.searchForm.createTimeRange) {
-                postData.createBeginTime = this.searchForm.createTimeRange[0];
-                postData.createEndTime = this.searchForm.createTimeRange[1];
+                postData.createTimeBegin = this.searchForm.createTimeRange[0];
+                postData.createTimeEnd = this.searchForm.createTimeRange[1];
             }
             if(this.searchForm.updateTimeRange) {
-                postData.updateBeginTime = this.searchForm.updateTimeRange[0];
-                postData.updateEndTime = this.searchForm.updateTimeRange[1];
+                postData.updateTimeBegin = this.searchForm.updateTimeRange[0];
+                postData.updateTimeEnd = this.searchForm.updateTimeRange[1];
             }
             this.getData(postData);
         },

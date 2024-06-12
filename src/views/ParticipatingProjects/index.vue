@@ -84,13 +84,10 @@
                 <el-table-column prop="projectApprovalTime" label="审批时间" min-width="120" align="center">
                 </el-table-column>
 
-                <el-table-column label="操作" width="150" align="center">
+                <el-table-column label="操作" align="center">
                     <template slot-scope="props">
                         <el-button @click="changeProject(props.row, props.$index)" type="primary"
                             size="small">修改</el-button>
-                        <el-button @click.native.prevent="deleteProject(props.$index)" type="danger" size="small">
-                            删除
-                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -324,25 +321,6 @@ export default {
             this.modifyProjectDialogVisible = true;
             this.modifyProjectIndex = index;
             this.modifyProjectItem = JSON.parse(JSON.stringify(row));
-        },
-        deleteProject(index) {
-            let _this = this;
-            this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                _this.$message({
-                    type: 'success',
-                    message: '删除成功'
-                });
-                this.projectTable.splice(index, 1);
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                });
-            });
         },
         modifyProjectCancel() {
             this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
