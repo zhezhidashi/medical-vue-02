@@ -99,6 +99,12 @@
                 </el-table-column>
             </el-table>
 
+            <div style="margin: 24px">
+                <el-pagination background layout="prev, pager, next" :page-size="10" :page-count="pages"
+                    @prev-click="prevPage" @next-click="nextPage" @current-change="clickPage">
+                </el-pagination>
+            </div>
+
             <el-dialog title="增加申请" :visible.sync="addApplyDialogVisible" width="80%"
                 :before-close="addApplyCancel">
                 <el-form :model="applyForm" ref="applyForm" label-width="auto">
@@ -184,6 +190,10 @@ export default {
     name: "DigitalObjectApplyUser",
     data() {
         return {
+            // 页数
+            pages: 1,
+            // 当前页数
+            currentPage: 1,
             searchForm : {
                 // 申请机构DOI
                 applicantInstitutionDoi: undefined,
@@ -262,6 +272,26 @@ export default {
         this.getData({});
      },
     methods: {
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.getData({ page: this.currentPage });
+            }
+        },
+
+        nextPage() {
+            if (this.currentPage < this.pages) {
+                this.currentPage++;
+                this.searchForm.page = this.currentPage;
+                this.getData(this.searchForm);
+            }
+        },
+
+        clickPage(page) {
+            this.currentPage = page;
+            this.searchForm.page = this.currentPage;
+            this.getData(this.searchForm);
+        },
         searchData() {
             let postData = {
                 applicantInstitutionDoi: this.searchForm.applicantInstitutionDoi,
@@ -287,6 +317,7 @@ export default {
             let _this = this;
             this.applyTable = [];
             postForm('/doApplication/getUserApplication', postData, _this, function(res) {
+                _this.pages = res.data.pages;
                 for(let item of res.data.records) {
                     _this.applyTable.push({
                         appId: item.appId,

@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { getForm } from '@/api/data';
+import { getForm, postForm } from '@/api/data';
 export default {
     name: "CommonAside",
     data() {
@@ -93,10 +93,57 @@ export default {
                 this.$message.error('两次密码不一致');
                 return;
             }
-            this.$message.success('修改成功');
-            this.modifyPasswordDialogVisible = false;
-            this.passwordForm.newPassword = '';
-            this.passwordForm.confirmPassword = '';
+
+            let userType = this.$store.state.user.userType;
+            let username = this.$store.state.user.username;
+            console.log("userType: ", userType);
+            console.log("username", username);
+
+            let _this = this;
+            if (userType === 'user') {
+                let postData = {
+                    username: username,
+                    password: this.passwordForm.newPassword
+                }
+                postForm('/users/update', postData, _this, function(res){
+                    if (res.code === 200) {
+                        _this.$message.success('修改成功');
+                        _this.modifyPasswordDialogVisible = false;
+                        _this.passwordForm.newPassword = '';
+                        _this.passwordForm.confirmPassword = '';
+                    }
+                    else {
+                        _this.$message.error(res.message);
+                    }
+                })
+            } 
+            else if (userType === 'admin') {
+                let postData = {
+                    username: username,
+                    password: this.passwordForm.newPassword
+                }
+                postForm('/users/getUsers', {username: username}, _this, function(res) {
+                    if (res.code === 200) {
+                        postData.uid = res.data.records[0].uid;
+                        postForm('/users/update', postData, _this, function(res) {
+                            if (res.code === 200) {
+                                _this.$message.success('修改成功');
+                                _this.modifyPasswordDialogVisible = false;
+                                _this.passwordForm.newPassword = '';
+                                _this.passwordForm.confirmPassword = '';
+                            }
+                            else {
+                                _this.$message.error(res.message);
+                            }
+                        })
+                    }
+                    else {
+                        _this.$message.error(res.message);
+                    }
+                })
+            }
+
+            
         }
     },
 }

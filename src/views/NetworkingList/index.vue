@@ -38,19 +38,6 @@
 			<el-button type="primary" @click="searchData">搜索</el-button>
 			<el-divider></el-divider>
 
-			<div style="margin: 24px">
-				<el-pagination
-					background
-					layout="prev, pager, next"
-					:page-size="10"
-					:page-count="pages"
-					@prev-click="prevPage"
-					@next-click="nextPage"
-					@current-change="clickPage"
-				>
-				</el-pagination>
-			</div>
-
 			<el-table :data="tableData" style="width: 95%" stripe border>
 				<el-table-column
 					prop="institutionDoi"
@@ -68,10 +55,10 @@
 					prop="institutionPort"
 					label="机构端口"
 				></el-table-column>
-				<el-table-column
+				<!-- <el-table-column
 					prop="institutionPublicKey"
 					label="机构公钥"
-				></el-table-column>
+				></el-table-column> -->
 				<el-table-column
 					prop="institutionDesc"
 					label="机构描述"
@@ -99,94 +86,87 @@
 						>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="150">
+				<el-table-column label="操作">
 					<template slot-scope="scope">
 						<el-button
-							@click="editNetworking(scope.row, scope.$index)"
+							@click="modifyNetworking(scope.row, scope.$index)"
 							type="primary"
 							size="small"
 							>修改</el-button
 						>
-						<el-button
+						<!-- <el-button
 							@click="deleteNetworking(scope.row, scope.$index)"
 							type="danger"
 							size="small"
 							>删除</el-button
-						>
+						> -->
 					</template>
 				</el-table-column>
 			</el-table>
 
+            <div style="margin: 24px">
+                <el-pagination background layout="prev, pager, next" :page-size="10" :page-count="pages"
+                    @prev-click="prevPage" @next-click="nextPage" @current-change="clickPage">
+                </el-pagination>
+            </div>
+
 			<el-dialog
 				title="修改组网组"
-				:visible.sync="editNetworkingDialogVisible"
+				:visible.sync="modifyNetworkingDialogVisible"
 				width="90%"
 			>
-				<el-form :model="editNetworkingForm" label-width="auto">
+				<el-form :model="modifyNetworkingForm" label-width="auto">
 					<el-form-item label="机构DOI" prop="institutionDoi">
 						<el-input
-							v-model="editNetworkingForm.institutionDoi"
+							v-model="modifyNetworkingForm.institutionDoi"
 							placeholder="请输入机构DOI"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="机构名字" prop="institutionName">
 						<el-input
-							v-model="editNetworkingForm.institutionName"
+							v-model="modifyNetworkingForm.institutionName"
 							placeholder="请输入机构名字"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="机构IP地址" prop="institutionAddress">
 						<el-input
-							v-model="editNetworkingForm.institutionAddress"
+							v-model="modifyNetworkingForm.institutionAddress"
 							placeholder="请输入机构IP地址"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="机构端口" prop="institutionPort">
 						<el-input
-							v-model="editNetworkingForm.institutionPort"
+							v-model="modifyNetworkingForm.institutionPort"
 							placeholder="请输入机构端口"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="机构公钥" prop="institutionPublicKey">
-						<el-input
-							v-model="editNetworkingForm.institutionPublicKey"
-							placeholder="请输入机构公钥"
-						></el-input>
-					</el-form-item>
+                        {{ modifyNetworkingForm.institutionPublicKey }}
+                        <el-upload
+                            action="/api/doApplication/submitPublicKey"
+                            :headers="{'Authorization': 'Bearer ' + $store.state.user.token}"
+                            :show-file-list="false"
+                            :on-success="importKey"
+                            >
+                                <el-button type="primary" style="margin: 24px;">导入公钥</el-button>
+                            </el-upload>
+                    </el-form-item>
 					<el-form-item label="机构描述" prop="institutionDesc">
 						<el-input
-							v-model="editNetworkingForm.institutionDesc"
+							v-model="modifyNetworkingForm.institutionDesc"
 							placeholder="请输入机构描述"
 						></el-input>
 					</el-form-item>
-					<el-form-item
-						label="所属组网组编号"
-						prop="networkingGroupId"
-					>
-						<el-input
-							v-model="editNetworkingForm.networkingGroupId"
-							placeholder="请输入所属组网组编号"
-						></el-input>
-					</el-form-item>
-					<el-form-item
-						label="所属组网组名字"
-						prop="networkingGroupName"
-					>
-						<el-input
-							v-model="editNetworkingForm.networkingGroupName"
-							placeholder="请输入所属组网组名字"
-						></el-input>
-					</el-form-item>
 					<el-form-item label="机构组网状态" prop="networkingStatus">
-						<el-input
-							v-model="editNetworkingForm.networkingStatus"
-							placeholder="请输入机构组网状态"
-						></el-input>
+						<el-radio-group v-model="modifyNetworkingForm.networkingStatus">
+                            <el-radio :label="0">正常</el-radio>
+                            <el-radio :label="1">异常</el-radio>
+                        </el-radio-group>
 					</el-form-item>
 				</el-form>
 				<div style="display: flex; justify-content: center">
-					<el-button @click="editNetworkingCancel">取消</el-button>
-					<el-button type="primary" @click="editNetworkingConfirm"
+					<el-button @click="modifyNetworkingCancel">取消</el-button>
+					<el-button type="primary" @click="modifyNetworkingConfirm"
 						>确定</el-button
 					>
 				</div>
@@ -201,6 +181,10 @@ export default {
 	name: "NetworkingList",
 	data() {
 		return {
+            // 页数
+            pages: 1,
+            // 当前页数
+            currentPage: 1,
 			// 表格数据
 			tableData: [
 				{
@@ -226,7 +210,7 @@ export default {
 			],
 
 			// 修改数据
-			editNetworkingForm: {
+			modifyNetworkingForm: {
 				// 机构DOI
 				institutionDoi: "",
 				// 机构名字
@@ -239,16 +223,12 @@ export default {
 				institutionPublicKey: "",
 				// 机构描述
 				institutionDesc: "",
-				// 所属组网组编号
-				networkingGroupId: "",
-				// 所属组网组名字
-				networkingGroupName: "",
 				// 机构组网状态
 				networkingStatus: "",
 			},
 
-			editNetworkingDialogVisible: false,
-			editNetworkingId: "",
+			modifyNetworkingDialogVisible: false,
+			modifyNetworkingId: "",
 
 			// 搜索表格
 			searchForm: {
@@ -273,11 +253,32 @@ export default {
 		this.getData({});
 	},
 	methods: {
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.getData({ page: this.currentPage });
+            }
+        },
+
+        nextPage() {
+            if (this.currentPage < this.pages) {
+                this.currentPage++;
+                this.searchForm.page = this.currentPage;
+                this.getData(this.searchForm);
+            }
+        },
+
+        clickPage(page) {
+            this.currentPage = page;
+            this.searchForm.page = this.currentPage;
+            this.getData(this.searchForm);
+        },
 		// 获取数据
 		getData(postData) {
 			this.tableData = [];
 			let _this = this;
 			postForm("/networkGroups/get", postData, _this, function (res) {
+                _this.pages = res.data.pages;
 				for (let item of res.data.records) {
 					_this.tableData.push({
 						gid: item.gid,
@@ -308,25 +309,40 @@ export default {
 			this.getData(this.searchForm);
 		},
 
-		// 修改组网组
-		editNetworking(row, index) {
-			this.editNetworkingForm.institutionDoi = row.institutionDoi;
-			this.editNetworkingForm.institutionName = row.institutionName;
-			this.editNetworkingForm.institutionAddress = row.institutionAddress;
-			this.editNetworkingForm.institutionPort = row.institutionPort;
-			this.editNetworkingForm.institutionPublicKey =
-				row.institutionPublicKey;
-			this.editNetworkingForm.institutionDesc = row.institutionDesc;
-			this.editNetworkingForm.networkingGroupId = row.networkingGroupId;
-			this.editNetworkingForm.networkingGroupName =
-				row.networkingGroupName;
-			this.editNetworkingForm.networkingStatus = row.networkingStatus;
+        importKey(response, file, fileList) {
+            console.log(response);
+            if(response.code === 200) {
+                this.$message({
+                    message: '导入公钥成功',
+                    type: 'success'
+                });
+                this.modifyNetworkingForm.institutionPublicKey = response.data;
+            }
+            else {
+                this.$message({
+                    message: response.message,
+                    type: 'error'
+                });
+            }
+        },
 
-			this.editNetworkingId = index;
-			this.editNetworkingDialogVisible = true;
+		// 修改组网组
+		modifyNetworking(row, index) {
+			this.modifyNetworkingForm.institutionDoi = row.institutionDoi;
+			this.modifyNetworkingForm.institutionName = row.institutionName;
+			this.modifyNetworkingForm.institutionAddress = row.institutionAddress;
+			this.modifyNetworkingForm.institutionPort = row.institutionPort;
+			this.modifyNetworkingForm.institutionPublicKey =
+				row.institutionPublicKey;
+			this.modifyNetworkingForm.institutionDesc = row.institutionDesc;
+	
+			this.modifyNetworkingForm.networkingStatus = row.networkingStatus;
+
+			this.modifyNetworkingId = index;
+			this.modifyNetworkingDialogVisible = true;
 		},
 		// 取消修改组网组
-		editNetworkingCancel() {
+		modifyNetworkingCancel() {
 			this.$confirm(
 				"不保存而直接关闭可能会丢失本次编辑的信息，是否继续?",
 				"提示",
@@ -337,7 +353,7 @@ export default {
 				}
 			)
 				.then(() => {
-					this.editNetworkingDialogVisible = false;
+					this.modifyNetworkingDialogVisible = false;
 				})
 				.catch(() => {
 					this.$message({
@@ -347,49 +363,60 @@ export default {
 				});
 		},
 		// 确定修改组网组
-		editNetworkingConfirm() {
-			this.tableData[this.editNetworkingId].institutionDoi =
-				this.editNetworkingForm.institutionDoi;
-			this.tableData[this.editNetworkingId].institutionName =
-				this.editNetworkingForm.institutionName;
-			this.tableData[this.editNetworkingId].institutionAddress =
-				this.editNetworkingForm.institutionAddress;
-			this.tableData[this.editNetworkingId].institutionPort =
-				this.editNetworkingForm.institutionPort;
-			this.tableData[this.editNetworkingId].institutionPublicKey =
-				this.editNetworkingForm.institutionPublicKey;
-			this.tableData[this.editNetworkingId].institutionDesc =
-				this.editNetworkingForm.institutionDesc;
-			this.tableData[this.editNetworkingId].networkingGroupId =
-				this.editNetworkingForm.networkingGroupId;
-			this.tableData[this.editNetworkingId].networkingGroupName =
-				this.editNetworkingForm.networkingGroupName;
-			this.tableData[this.editNetworkingId].networkingStatus =
-				this.editNetworkingForm.networkingStatus;
+		modifyNetworkingConfirm() {
 
-			this.editNetworkingDialogVisible = false;
+            let postData = {
+                gid: this.tableData[this.modifyNetworkingId].gid,
+                institutionDoi: this.modifyNetworkingForm.institutionDoi,
+                publicRootName: this.modifyNetworkingForm.institutionName,
+                publicRootAddress: this.modifyNetworkingForm.institutionAddress,
+                publicRootPort: this.modifyNetworkingForm.institutionPort,
+                publicRootKey: this.modifyNetworkingForm.institutionPublicKey,
+                description: this.modifyNetworkingForm.institutionDesc,
+                status: this.modifyNetworkingForm.networkingStatus,
+                publicRootKey: this.modifyNetworkingForm.institutionPublicKey,
+            };
+
+            let _this = this;
+            postForm('/networkGroups/update', postData, _this, function(res){
+                if (res.code === 200) {
+                    _this.$message({
+                        message: '修改成功',
+                        type: 'success'
+                    });
+                    _this.modifyNetworkingDialogVisible = false;
+                }
+                else {
+                    _this.$message({
+                        message: res.message,
+                        type: 'error'
+                    });
+                }
+            })
+            
+			
 		},
 		// 删除组网组
-		deleteNetworking(row, id) {
-			this.$confirm("此操作将永久删除该组网组, 是否继续?", "提示", {
-				confirmButtonText: "确定",
-				cancelButtonText: "取消",
-				type: "warning",
-			})
-				.then(() => {
-					this.tableData.splice(id, 1);
-					this.$message({
-						type: "success",
-						message: "删除成功!",
-					});
-				})
-				.catch(() => {
-					this.$message({
-						type: "info",
-						message: "已取消删除",
-					});
-				});
-		},
+		// deleteNetworking(row, id) {
+		// 	this.$confirm("此操作将永久删除该组网组, 是否继续?", "提示", {
+		// 		confirmButtonText: "确定",
+		// 		cancelButtonText: "取消",
+		// 		type: "warning",
+		// 	})
+		// 		.then(() => {
+		// 			this.tableData.splice(id, 1);
+		// 			this.$message({
+		// 				type: "success",
+		// 				message: "删除成功!",
+		// 			});
+		// 		})
+		// 		.catch(() => {
+		// 			this.$message({
+		// 				type: "info",
+		// 				message: "已取消删除",
+		// 			});
+		// 		});
+		// },
 	},
 };
 </script>

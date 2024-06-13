@@ -92,6 +92,12 @@
                 </el-table-column>
             </el-table>
 
+            <div style="margin: 24px">
+                <el-pagination background layout="prev, pager, next" :page-size="10" :page-count="pages"
+                    @prev-click="prevPage" @next-click="nextPage" @current-change="clickPage">
+                </el-pagination>
+            </div>
+
             <el-dialog title="修改项目" :visible.sync="modifyProjectDialogVisible" width="80%"
                 :before-close="modifyProjectCancel">
                 <el-form :model="modifyProjectItem" label-width="auto">
@@ -178,6 +184,10 @@ export default {
     name: "ParticipatingProjects",
     data() {
         return {
+            // 页数
+            pages: 1,
+            // 当前页数
+            currentPage: 1,
             // 搜索表单
             searchForm: {
                 // 项目名称
@@ -272,10 +282,31 @@ export default {
 
     },
     methods: {
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.getData({ page: this.currentPage });
+            }
+        },
+
+        nextPage() {
+            if (this.currentPage < this.pages) {
+                this.currentPage++;
+                this.searchForm.page = this.currentPage;
+                this.getData(this.searchForm);
+            }
+        },
+
+        clickPage(page) {
+            this.currentPage = page;
+            this.searchForm.page = this.currentPage;
+            this.getData(this.searchForm);
+        },
         getData(postData){
             let _this = this;
             _this.projectTable = [];
             postForm('/projectInfos/getApplications', postData, _this, function(res){
+                _this.pages = res.data.pages;
                 for(let item of res.data.records) {
                     _this.projectTable.push({
                         id: item.id,

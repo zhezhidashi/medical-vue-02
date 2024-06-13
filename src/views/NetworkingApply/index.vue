@@ -6,7 +6,7 @@
                 action="/api/doApplication/submitPublicKey"
                 :headers="{'Authorization': 'Bearer ' + $store.state.user.token}"
                 :show-file-list="false"
-                :on-success="ImportKey"
+                :on-success="importKey"
                 >
                     <el-button type="primary" style="margin: 24px;">导入公钥</el-button>
                 </el-upload>
@@ -78,7 +78,7 @@ export default {
     mounted() {
     },
     methods: {
-        ImportKey(response, file, fileList) {
+        importKey(response, file, fileList) {
             console.log(response);
             if(response.code === 200) {
                 this.$message({
