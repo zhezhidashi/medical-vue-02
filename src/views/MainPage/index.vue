@@ -21,20 +21,22 @@
                 </el-card>
             </div>
             <!-- 卡片 -->
-            <div
-                style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 100%; margin-top: 24px;">
-                <el-card style="width: 95%; margin-bottom: 24px;">
+            <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 95%; margin-top: 24px;">
+                <div v-for="(item, index) in projectsList">
+                    <el-card style="width: 100%; margin-bottom: 24px;">
+                        <el-descriptions :title="item.name">
+                            <el-descriptions-item label="项目DOI">{{ item.projectDoi }}</el-descriptions-item>
+                            <el-descriptions-item label="项目负责人">{{ item.user }}</el-descriptions-item>
+                            <el-descriptions-item label="联系方式">{{ item.contactInfo }}</el-descriptions-item>
+                        </el-descriptions>
+                    </el-card>
+                </div>
+            </div>
 
-                    <el-descriptions title="项目名字1">
-                        <el-descriptions-item label="项目所属机构">北医三院</el-descriptions-item>
-                        <el-descriptions-item label="项目负责人">张三</el-descriptions-item>
-                        <el-descriptions-item label="项目描述">苏州市</el-descriptions-item>
-                        <el-descriptions-item label="项目类型">
-                            <el-tag size="small">类型1</el-tag>
-                        </el-descriptions-item>
-                        <el-descriptions-item label="联系方式">aaaaa@pku.edu.cn</el-descriptions-item>
-                    </el-descriptions>
-                </el-card>
+            <div style="margin: 24px">
+                <el-pagination background layout="pager" :page-size="5" :page-count="pages"
+                    @current-change="clickPage">
+                </el-pagination>
             </div>
         </div>
     </div>
@@ -42,6 +44,7 @@
 
 <script>
 import * as echarts from "echarts";
+import { postForm } from "@/api/data";
 export default {
     name: "MainPage",
     data() {
@@ -151,6 +154,16 @@ export default {
                     },
                 ],
             },
+            projectsList: [
+                {
+                    projectDoi: "项目DOI",
+                    name: "项目名字",
+                    user: "项目负责人",
+                    contactInfo: "联系方式",
+                }
+            ],
+            pages: 1,
+            currentPage: 1,
         };
     },
     mounted() {
@@ -162,6 +175,7 @@ export default {
             this.user.userType = '普通用户';
         }
         this.initEcharts();
+        this.getProjectsList({ page: 1, size: 5});
     },
     methods: {
         initEcharts() {
@@ -189,6 +203,25 @@ export default {
             window.addEventListener("resize", () => {
                 lineEcharts2.resize();
             });
+        },
+        clickPage(page) {
+            this.currentPage = page;
+            this.getProjectsList({page: this.currentPage, size: 5});
+        },
+        getProjectsList(postData) {
+            let _this = this;
+            _this.projectsList = [];
+            postForm('/projectInfos/getProjectInfo', postData, _this, function(res){
+                _this.pages = res.data.pages;
+                for(let item of res.data.records) {
+                    _this.projectsList.push({
+                        name: item.name,
+                        user: item.user,
+                        contactInfo: item.contactInfo,
+                        projectDoi: item.projectDoi,
+                    });
+                }
+            })
         },
     },
 }

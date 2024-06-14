@@ -8,8 +8,9 @@
             <el-dropdown trigger="click" size="mini"  style="display: flex; align-items: center;">
                 <el-avatar :size="50" src="userImg.png"></el-avatar>
                 <el-dropdown-menu>
-                    <el-dropdown-item @click.native="logOut">登出</el-dropdown-item>
-                    <el-dropdown-item @click.native="modifyPassword">修改密码</el-dropdown-item>
+                    <el-dropdown-item align="center">用户：{{ $store.state.user.username }}</el-dropdown-item>
+                    <el-dropdown-item align="center" @click.native="logOut">登出</el-dropdown-item>
+                    <el-dropdown-item align="center" @click.native="modifyPassword">修改密码</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>

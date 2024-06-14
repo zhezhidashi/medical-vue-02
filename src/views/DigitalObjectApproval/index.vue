@@ -95,8 +95,8 @@
             </el-table>
 
             <div style="margin: 24px">
-                <el-pagination background layout="prev, pager, next" :page-size="10" :page-count="pages"
-                    @prev-click="prevPage" @next-click="nextPage" @current-change="clickPage">
+                <el-pagination background layout="pager" :page-size="10" :page-count="pages"
+                    @current-change="clickPage">
                 </el-pagination>
             </div>
         </div>
@@ -188,21 +188,6 @@ export default {
         this.getData({});
      },
     methods: {
-        prevPage() {
-            if (this.currentPage > 1) {
-                this.currentPage--;
-                this.getData({ page: this.currentPage });
-            }
-        },
-
-        nextPage() {
-            if (this.currentPage < this.pages) {
-                this.currentPage++;
-                this.searchForm.page = this.currentPage;
-                this.getData(this.searchForm);
-            }
-        },
-
         clickPage(page) {
             this.currentPage = page;
             this.searchForm.page = this.currentPage;
