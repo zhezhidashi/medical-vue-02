@@ -2,53 +2,45 @@
     <div style="display: flex;">
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <el-form :model="searchForm" label-width="auto" :rules="rules" class="SearchForm">
-                <el-form-item class="SearchFormItem">
-                    <el-input v-model="searchForm.projectDoi" placeholder="项目DOI"></el-input>
+                <el-form-item prop="projectDoi" label="项目DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.projectDoi"></el-input>
                 </el-form-item>
-                <el-form-item class="SearchFormItem">
-                    <el-input v-model="searchForm.doi" placeholder="DOI"></el-input>
+                <el-form-item prop="doi" label="DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.doi"></el-input>
                 </el-form-item>
-                <el-form-item class="SearchFormItem">
-                    <el-input v-model="searchForm.name" placeholder="数字对象名称"></el-input>
+                <el-form-item prop="name" label="数字对象名称" class="SearchFormItem">
+                    <el-input v-model="searchForm.name"></el-input>
                 </el-form-item>
-                <el-form-item class="SearchFormItem">
-                    <el-input v-model="searchForm.type" placeholder="数字对象类型"></el-input>
+                <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
+                    <el-input v-model="searchForm.type"></el-input>
                 </el-form-item>
-                <el-form-item class="SearchFormItem">
-                    <el-input v-model="searchForm.status" placeholder="数字对象状态"></el-input>
+                <el-form-item prop="status" label="数字对象状态" class="SearchFormItem">
+                    <el-input v-model="searchForm.status"></el-input>
                 </el-form-item>
-                <el-form-item class="SearchFormItem">
-                    <el-input v-model="searchForm.description" placeholder="数字对象描述"></el-input>
+                <el-form-item prop="description" label="数字对象描述" class="SearchFormItem">
+                    <el-input v-model="searchForm.description"></el-input>
                 </el-form-item>
-                <el-form-item class="SearchFormItem">
-                    <el-input v-model="searchForm.source" placeholder="数字对象来源"></el-input>
+                <el-form-item prop="source" label="数字对象来源" class="SearchFormItem">
+                    <el-input v-model="searchForm.source"></el-input>
                 </el-form-item>
-                <el-form-item class="SearchFormItem">
-                    <el-input v-model="searchForm.institutionDoi" placeholder="机构DOI"></el-input>
+                <el-form-item prop="institutionDoi" label="机构DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.institutionDoi"></el-input>
                 </el-form-item>
-                <el-form-item class="SearchFormItem">
-                    <el-input v-model="searchForm.institutionName" placeholder="机构名字"></el-input>
+                <el-form-item prop="institutionName" label="机构名字" class="SearchFormItem">
+                    <el-input v-model="searchForm.institutionName"></el-input>
                 </el-form-item>
-                <el-form-item class="SearchFormItem">
-                    <el-date-picker
-                        v-model="searchForm.createTimeRange"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd">
+                <el-form-item prop="createTimeRange" label="创建时间范围" class="SearchFormItem">
+                    <el-date-picker value-format="timestamp" type="daterange" v-model="searchForm.createTimeRange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item class="SearchFormItem">
-                    <el-date-picker
-                        v-model="searchForm.updateTimeRange"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd">
+                <el-form-item value-format="timestamp" prop="updateTimeRange" label="更新时间范围" class="SearchFormItem">
+                    <el-date-picker type="daterange" v-model="searchForm.updateTimeRange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
+
+                
             </el-form>
 
             <el-button type="primary" @click="searchData">搜索</el-button>
@@ -109,7 +101,7 @@ export default {
 
             rules: {
                 projectDoi: [
-                    { required: false, message: '请输入项目DOI', trigger: 'blur' }
+                    { required: true, message: '请输入项目DOI', trigger: 'blur' }
                 ]
             },
 
@@ -135,11 +127,10 @@ export default {
             this.getData(this.searchForm);
         },
         searchData() {
-            if (this.searchData.projectDoi === '') {
-                this.$message.warn('请输入项目DOI');
+            if (this.searchForm.projectDoi === "") {
+                this.$message.warning('请输入项目DOI');
                 return;
             }
-
             let postData = {
                 projectDoi: this.searchForm.projectDoi,
                 doi: this.searchForm.doi,
@@ -159,10 +150,11 @@ export default {
                 postData.updateTimeStart = this.searchForm.updateTimeRange[0];
                 postData.updateTimeEnd = this.searchForm.updateTimeRange[1];
             }
+            this.getData(postData);
         },
         
         getData(postData) {
-            _this.resultTable = [];
+            this.resultTable = [];
             postData.pageSize = 10;
             postData.pageNo = this.currentPage;
             let _this = this;

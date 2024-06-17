@@ -114,6 +114,46 @@ export const loginRequest = (requestUrl, params, This, callback) => {
     })
 }
 
+export const loginRequestMock = (requestUrl, params, This, callback) => {
+    nprogress.start();
+    console.log('postFormMock 的表单', requestUrl, params)
+    axios.request({
+        url: "https://mock.apipark.cn/m1/3980705-3616153-default/login?apifoxApiId=149513755&apifoxToken=FWfuxvo9z3Zb1yuOsKEfh",
+        method: 'post',
+        data: params,
+    }).then(({ data: res }) => {
+        nprogress.done()
+        console.log('postForm 的 response: ', requestUrl, res);
+        if (res.code === 200) { 
+            if(res.data.userType === 1) {
+                // store.commit('setToken', res.data.accessToken)
+                store.commit('setToken', res.data.refreshToken)
+                store.commit('setUsername', params.username)
+                store.commit('setUserType', 'user')
+                callback({code: 200, message: '登录成功'})
+            }
+            else {
+                // store.commit('setToken', res.data.accessToken)
+                store.commit('setToken', res.data.refreshToken)
+                store.commit('setUsername', params.username)
+                store.commit('setUserType', 'admin')
+                callback({code: 200, message: '登录成功'})
+            }
+            callback(res) 
+        }
+        else {
+            This.$message({
+                message: res.message,
+                type: 'error'
+            });
+        }
+    })
+    .catch((err) => {
+        nprogress.done()
+        console.log('loginRequestMock 的 error: ', requestUrl, err);
+    })
+}
+
 // post mock
 export const postFormMock = (requestUrl, params, This, callback) => {
     nprogress.start();

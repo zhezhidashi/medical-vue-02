@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { loginRequest } from "@/api/data";
+import { loginRequest, loginRequestMock } from "@/api/data";
 export default {
     name: "login",
     data() {
@@ -66,7 +66,7 @@ export default {
                 password: this.form.password,
             };
 
-            loginRequest('/login', params, _this, function (res) {
+            loginRequestMock('/login', params, _this, function (res) {
                 _this.$router.push({ path: "/MainPage" });
             });
         },
