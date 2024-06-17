@@ -66,7 +66,7 @@ export default {
                 password: this.form.password,
             };
 
-            loginRequestMock('/login', params, _this, function (res) {
+            loginRequest('/login', params, _this, function (res) {
                 _this.$router.push({ path: "/MainPage" });
             });
         },
