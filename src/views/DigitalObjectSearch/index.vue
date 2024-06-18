@@ -29,13 +29,13 @@
                 <el-form-item prop="institutionName" label="机构名字" class="SearchFormItem">
                     <el-input v-model="searchForm.institutionName"></el-input>
                 </el-form-item>
-                <el-form-item prop="createTimeRange" label="创建时间范围" class="SearchFormItem">
+                <el-form-item prop="createTimeRange" label="创建时间范围" class="SearchFormTimePicker">
                     <el-date-picker value-format="timestamp" type="daterange" v-model="searchForm.createTimeRange" range-separator="至"
                         start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item value-format="timestamp" prop="updateTimeRange" label="更新时间范围" class="SearchFormItem">
-                    <el-date-picker type="daterange" v-model="searchForm.updateTimeRange" range-separator="至"
+                <el-form-item prop="updateTimeRange" label="更新时间范围" class="SearchFormTimePicker">
+                    <el-date-picker value-format="timestamp" type="daterange" v-model="searchForm.updateTimeRange" range-separator="至"
                         start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
@@ -106,19 +106,18 @@ export default {
             },
 
             resultTable: [
-                {
-                    doi: 'doi1',
-                    doiName: '数字对象1',
-                    doiSource: '来源1',
-                    doiDesc: '描述1',
-                    project: '项目1',
-                    institution: '机构1',
-                }
+                // {
+                //     doi: 'doi1',
+                //     doiName: '数字对象1',
+                //     doiSource: '来源1',
+                //     doiDesc: '描述1',
+                //     project: '项目1',
+                //     institution: '机构1',
+                // }
             ],
         };
     },
     mounted() {
-        this.getData({})
     },
     methods: {
         clickPage(page) {
@@ -142,11 +141,11 @@ export default {
                 institutionDoi: this.searchForm.institutionDoi,
                 institutionName: this.searchForm.institutionName,
             };
-            if (this.searchForm.createTimeRange.length > 0) {
+            if (this.searchForm.createTimeRange && this.searchForm.createTimeRange.length > 1) {
                 postData.createTimeStart = this.searchForm.createTimeRange[0];
                 postData.createTimeEnd = this.searchForm.createTimeRange[1];
             }
-            if (this.searchForm.updateTimeRange.length > 0) {
+            if (this.searchForm.updateTimeRange && this.searchForm.updateTimeRange.length > 1) {
                 postData.updateTimeStart = this.searchForm.updateTimeRange[0];
                 postData.updateTimeEnd = this.searchForm.updateTimeRange[1];
             }
@@ -177,13 +176,29 @@ export default {
 </script>
 
 <style scoped>
+.TableItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .SearchForm {
     display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
     flex-wrap: wrap;
     margin-top: 24px;
 }
+
 .SearchFormItem {
     margin: 0 24px 24px 24px;
+    width: 280px;
+}
+
+.SearchFormTimePicker {
+    margin: 0 24px 24px 24px;
+    width: 460px;
 }
 
 </style>

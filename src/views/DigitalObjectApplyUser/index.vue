@@ -26,7 +26,7 @@
                     <el-input v-model="searchForm.appContent"></el-input>
                 </el-form-item>
                 <el-form-item class="SearchFormItem" label="申请文件">
-                    <el-input v-model="searchForm.applyFile"></el-input>
+                    <el-input v-model="searchForm.appFile"></el-input>
                 </el-form-item>
                 <el-form-item class="SearchFormTimePicker" label="创建时间范围">
                     <el-date-picker
@@ -80,7 +80,7 @@
                 </el-table-column>
                 <el-table-column prop="appName" label="申请名称"></el-table-column>
                 <el-table-column prop="appContent" label="申请内容"></el-table-column>
-                <el-table-column prop="applyFile" label="申请文件"></el-table-column>
+                <el-table-column prop="appFile" label="申请文件"></el-table-column>
                 <el-table-column prop="createTime" label="创建时间"></el-table-column>
                 <el-table-column prop="updateTime" label="更新时间"></el-table-column>
                 <el-table-column prop="appStatus" label="申请状态">
@@ -91,12 +91,12 @@
                         <el-tag v-else-if="scope.row.appStatus === 4" type="warning">无效记录</el-tag>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <!-- <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button @click="changeApply(scope.row, scope.$index)" type="text" size="small">修改</el-button>
                         <el-button @click="deleteApply(scope.$index)" type="text" size="small">删除</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
 
             <div style="margin: 24px">
@@ -113,26 +113,30 @@
                         <el-input v-model="applyForm.doi"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="数字对象名字" prop="doiName">
-                        <el-input v-model="applyForm.doiName"></el-input>
+                    <el-form-item label="申请类型" prop="applyType">
+                        <el-select v-model="applyForm.appType" placeholder="请选择" clearable>
+                            <el-option label="实体型" value="1"></el-option>
+                            <el-option label="指针型" value="2"></el-option>
+                        </el-select>
                     </el-form-item>
 
-                    <el-form-item label="申请人邮箱" prop="applyUserEmail">
-                        <el-input v-model="applyForm.applyUserEmail"></el-input>
+                    <el-form-item label="接受机构DOI" prop="recipientInstitutionDoi">
+                        <el-input v-model="applyForm.recipientInstitutionDoi"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="申请审批文件" prop="applyFile">
-                        <el-upload class="upload-demo" drag action="/api/file/upload" :on-success="handleUploadSuccess">
+                    <el-form-item label="申请名字" prop="appName">
+                        <el-input v-model="applyForm.appName"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="申请内容" prop="appContent">
+                        <el-input v-model="applyForm.appContent"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="申请审批文件" prop="appFile">
+                        <el-upload class="upload-demo" drag action="/api/file/upload" :headers="{'Authorization': 'Bearer ' + $store.state.user.token}" :on-success="handleUploadSuccess">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
-                    </el-form-item>
-
-                    <el-form-item label="申请类型" prop="applyType">
-                        <el-radio-group v-model="applyForm.applyType">
-                            <el-radio label="1">实体型</el-radio>
-                            <el-radio label="2">指针型</el-radio>
-                        </el-radio-group>
                     </el-form-item>
                 </el-form>
 
@@ -142,27 +146,12 @@
                 </span>
             </el-dialog>
 
-            <el-dialog title="修改申请" :visible.sync="modifyDialogVisible" width="80%"
+            <!-- <el-dialog title="修改申请" :visible.sync="modifyDialogVisible" width="80%"
                 :before-close="modifyCancel">
                 <el-form :model="modifyForm" ref="modifyForm" label-width="auto">
 
                     <el-form-item label="DOI" prop="doi">
                         <el-input v-model="modifyForm.doi"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="数字对象名字" prop="doiName">
-                        <el-input v-model="modifyForm.doiName"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="申请人邮箱" prop="applyUserEmail">
-                        <el-input v-model="modifyForm.applyUserEmail"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="申请审批文件" prop="applyFile">
-                        <el-upload class="upload-demo" drag action="/api/file/upload" :on-success="handleUploadSuccess">
-                            <i class="el-icon-upload"></i>
-                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        </el-upload>
                     </el-form-item>
 
                     <el-form-item label="申请类型" prop="applyType">
@@ -171,13 +160,32 @@
                             <el-radio label="2">指针型</el-radio>
                         </el-radio-group>
                     </el-form-item>
+
+                    <el-form-item label="接受机构DOI" prop="recipientInstitutionDoi">
+                        <el-input v-model="modifyForm.recipientInstitutionDoi"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="申请名字" prop="appName">
+                        <el-input v-model="modifyForm.appName"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="申请内容" prop="appContent">
+                        <el-input v-model="modifyForm.appContent"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="申请审批文件" prop="appFile">
+                        <el-upload class="upload-demo" drag action="/api/file/upload" :headers="{'Authorization': 'Bearer ' + $store.state.user.token}" :on-success="handleUploadSuccess">
+                            <i class="el-icon-upload"></i>
+                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        </el-upload>
+                    </el-form-item>
                 </el-form>
 
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="modifyCancel">取 消</el-button>
                     <el-button type="primary" @click="modifyConfirm">确 定</el-button>
                 </span>
-            </el-dialog>
+            </el-dialog> -->
         </div>
 
     </div>
@@ -210,7 +218,7 @@ export default {
                 // 申请内容
                 appContent: undefined,
                 // 申请文件
-                applyFile: undefined,
+                appFile: undefined,
                 // 创建时间范围
                 createTimeRange: undefined,
                 // 更新时间范围
@@ -230,7 +238,7 @@ export default {
                     appType: '申请类型',
                     appName: '申请名称',
                     appContent: '申请内容',
-                    applyFile: '申请文件',
+                    appFile: '申请文件',
                     createTime: '创建时间',
                     updateTime: '更新时间',
                     appStatus: 1,
@@ -239,33 +247,37 @@ export default {
 
             // 表单数据
             applyForm: {
-                // 待申请DOI
-                doi: undefined,
-                // 数字对象名字
-                doiName: undefined,
-                // 申请审批文件
-                applyFile: undefined,
+                // DOI
+                doi: '',
                 // 申请类型
-                applyType: undefined,
-                // 申请人邮箱
-                applyUserEmail: undefined,
+                appType: '',
+                // 接受机构DOI
+                recipientInstitutionDoi: '',
+                // 申请名字
+                appName: '',
+                // 申请内容
+                appContent: '',
+                // 申请审批文件
+                appFile: '',
             },
             addApplyDialogVisible: false,
 
-            modifyIndex: 0,
-            modifyDialogVisible: false,
-            modifyForm: {
-                // DOI
-                doi: '',
-                // 数字对象名称
-                doiName: '',
-                // 申请审批文件
-                applyFile: '',
-                // 申请类型
-                applyType: '',
-                // 申请人邮箱
-                applyUserEmail: '',
-            },
+            // modifyIndex: 0,
+            // modifyDialogVisible: false,
+            // modifyForm: {
+            //     // DOI
+            //     doi: '',
+            //     // 申请类型
+            //     appType: '',
+            //     // 接受机构DOI
+            //     recipientInstitutionDoi: '',
+            //     // 申请名字
+            //     appName: '',
+            //     // 申请内容
+            //     appContent: '',
+            //     // 申请审批文件
+            //     appFile: '',
+            // },
         };
     },
     mounted() {
@@ -285,14 +297,14 @@ export default {
                 appType: this.searchForm.appType,
                 appName: this.searchForm.appName,
                 appContent: this.searchForm.appContent,
-                applyFile: this.searchForm.applyFile,
+                appFile: this.searchForm.appFile,
                 appStatus: this.searchForm.appStatus,
             }
-            if(this.searchForm.createTimeRange) {
+            if(this.searchForm.createTimeRange && this.searchForm.createTimeRange.length > 1) {
                 postData.createTimeBegin = this.searchForm.createTimeRange[0];
                 postData.createTimeEnd = this.searchForm.createTimeRange[1];
             }
-            if(this.searchForm.updateTimeRange) {
+            if(this.searchForm.updateTimeRange && this.searchForm.updateTimeRange.length > 1) {
                 postData.updateTimeBegin = this.searchForm.updateTimeRange[0];
                 postData.updateTimeEnd = this.searchForm.updateTimeRange[1];
             }
@@ -313,7 +325,7 @@ export default {
                         appType: item.appType,
                         appName: item.appName,
                         appContent: item.appContent,
-                        applyFile: item.applyFile,
+                        appFile: item.appFile,
                         createTime: new Date(item.createTime).toLocaleString(),
                         updateTime: new Date(item.updateTime).toLocaleString(),
                         appStatus: item.appStatus,
@@ -324,7 +336,7 @@ export default {
         // 处理上传成功
         handleUploadSuccess(response, file, fileList) {
             console.log(response, file, fileList);
-            this.applyForm.applyFile = response.id;
+            this.applyForm.appFile = response.data;
         },
 
         // 增加申请
@@ -332,10 +344,11 @@ export default {
             this.addApplyDialogVisible = true;
             this.applyForm = {
                 doi: '',
-                doiName: '',
-                applyFile: '',
-                applyType: '',
-                applyUserEmail: '',
+                appType: '',
+                recipientInstitutionDoi: '',
+                appName: '',
+                appContent: '',
+                appFile: '',
             }
         },
 
@@ -356,85 +369,96 @@ export default {
         },
 
         // 确定增加申请
-        addApplyConfirm() {
-            console.log(this.applyForm);
-            this.addApplyDialogVisible = false;
-            this.applyTable.push({
+        addApplyConfirm() {            
+            let postData = ({
                 doi: this.applyForm.doi,
-                doiName: this.applyForm.doiName,
-                applyFile: this.applyForm.applyFile,
-                applyType: this.applyForm.applyType,
-                applyUserEmail: this.applyForm.applyUserEmail,
+                appType: this.applyForm.appType,
+                recipientInstitutionDoi: this.applyForm.recipientInstitutionDoi,
+                appName: this.applyForm.appName,
+                appContent: this.applyForm.appContent,
+                appFile: this.applyForm.appFile,
             })
-            this.$message({
-                message: '增加申请成功',
-                type: 'success'
-            });
+            let _this = this;
+            postForm('/doApplication/submitDoApplication', postData, this, function(res) {
+                if(res.code === 200) {
+                    _this.$message({
+                        message: '增加申请成功',
+                        type: 'success'
+                    });
+                    _this.addApplyDialogVisible = false;
+                }
+                // else {
+                //     _this.$message({
+                //         message: res.message,
+                //         type: 'error'
+                //     });
+                // }
+            })
         },
 
-        // 修改申请
-        changeApply(row, index) {
-            this.modifyDialogVisible = true;
-            this.modifyIndex = index;
-            this.modifyForm = {
-                doi: row.doi,
-                doiName: row.doiName,
-                applyFile: row.applyFile,
-                applyType: row.applyType,
-                applyUserEmail: row.applyUserEmail,
-            }
-        },
+        // // 修改申请
+        // changeApply(row, index) {
+        //     this.modifyDialogVisible = true;
+        //     this.modifyIndex = index;
+        //     this.modifyForm = {
+        //         doi: row.doi,
+        //         doiName: row.doiName,
+        //         appFile: row.appFile,
+        //         applyType: row.applyType,
+        //         applyUserEmail: row.applyUserEmail,
+        //     }
+        // },
         
-        // 取消修改申请
-        modifyCancel() {
-            this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.modifyDialogVisible = false;
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消'
-                });
-            });
-        },
+        // // 取消修改申请
+        // modifyCancel() {
+        //     this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
+        //         confirmButtonText: '确定',
+        //         cancelButtonText: '取消',
+        //         type: 'warning'
+        //     }).then(() => {
+        //         this.modifyDialogVisible = false;
+        //     }).catch(() => {
+        //         this.$message({
+        //             type: 'info',
+        //             message: '已取消'
+        //         });
+        //     });
+        // },
 
-        // 确定修改申请
-        modifyConfirm() {
-            console.log(this.modifyForm);
-            this.applyTable[this.modifyIndex].doi = this.modifyForm.doi;
-            this.applyTable[this.modifyIndex].doiName = this.modifyForm.doiName;
-            this.applyTable[this.modifyIndex].applyFile = this.modifyForm.applyFile;
-            this.applyTable[this.modifyIndex].applyType = this.modifyForm.applyType;
-            this.applyTable[this.modifyIndex].applyUserEmail = this.modifyForm.applyUserEmail;
-            this.modifyDialogVisible = false;
-            this.$message({
-                message: '修改申请成功',
-                type: 'success'
-            });
-        },
+        // // 确定修改申请
+        // modifyConfirm() {
+        //     console.log(this.modifyForm);
+        //     this.applyTable[this.modifyIndex].doi = this.modifyForm.doi;
+        //     this.applyTable[this.modifyIndex].doiName = this.modifyForm.doiName;
+        //     this.applyTable[this.modifyIndex].appFile = this.modifyForm.appFile;
+        //     this.applyTable[this.modifyIndex].applyType = this.modifyForm.applyType;
+        //     this.applyTable[this.modifyIndex].applyUserEmail = this.modifyForm.applyUserEmail;
+        //     this.modifyDialogVisible = false;
+        //     this.$message({
+        //         message: '修改申请成功',
+        //         type: 'success'
+        //     });
+        // },
 
-        // 删除申请
-        deleteApply(index) {
-            this.$confirm('此操作将永久删除该申请, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.applyTable.splice(index, 1);
-                this.$message({
-                    message: '删除申请成功',
-                    type: 'success'
-                });
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                });
-            });
-        },
+        // // 删除申请
+        // deleteApply(index) {
+        //     this.$confirm('此操作将永久删除该申请, 是否继续?', '提示', {
+        //         confirmButtonText: '确定',
+        //         cancelButtonText: '取消',
+        //         type: 'warning'
+        //     }).then(() => {
+        //         this.applyTable.splice(index, 1);
+        //         this.$message({
+        //             message: '删除申请成功',
+        //             type: 'success'
+        //         });
+        //     }).catch(() => {
+        //         this.$message({
+        //             type: 'info',
+        //             message: '已取消删除'
+        //         });
+        //     });
+        // },
     },
 }
 </script>

@@ -11,32 +11,31 @@
                     <el-button type="primary" style="margin: 24px;">导入公钥</el-button>
                 </el-upload>
                 
-                <el-button @click="ExportKey" type="primary" style="margin: 24px;">导出公钥</el-button>
             </div>
 
-            <el-form :model="networkingApplyForm" label-width="auto" style="width: 65vw;">
-                <el-form-item label="第三方平台的名称">
+            <el-form :model="networkingApplyForm" :rules="rules" label-width="auto" style="width: 65vw;">
+                <el-form-item prop="publicRootName" label="第三方平台的名称">
                     <el-input v-model="networkingApplyForm.publicRootName"></el-input>
                 </el-form-item>
-                <el-form-item label="第三方平台的ip">
+                <el-form-item prop="publicRootAddress" label="第三方平台的ip">
                     <el-input v-model="networkingApplyForm.publicRootAddress"></el-input>
                 </el-form-item>
-                <el-form-item label="第三方平台的端口">
+                <el-form-item prop="publicRootPort" label="第三方平台的端口">
                     <el-input v-model="networkingApplyForm.publicRootPort"></el-input>
                 </el-form-item>
-                <el-form-item label="机构的ip">
+                <el-form-item prop="institutionAddress" label="机构的ip">
                     <el-input v-model="networkingApplyForm.institutionAddress"></el-input>
                 </el-form-item>
-                <el-form-item label="机构的端口">
+                <el-form-item prop="institutionPort" label="机构的端口">
                     <el-input v-model="networkingApplyForm.institutionPort"></el-input>
                 </el-form-item>
-                <el-form-item label="机构的名字">
+                <el-form-item prop="institutionName" label="机构的名字">
                     <el-input v-model="networkingApplyForm.institutionName"></el-input>
                 </el-form-item>
-                <el-form-item label="组网的描述">
+                <el-form-item prop="networkingDesc" label="组网的描述">
                     <el-input v-model="networkingApplyForm.networkingDesc"></el-input>
                 </el-form-item>
-                <el-form-item label="申请人名称">
+                <el-form-item prop="userName" label="申请人名称">
                     <el-input v-model="networkingApplyForm.userName"></el-input>
                 </el-form-item>
             </el-form>
@@ -72,6 +71,32 @@ export default {
                 // 申请人名称
                 userName: '',
             },
+            rules: {
+                publicRootName: [
+                    { required: true, message: '请输入第三方平台的名称', trigger: 'blur' }
+                ],
+                publicRootAddress: [
+                    { required: true, message: '请输入第三方平台的ip', trigger: 'blur' }
+                ],
+                publicRootPort: [
+                    { required: true, message: '请输入第三方平台的端口', trigger: 'blur' }
+                ],
+                institutionAddress: [
+                    { required: true, message: '请输入机构的ip', trigger: 'blur' }
+                ],
+                institutionPort: [
+                    { required: true, message: '请输入机构的端口', trigger: 'blur' }
+                ],
+                institutionName: [
+                    { required: true, message: '请输入机构的名字', trigger: 'blur' }
+                ],
+                networkingDesc: [
+                    { required: true, message: '请输入组网的描述', trigger: 'blur' }
+                ],
+                userName: [
+                    { required: true, message: '请输入申请人名称', trigger: 'blur' }
+                ],
+            },
             loading: false,
         };
     },
@@ -93,9 +118,6 @@ export default {
                 });
             }
         }, 
-        ExportKey() {
-
-        },
         ApplyCommit() {
             this.loading = true;
 

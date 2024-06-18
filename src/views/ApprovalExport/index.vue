@@ -1,8 +1,6 @@
 <template>
     <div style="display: flex;">
-
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-
             <el-form :model="searchForm" label-width="auto" class="SearchForm">
                 <el-form-item class="SearchFormItem" label="申请机构DOI">
                     <el-input v-model="searchForm.applicantInstitutionDoi"></el-input>
@@ -50,48 +48,22 @@
                         align="right">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item class="SearchFormItem" label="申请状态">
-                    <el-select v-model="searchForm.appStatus" placeholder="请选择" clearable>
-                        <el-option label="已批准" value="1"></el-option>
-                        <el-option label="已拒绝" value="2"></el-option>
-                        <el-option label="待审核" value="3"></el-option>
-                        <el-option label="无效记录" value="4"></el-option>
-                    </el-select>
-                </el-form-item>
             </el-form>
 
             <el-button type="primary" @click="searchData">搜索</el-button>
-
             <el-divider></el-divider>
 
-            <el-table :data="applyTable" style="width: 95%;" stripe border >
-                <el-table-column prop="applicantInstitutionDoi" label="申请机构DOI"></el-table-column>
-                <el-table-column prop="recipientInstitutionDoi" label="接受机构DOI"></el-table-column>
-                <el-table-column prop="doi" label="DOI"></el-table-column>
-                <el-table-column prop="appType" label="申请类型">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.appType === 1">实体型</el-tag>
-                        <el-tag v-else-if="scope.row.appType === 2">指针型</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="appName" label="申请名称"></el-table-column>
-                <el-table-column prop="appContent" label="申请内容"></el-table-column>
-                <el-table-column prop="applyFile" label="申请文件"></el-table-column>
-                <el-table-column prop="createTime" label="创建时间"></el-table-column>
-                <el-table-column prop="updateTime" label="更新时间"></el-table-column>
-                <el-table-column prop="appStatus" label="申请状态">
-                    <template slot-scope="scope">
-                        <el-tag v-if="scope.row.appStatus === 1" type="success">已批准</el-tag>
-                        <el-tag v-else-if="scope.row.appStatus === 2" type="error">已拒绝</el-tag>
-                        <el-tag v-else-if="scope.row.appStatus === 3">待审核</el-tag>
-                        <el-tag v-else-if="scope.row.appStatus === 4" type="warning">无效记录</el-tag>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <div style="margin: 24px">
-                <el-pagination background layout="pager" :page-size="10" :page-count="pages"
-                    @current-change="clickPage">
-                </el-pagination>
+            <div style="margin-bottom: 24px; display: flex; justify-content: center;">
+                <div style="display: flex; flex-direction: column; justify-content: center; width: 70vw; padding: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
+                    <div v-for="(item, index) in digitalObjectList" :key="index">
+                        <el-checkbox style="margin: 5px;" v-model="item.selected">{{ item.name }}</el-checkbox>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <el-button type="primary" @click="ferry">导出</el-button>
             </div>
         </div>
 
@@ -100,15 +72,11 @@
 </template>
 
 <script>
-import { postForm } from '@/api/data'
+import { postForm } from '@/api/data';
 export default {
-    name: "DigitalObjectApplyInstitution",
+    name: "ApprovalExport",
     data() {
         return {
-            // 页数
-            pages: 1,
-            // 当前页数
-            currentPage: 1,
             searchForm : {
                 // 申请机构DOI
                 applicantInstitutionDoi: undefined,
@@ -131,38 +99,29 @@ export default {
                 // 更新时间范围
                 updateTimeRange: undefined,
                 // 申请状态
-                appStatus: undefined,
+                appStatus: 1,
             },
 
-            // 表格数据
-            applyTable: [
+            digitalObjectList: [
                 {
-                    appId: 1,
-                    applicantInstitutionDoi: '申请机构DOI',
-                    applicantUserId: '申请人ID',
-                    recipientInstitutionDoi: '接受机构DOI',
-                    doi: 'DOI',
-                    appType: '申请类型',
-                    appName: '申请名称',
-                    appContent: '申请内容',
-                    applyFile: '申请文件',
-                    createTime: '创建时间',
-                    updateTime: '更新时间',
-                    appStatus: 1,
-                }
+                    name: '数字对象1',
+                    selected: false,
+                },
+                {
+                    name: '数字对象22',
+                    selected: false,
+                },
+                {
+                    name: '数字对象333',
+                    selected: false,
+                },
             ],
-
         };
     },
-    mounted() {
-        this.getData({});
-     },
+    mounted() { 
+        this.searchData();
+    },
     methods: {
-        clickPage(page) {
-            this.currentPage = page;
-            this.searchForm.page = this.currentPage;
-            this.getData(this.searchForm);
-        },
         searchData() {
             let postData = {
                 applicantInstitutionDoi: this.searchForm.applicantInstitutionDoi,
@@ -184,34 +143,37 @@ export default {
             }
             this.getData(postData);
         },
+        
         getData(postData) {
+            this.digitalObjectList = [];
+            postData.pageSize = -1;
             let _this = this;
-            this.applyTable = [];
-            postForm('/doApplication/getInstApplication', postData, _this, function(res) {
-                _this.pages = res.data.pages;
+            postForm('/doApplication/getApprovalList', postData, _this, function(res) {
                 for(let item of res.data.records) {
-                    _this.applyTable.push({
-                        appId: item.appId,
-                        applicantInstitutionDoi: item.applicantInstitutionDoi,
-                        applicantUserId: item.applicantUserId,
-                        recipientInstitutionDoi: item.recipientInstitutionDoi,
-                        doi: item.doi,
-                        appType: item.appType,
-                        appName: item.appName,
-                        appContent: item.appContent,
-                        applyFile: item.applyFile,
-                        createTime: new Date(item.createTime).toLocaleString(),
-                        updateTime: new Date(item.updateTime).toLocaleString(),
-                        appStatus: item.appStatus,
+                    _this.digitalObjectList.push({
+                        name: item.appName,
+                        selected: false,
                     })
                 }
             })
+        },
+
+        ferry() {
+            const selectedDigitalObject = this.digitalObjectList.filter(item => item.selected);
+            console.log(selectedDigitalObject);
         },
     },
 }
 </script>
 
 <style scoped>
+.TableItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .SearchForm {
     display: flex;
     flex-direction: row;
@@ -219,10 +181,12 @@ export default {
     flex-wrap: wrap;
     margin-top: 24px;
 }
+
 .SearchFormItem {
     margin: 0 24px 24px 24px;
     width: 280px;
 }
+
 .SearchFormTimePicker {
     margin: 0 24px 24px 24px;
     width: 460px;

@@ -118,6 +118,14 @@ const routes = [
                 component: () => import('@/views/DigitalObjectApplyInstitution')
             },
             {
+                path: '/ApprovalExport',
+                name: 'ApprovalExport',
+                meta: {
+                    title: '审批通过导出'
+                },
+                component: () => import('@/views/ApprovalExport')
+            },
+            {
                 path: '/DigitalObjectSearch',
                 name: 'DigitalObjectSearch',
                 meta: {

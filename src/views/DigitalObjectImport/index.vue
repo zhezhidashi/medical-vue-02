@@ -3,7 +3,7 @@
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <el-upload
                 class="upload-demo"
-                action="/api/file/upload"
+                action="/api/registry/batchImportMetadata"
                 :onSuccess="handleSuccess"
                 :before-upload="beforeUpload"
                 style="margin-top: 24px;"

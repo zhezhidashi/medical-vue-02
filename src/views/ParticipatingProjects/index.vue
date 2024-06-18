@@ -321,12 +321,12 @@ export default {
                 reviewComments: this.searchForm.projectApprovalOpinion,
             }
 
-            if(this.searchForm.projectApplyTimeRange !== "") {
+            if(this.searchForm.projectApplyTimeRange && this.searchForm.projectApplyTimeRange !== "") {
                 postData.createBeginTime = this.searchForm.projectApplyTimeRange[0];
                 postData.createEndTime = this.searchForm.projectApplyTimeRange[1];
             }
 
-            if(this.searchForm.projectApprovalTimeRange !== "") {
+            if(this.searchForm.projectApprovalTimeRange && this.searchForm.projectApprovalTimeRange !== "") {
                 postData.updateBeginTime = this.searchForm.projectApprovalTimeRange[0];
                 postData.updateEndTime = this.searchForm.projectApprovalTimeRange[1];
             }

@@ -1,13 +1,48 @@
 <template>
     <div style="display: flex;">
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-            <div style="text-align: center; font-size: 20px; margin: 24px;">选择导出的时间段</div>
-            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
-                <el-date-picker v-model="dateValue" type="daterange" unlink-panels range-separator="至"
-                    start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
-                </el-date-picker>
-                <el-button style="margin-left: 10px;" type="primary" @click="queryDigitalObject">查询</el-button>
-            </div>
+            <el-form :model="searchForm" label-width="auto" :rules="rules" class="SearchForm">
+                <el-form-item prop="projectDoi" label="项目DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.projectDoi"></el-input>
+                </el-form-item>
+                <el-form-item prop="doi" label="DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.doi"></el-input>
+                </el-form-item>
+                <el-form-item prop="name" label="数字对象名称" class="SearchFormItem">
+                    <el-input v-model="searchForm.name"></el-input>
+                </el-form-item>
+                <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
+                    <el-input v-model="searchForm.type"></el-input>
+                </el-form-item>
+                <el-form-item prop="status" label="数字对象状态" class="SearchFormItem">
+                    <el-input v-model="searchForm.status"></el-input>
+                </el-form-item>
+                <el-form-item prop="description" label="数字对象描述" class="SearchFormItem">
+                    <el-input v-model="searchForm.description"></el-input>
+                </el-form-item>
+                <el-form-item prop="source" label="数字对象来源" class="SearchFormItem">
+                    <el-input v-model="searchForm.source"></el-input>
+                </el-form-item>
+                <el-form-item prop="institutionDoi" label="机构DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.institutionDoi"></el-input>
+                </el-form-item>
+                <el-form-item prop="institutionName" label="机构名字" class="SearchFormItem">
+                    <el-input v-model="searchForm.institutionName"></el-input>
+                </el-form-item>
+                <el-form-item prop="createTimeRange" label="创建时间范围" class="SearchFormTimePicker">
+                    <el-date-picker value-format="timestamp" type="daterange" v-model="searchForm.createTimeRange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item prop="updateTimeRange" label="更新时间范围" class="SearchFormTimePicker">
+                    <el-date-picker value-format="timestamp" type="daterange" v-model="searchForm.updateTimeRange" range-separator="至"
+                        start-placeholder="开始日期" end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+            </el-form>
+
+            <el-button type="primary" @click="searchData">搜索</el-button>
+            <el-divider></el-divider>
 
             <div style="margin-bottom: 24px; display: flex; justify-content: center;">
                 <div style="display: flex; flex-direction: column; justify-content: center; width: 70vw; padding: 5px;
@@ -17,6 +52,12 @@
                     </div>
                 </div>
             </div>
+
+            <!-- <div style="margin: 24px">
+                <el-pagination background layout="pager" :page-size="10" :page-count="pages"
+                    @current-change="clickPage">
+                </el-pagination>
+            </div> -->
 
             <div style="text-align: center;">
                 <el-button type="primary" @click="ferry">导出</el-button>
@@ -28,11 +69,44 @@
 </template>
 
 <script>
+import { postForm } from '@/api/data';
 export default {
     name: "DigitalObjectExport",
     data() {
         return {
-            dateValue: '',
+            pages: 1,
+            currentPage: 1,
+            searchForm: {
+                // 项目DOI
+                projectDoi: '',
+                // DOI
+                doi: '',
+                // 数字对象名称
+                name: '',
+                // 数字对象类型
+                type: '',
+                // 数字对象状态
+                status: '',
+                // 数字对象描述
+                description: '',
+                // 数字对象来源
+                source: '',
+                // 机构DOI
+                institutionDoi: '',
+                // 机构名字
+                institutionName: '',
+                // 创建时间范围
+                createTimeRange: [],
+                // 更新时间范围
+                updateTimeRange: [],
+            },
+
+            rules: {
+                projectDoi: [
+                    { required: true, message: '请输入项目DOI', trigger: 'blur' }
+                ]
+            },
+
             digitalObjectList: [
                 {
                     name: '数字对象1',
@@ -47,40 +121,58 @@ export default {
                     selected: false,
                 },
             ],
-            pickerOptions: {
-                shortcuts: [{
-                    text: '最近一周',
-                    onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近一个月',
-                    onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                        picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近三个月',
-                    onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                        picker.$emit('pick', [start, end]);
-                    }
-                }]
-            },
         };
     },
     mounted() { },
     methods: {
-        queryDigitalObject() {
-            console.log(this.dateValue);
+        clickPage(page) {
+            this.currentPage = page;
+            this.searchForm.pageNo = this.currentPage;
+            this.getData(this.searchForm);
         },
+        searchData() {
+            if (this.searchForm.projectDoi === "") {
+                this.$message.warning('请输入项目DOI');
+                return;
+            }
+            let postData = {
+                projectDoi: this.searchForm.projectDoi,
+                doi: this.searchForm.doi,
+                name: this.searchForm.name,
+                type: this.searchForm.type,
+                status: this.searchForm.status,
+                description: this.searchForm.description,
+                source: this.searchForm.source,
+                institutionDoi: this.searchForm.institutionDoi,
+                institutionName: this.searchForm.institutionName,
+            };
+            if (this.searchForm.createTimeRange && this.searchForm.createTimeRange.length > 1) {
+                postData.createTimeStart = this.searchForm.createTimeRange[0];
+                postData.createTimeEnd = this.searchForm.createTimeRange[1];
+            }
+            if (this.searchForm.updateTimeRange && this.searchForm.updateTimeRange.length > 1) {
+                postData.updateTimeStart = this.searchForm.updateTimeRange[0];
+                postData.updateTimeEnd = this.searchForm.updateTimeRange[1];
+            }
+            this.getData(postData);
+        },
+        
+        getData(postData) {
+            this.digitalObjectList = [];
+            postData.pageSize = -1;
+            // postData.pageNo = this.currentPage;
+            let _this = this;
+            postForm('/registry/searchMetaData', postData, _this, function(res) {
+                _this.pages = res.data.pages;
+                for(let item of res.data.records) {
+                    _this.digitalObjectList.push({
+                        name: item.name,
+                        selected: false,
+                    })
+                }
+            })
+        },
+        
         ferry() {
             const selectedDigitalObject = this.digitalObjectList.filter(item => item.selected);
             console.log(selectedDigitalObject);
@@ -89,4 +181,29 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.TableItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.SearchForm {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+
+.SearchFormItem {
+    margin: 0 24px 24px 24px;
+    width: 280px;
+}
+
+.SearchFormTimePicker {
+    margin: 0 24px 24px 24px;
+    width: 460px;
+}
+</style>

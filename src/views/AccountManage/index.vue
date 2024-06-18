@@ -297,20 +297,20 @@ export default {
                 email: this.searchForm.email,
             };
             // 注册时间范围
-            if (this.searchForm.registerTimeRange) {
+            if (this.searchForm.registerTimeRange && this.searchForm.registerTimeRange.length > 1) {
                 postData.registerTimeStart =
                     this.searchForm.registerTimeRange[0];
                 postData.registerTimeEnd = this.searchForm.registerTimeRange[1];
             }
             // 最近登录时间范围
-            if (this.searchForm.lastLoginTimeRange) {
+            if (this.searchForm.lastLoginTimeRange && this.searchForm.lastLoginTimeRange.length > 1) {
                 postData.lastLoginTimeStart =
                     this.searchForm.lastLoginTimeRange[0];
                 postData.lastLoginTimeEnd =
                     this.searchForm.lastLoginTimeRange[1];
             }
             // 最近修改密码时间范围
-            if (this.searchForm.lastModifyPasswordTimeRange) {
+            if (this.searchForm.lastModifyPasswordTimeRange && this.searchForm.lastModifyPasswordTimeRange.length > 1) {
                 postData.lastModifyPasswordTimeStart =
                     this.searchForm.lastModifyPasswordTimeRange[0];
                 postData.lastModifyPasswordTimeEnd =
@@ -468,9 +468,10 @@ export default {
             console.log(response);
             if (response.code === 200) {
                 this.$message({
-                    message: "导入公钥成功",
+                    message: "导入用户成功",
                     type: "success",
                 });
+                this.getData({});
             } else {
                 this.$message({
                     message: response.message,

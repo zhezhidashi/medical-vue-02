@@ -116,7 +116,7 @@
                         <el-input v-model="modifyProjectItem.projectDescription"></el-input>
                     </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
-                        <el-upload class="upload-demo" drag action="/api/file/upload" :on-success="handleUploadSuccess">
+                        <el-upload class="upload-demo" drag action="/api/file/upload" :headers="{'Authorization': 'Bearer ' + $store.state.user.token}" :on-success="handleUploadSuccess">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
@@ -150,7 +150,7 @@
                         <el-input v-model="addProjectItem.projectDescription"></el-input>
                     </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
-                        <el-upload class="upload-demo" drag action="/api/file/upload" :on-success="handleUploadSuccess">
+                        <el-upload class="upload-demo" drag action="/api/file/upload" :headers="{'Authorization': 'Bearer ' + $store.state.user.token}" :on-success="handleUploadSuccess">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
@@ -327,7 +327,7 @@ export default {
         // 处理上传成功
         handleUploadSuccess(response, file, fileList) {
             console.log(response, file, fileList);
-            this.applyForm.applyFile = response.id;
+            this.applyForm.applyFile = response.data;
         },
     },
 }

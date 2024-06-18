@@ -105,8 +105,8 @@
             <el-form :model="approvalForm" label-width="80px">
                 <el-form-item label="审批状态">
                     <el-select v-model="approvalForm.approvalStatus" placeholder="请选择">
-                        <el-option label="已通过" value="1"></el-option>
-                        <el-option label="未通过" value="2"></el-option>
+                        <el-option label="通过" :value="1"></el-option>
+                        <el-option label="拒绝" :value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="审批意见">
@@ -204,11 +204,11 @@ export default {
                 applyFile: this.searchForm.applyFile,
                 appStatus: this.searchForm.appStatus,
             }
-            if(this.searchForm.createTimeRange) {
+            if(this.searchForm.createTimeRange && this.searchForm.createTimeRange.length > 1) {
                 postData.createTimeBegin = this.searchForm.createTimeRange[0];
                 postData.createTimeEnd = this.searchForm.createTimeRange[1];
             }
-            if(this.searchForm.updateTimeRange) {
+            if(this.searchForm.updateTimeRange && this.searchForm.updateTimeRange.length > 1) {
                 postData.updateTimeBegin = this.searchForm.updateTimeRange[0];
                 postData.updateTimeEnd = this.searchForm.updateTimeRange[1];
             }
@@ -239,6 +239,7 @@ export default {
         },
         // 进行审批
         conductApproval(row, index) {
+            console.log(row, index);
             this.approvalDialogVisible = true;
             this.approvalIndex = index;
         },
@@ -259,13 +260,22 @@ export default {
         },
         // 确定审批
         approvalConfirm() {
-            this.approvalDialogVisible = false;
-            this.approvalTable[this.approvalIndex].approvalStatus = this.approvalForm.approvalStatus === '1' ? 1 : 2;
-            this.approvalTable[this.approvalIndex].approvalOpinion = this.approvalForm.approvalOpinion;
-            this.$message({
-                message: '审批完成',
-                type: 'success'
-            });
+            let postData = {
+                id: this.approvalTable[this.approvalIndex].appId,
+                status: this.approvalForm.approvalStatus,
+                approvalOpinion: this.approvalForm.approvalOpinion,
+            }
+            let _this = this;
+            postForm('/doApplication/submitApproval', postData, _this, function(res){
+                if (res.code === 200) {
+                    _this.$message({
+                        message: '审批完成',
+                        type: 'success'
+                    });
+                    _this.approvalDialogVisible = false;
+                    _this.getData({});
+                }
+            })
         }
     },
 }
