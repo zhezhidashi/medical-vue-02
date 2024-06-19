@@ -2,8 +2,11 @@
     <div style="display: flex;">
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <el-form :model="searchForm" label-width="auto" :rules="rules" class="SearchForm">
-                <el-form-item prop="projectDoi" label="项目DOI" class="SearchFormItem">
-                    <el-input v-model="searchForm.projectDoi"></el-input>
+                <el-form-item prop="project" label="项目" class="SearchFormItem">
+                    <el-select v-model="searchForm.project" placeholder="请选择项目">
+                        <el-option v-for="item in projectList" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item prop="doi" label="DOI" class="SearchFormItem">
                     <el-input v-model="searchForm.doi"></el-input>
@@ -76,9 +79,10 @@ export default {
         return {
             pages: 1,
             currentPage: 1,
+            projectList: [],
             searchForm: {
-                // 项目DOI
-                projectDoi: '',
+                // 项目
+                project: '',
                 // DOI
                 doi: '',
                 // 数字对象名称
@@ -102,8 +106,8 @@ export default {
             },
 
             rules: {
-                projectDoi: [
-                    { required: true, message: '请输入项目DOI', trigger: 'blur' }
+                project: [
+                    { required: true, message: '请选择项目', trigger: 'blur' }
                 ]
             },
 
@@ -123,7 +127,19 @@ export default {
             ],
         };
     },
-    mounted() { },
+    mounted() { 
+        let _this = this;
+        postForm('/projectInfos/getProjectInfo', {size: -1}, _this, function(res) {
+            if(res.code === 200) {
+                for (let item of res.data.records) {
+                    _this.projectList.push({
+                        label: item.name,
+                        value: item.projectDoi,
+                    })
+                }
+            }
+        })
+    },
     methods: {
         clickPage(page) {
             this.currentPage = page;
@@ -131,12 +147,12 @@ export default {
             this.getData(this.searchForm);
         },
         searchData() {
-            if (this.searchForm.projectDoi === "") {
-                this.$message.warning('请输入项目DOI');
+            if (this.searchForm.project === "") {
+                this.$message.warning('请选择项目');
                 return;
             }
             let postData = {
-                projectDoi: this.searchForm.projectDoi,
+                projectDoi: this.searchForm.project,
                 doi: this.searchForm.doi,
                 name: this.searchForm.name,
                 type: this.searchForm.type,
@@ -148,11 +164,11 @@ export default {
             };
             if (this.searchForm.createTimeRange && this.searchForm.createTimeRange.length > 1) {
                 postData.createTimeStart = this.searchForm.createTimeRange[0];
-                postData.createTimeEnd = this.searchForm.createTimeRange[1];
+                postData.createTimeEnd = this.searchForm.createTimeRange[1] + 86399999;
             }
             if (this.searchForm.updateTimeRange && this.searchForm.updateTimeRange.length > 1) {
                 postData.updateTimeStart = this.searchForm.updateTimeRange[0];
-                postData.updateTimeEnd = this.searchForm.updateTimeRange[1];
+                postData.updateTimeEnd = this.searchForm.updateTimeRange[1] + 86399999;
             }
             this.getData(postData);
         },
@@ -163,12 +179,14 @@ export default {
             // postData.pageNo = this.currentPage;
             let _this = this;
             postForm('/registry/searchMetaData', postData, _this, function(res) {
-                _this.pages = res.data.pages;
-                for(let item of res.data.records) {
-                    _this.digitalObjectList.push({
-                        name: item.name,
-                        selected: false,
-                    })
+                if(res.code === 200) {
+                    _this.pages = res.data.pages;
+                    for(let item of res.data.records) {
+                        _this.digitalObjectList.push({
+                            name: item.name,
+                            selected: false,
+                        })
+                    }
                 }
             })
         },

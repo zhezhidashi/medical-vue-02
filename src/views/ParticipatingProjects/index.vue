@@ -323,12 +323,12 @@ export default {
 
             if(this.searchForm.projectApplyTimeRange && this.searchForm.projectApplyTimeRange !== "") {
                 postData.createBeginTime = this.searchForm.projectApplyTimeRange[0];
-                postData.createEndTime = this.searchForm.projectApplyTimeRange[1];
+                postData.createEndTime = this.searchForm.projectApplyTimeRange[1] + 86399999;
             }
 
             if(this.searchForm.projectApprovalTimeRange && this.searchForm.projectApprovalTimeRange !== "") {
                 postData.updateBeginTime = this.searchForm.projectApprovalTimeRange[0];
-                postData.updateEndTime = this.searchForm.projectApprovalTimeRange[1];
+                postData.updateEndTime = this.searchForm.projectApprovalTimeRange[1] + 86399999;
             }
 
             this.getData(postData);
@@ -424,11 +424,33 @@ export default {
         },
         // 处理上传成功
         uploadSuccessAdd(response, file, fileList) {
-            this.addProjectItem.projectApplyFile = response.data;
+            if(response.code === 200) {
+                this.$message({
+                    message: '上传成功',
+                    type: 'success'
+                });
+                this.addProjectItem.projectApplyFile = response.data;
+            } else {
+                this.$message({
+                    message: response.message,
+                    type: 'error'
+                });
+            }
         },
 
         uploadSuccessModify(response, file, fileList) {
-            this.modifyProjectItem.projectApplyFile = response.data;
+            if(response.code === 200) {
+                this.$message({
+                    message: '上传成功',
+                    type: 'success'
+                });
+                this.modifyProjectItem.projectApplyFile = response.data;
+            } else {
+                this.$message({
+                    message: response.message,
+                    type: 'error'
+                });
+            }
         },
     },
 }

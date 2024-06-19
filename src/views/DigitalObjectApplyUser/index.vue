@@ -133,7 +133,11 @@
                     </el-form-item>
 
                     <el-form-item label="申请审批文件" prop="appFile">
-                        <el-upload class="upload-demo" drag action="/api/file/upload" :headers="{'Authorization': 'Bearer ' + $store.state.user.token}" :on-success="handleUploadSuccess">
+                        <el-upload 
+                            class="upload-demo" drag 
+                            action="/api/file/upload" 
+                            :headers="{'Authorization': 'Bearer ' + $store.state.user.token}" 
+                            :on-success="handleUploadSuccess">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
@@ -302,11 +306,11 @@ export default {
             }
             if(this.searchForm.createTimeRange && this.searchForm.createTimeRange.length > 1) {
                 postData.createTimeBegin = this.searchForm.createTimeRange[0];
-                postData.createTimeEnd = this.searchForm.createTimeRange[1];
+                postData.createTimeEnd = this.searchForm.createTimeRange[1] + 86399999;
             }
             if(this.searchForm.updateTimeRange && this.searchForm.updateTimeRange.length > 1) {
                 postData.updateTimeBegin = this.searchForm.updateTimeRange[0];
-                postData.updateTimeEnd = this.searchForm.updateTimeRange[1];
+                postData.updateTimeEnd = this.searchForm.updateTimeRange[1] + 86399999;
             }
             this.getData(postData);
         },
@@ -335,8 +339,19 @@ export default {
         },
         // 处理上传成功
         handleUploadSuccess(response, file, fileList) {
-            console.log(response, file, fileList);
-            this.applyForm.appFile = response.data;
+            console.log(response);
+            if(response.code === 200){
+                this.$message({
+                    message: '上传成功',
+                    type: 'success'
+                });
+                this.applyForm.appFile = response.data;
+            } else {
+                this.$message({
+                    message: response.message,
+                    type: 'error'
+                });
+            }
         },
 
         // 增加申请

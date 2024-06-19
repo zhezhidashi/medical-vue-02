@@ -24,7 +24,7 @@
 <script>
 import { loginRequest, loginRequestMock } from "@/api/data";
 export default {
-    name: "login",
+    name: "Login",
     data() {
         return {
             form: {

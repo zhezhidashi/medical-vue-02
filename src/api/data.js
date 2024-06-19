@@ -87,14 +87,14 @@ export const loginRequest = (requestUrl, params, This, callback) => {
         if (res.code === 200) { 
             if(res.data.userType === 1) {
                 // store.commit('setToken', res.data.accessToken)
-                store.commit('setToken', res.data.refreshToken)
+                store.commit('setToken', res.data.accessToken)
                 store.commit('setUsername', params.username)
                 store.commit('setUserType', 'user')
                 callback({code: 200, message: '登录成功'})
             }
             else {
                 // store.commit('setToken', res.data.accessToken)
-                store.commit('setToken', res.data.refreshToken)
+                store.commit('setToken', res.data.accessToken)
                 store.commit('setUsername', params.username)
                 store.commit('setUserType', 'admin')
                 callback({code: 200, message: '登录成功'})
@@ -127,14 +127,14 @@ export const loginRequestMock = (requestUrl, params, This, callback) => {
         if (res.code === 200) { 
             if(res.data.userType === 1) {
                 // store.commit('setToken', res.data.accessToken)
-                store.commit('setToken', res.data.refreshToken)
+                store.commit('setToken', res.data.accessToken)
                 store.commit('setUsername', params.username)
                 store.commit('setUserType', 'user')
                 callback({code: 200, message: '登录成功'})
             }
             else {
                 // store.commit('setToken', res.data.accessToken)
-                store.commit('setToken', res.data.refreshToken)
+                store.commit('setToken', res.data.accessToken)
                 store.commit('setUsername', params.username)
                 store.commit('setUserType', 'admin')
                 callback({code: 200, message: '登录成功'})

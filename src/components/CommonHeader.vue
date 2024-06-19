@@ -2,13 +2,14 @@
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex;">
             <img src="favicon.png" style="height: 50px; margin-right: 10px;" />
-            <div style="font-size: 25px; line-height: 200%;">医学临床数据交换系统</div>
+            <div style="font-size: 25px; line-height: 200%;">医学临床数据交换公网系统</div>
         </div>
         <div class="r-content" v-show="path !== '/Login'">
-            <el-dropdown trigger="click" size="mini"  style="display: flex; align-items: center;">
-                <el-avatar :size="50" src="userImg.png"></el-avatar>
+            <el-dropdown style="display: flex; align-items: center;">
+                <span class="el-dropdown-link" style="">
+                    用户：{{ username }} <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
                 <el-dropdown-menu>
-                    <el-dropdown-item align="center">用户：{{ $store.state.user.username }}</el-dropdown-item>
                     <el-dropdown-item align="center" @click.native="logOut">登出</el-dropdown-item>
                     <el-dropdown-item align="center" @click.native="modifyPassword">修改密码</el-dropdown-item>
                 </el-dropdown-menu>
@@ -45,13 +46,15 @@ export default {
                 confirmPassword: ''
             },
             modifyPasswordDialogVisible: false,
+            userType: '',
+            username: '',
         }  
-    },
-    props: {
-        activeIndex: String,
     },
     mounted() {
         this.path = this.$router.currentRoute.path;
+        this.userType = this.$store.state.user.userType;
+        this.username = this.$store.state.user.username;
+
     },
     watch: {
         $route(to, from) {
@@ -63,7 +66,7 @@ export default {
             this.$store.commit('clearToken');
             this.$store.commit('clearUsername');
             this.$store.commit('clearUserType');
-            getForm('/logout?apifoxApiId=163024276', this, function(res) {})
+            getForm('/logout', this, function(res) {})
             window.location.reload();
         },
         modifyPassword() {
@@ -95,15 +98,10 @@ export default {
                 return;
             }
 
-            let userType = this.$store.state.user.userType;
-            let username = this.$store.state.user.username;
-            console.log("userType: ", userType);
-            console.log("username", username);
-
             let _this = this;
-            if (userType === 'user') {
+            if (this.userType === 'user') {
                 let postData = {
-                    username: username,
+                    username: this.username,
                     password: this.passwordForm.newPassword
                 }
                 postForm('/users/update', postData, _this, function(res){
@@ -112,18 +110,19 @@ export default {
                         _this.modifyPasswordDialogVisible = false;
                         _this.passwordForm.newPassword = '';
                         _this.passwordForm.confirmPassword = '';
+                        _this.logOut();
                     }
                     else {
                         _this.$message.error(res.message);
                     }
                 })
             } 
-            else if (userType === 'admin') {
+            else if (this.userType === 'admin') {
                 let postData = {
-                    username: username,
+                    username: this.username,
                     password: this.passwordForm.newPassword
                 }
-                postForm('/users/getUsers', {username: username}, _this, function(res) {
+                postForm('/users/getUsers', {username: _this.username}, _this, function(res) {
                     if (res.code === 200) {
                         postData.uid = res.data.records[0].uid;
                         postForm('/users/update', postData, _this, function(res) {
@@ -132,6 +131,7 @@ export default {
                                 _this.modifyPasswordDialogVisible = false;
                                 _this.passwordForm.newPassword = '';
                                 _this.passwordForm.confirmPassword = '';
+                                _this.logOut();
                             }
                             else {
                                 _this.$message.error(res.message);
@@ -151,4 +151,10 @@ export default {
 </script>
 
 <style scoped>
+.el-dropdown-link {
+    cursor: pointer;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
 </style>

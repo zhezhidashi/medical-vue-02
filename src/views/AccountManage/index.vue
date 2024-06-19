@@ -298,23 +298,23 @@ export default {
             };
             // 注册时间范围
             if (this.searchForm.registerTimeRange && this.searchForm.registerTimeRange.length > 1) {
-                postData.registerTimeStart =
+                postData.createTimeBegin =
                     this.searchForm.registerTimeRange[0];
-                postData.registerTimeEnd = this.searchForm.registerTimeRange[1];
+                postData.createTimeEnd = this.searchForm.registerTimeRange[1] + 86399999;
             }
             // 最近登录时间范围
             if (this.searchForm.lastLoginTimeRange && this.searchForm.lastLoginTimeRange.length > 1) {
-                postData.lastLoginTimeStart =
+                postData.lastLoginTimeBegin =
                     this.searchForm.lastLoginTimeRange[0];
                 postData.lastLoginTimeEnd =
-                    this.searchForm.lastLoginTimeRange[1];
+                    this.searchForm.lastLoginTimeRange[1] + 86399999;
             }
             // 最近修改密码时间范围
             if (this.searchForm.lastModifyPasswordTimeRange && this.searchForm.lastModifyPasswordTimeRange.length > 1) {
-                postData.lastModifyPasswordTimeStart =
+                postData.updateTimeBegin =
                     this.searchForm.lastModifyPasswordTimeRange[0];
-                postData.lastModifyPasswordTimeEnd =
-                    this.searchForm.lastModifyPasswordTimeRange[1];
+                postData.updateTimeEnd =
+                    this.searchForm.lastModifyPasswordTimeRange[1] + 86399999;
             }
             this.getData(postData);
         },

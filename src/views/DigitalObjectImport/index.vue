@@ -4,8 +4,9 @@
             <el-upload
                 class="upload-demo"
                 action="/api/registry/batchImportMetadata"
-                :onSuccess="handleSuccess"
-                :before-upload="beforeUpload"
+                :headers="{'Authorization': 'Bearer ' + $store.state.user.token}"
+                :on-success="handleUploadSuccess"
+                :show-file-list="false"
                 style="margin-top: 24px;"
             >
                 <el-button type="primary">点击上传</el-button>
@@ -109,17 +110,19 @@ export default {
     },
     mounted() { },
     methods: {
-        beforeUpload(file) {
-            console.log(file);
-            this.uploadFile = file;
-            this.uploadLoading = true;
-            return false;
-        },
-        handleSuccess(response, file, fileList) {
-            setTimeout(() => {
-                this.uploadLoading = false;
-            }, 1000);
-            console.log(response, file, fileList);
+        handleUploadSuccess(response, file, fileList) {
+            console.log(response);
+            if(response.code === 200) {
+                this.$message({
+                    message: '上传成功',
+                    type: 'success'
+                });
+            } else {
+                this.$message({
+                    message: response.message,
+                    type: 'error'
+                });
+            }
         },
         ferry() {
             console.log(this.tableData);

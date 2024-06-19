@@ -1,19 +1,16 @@
 <template>
-    <div style="width: 250px;" v-show="path !== '/Login'">
-        <el-menu :default-active="activeIndex" class="el-menu-demo" @select="handleSelect" :unique-opened="false">
+    <div style="width: 200px;" v-show="path !== '/Login'">
+        <el-menu :default-active="activeIndex" class="el-menu-demo" 
+            @select="handleSelect" :unique-opened="false"
+            text-color="#000080" active-text-color="#FF4040"
+            >
             <el-menu-item index="0">主页</el-menu-item>
-            <!-- <el-menu-item v-show="isAdmin" index="1">组网管理</el-menu-item> -->
             <el-submenu v-show="isAdmin" index="1">
                 <template slot="title">组网管理</template>
                 <el-menu-item index="1-1">申请管理</el-menu-item>
                 <el-menu-item index="1-2">组网列表</el-menu-item>
             </el-submenu>
-            <el-menu-item index="2" v-show="isAdmin">项目管理</el-menu-item>
-            <!-- <el-submenu v-show="isAdmin" index="2">
-                <template slot="title">项目管理</template>
-                <el-menu-item index="2-1">本机构牵头项目</el-menu-item>
-                <el-menu-item index="2-2">本机构参与项目</el-menu-item>
-            </el-submenu> -->
+            <el-menu-item v-show="isAdmin" index="2">项目管理</el-menu-item>
             <el-menu-item v-show="isAdmin" index="3">账号管理</el-menu-item>
             <el-menu-item v-show="!isAdmin" index="4">关系系统</el-menu-item>
             <el-menu-item v-show="!isAdmin" index="5">数字对象申请</el-menu-item>
@@ -47,8 +44,8 @@ export default {
     },
     mounted() {
         this.isAdmin = this.$store.state.user.userType === 'admin';
-        this.path = this.$router.currentRoute.path;
-        console.log("***", this.path)
+        this.path = this.$router.history.current.path;
+        console.log("***", this.$router.history.current.path, this.path)
         if (this.path === '/Login') {
             this.activeIndex = '0';
         }
@@ -61,15 +58,9 @@ export default {
         else if (this.path === '/NetworkingList') {
             this.activeIndex = '1-2';
         }
-        else if (this.path = '/ParticipatingProjects') {
+        else if (this.path === '/ParticipatingProjects') {
             this.activeIndex = '2'
         }
-        // else if (this.path === '/LeadingProjects') {
-        //     this.activeIndex = '2-1';
-        // }
-        // else if (this.path === '/ParticipatingProjects') {
-        //     this.activeIndex = '2-2';
-        // }
         else if (this.path === '/AccountManage') {
             this.activeIndex = '3';
         }
@@ -129,12 +120,6 @@ export default {
             else if (key === '2') {
                 this.$router.push('/ParticipatingProjects')
             }
-            // else if (key === '2-1') {
-            //     this.$router.push('/LeadingProjects')
-            // } 
-            // else if(key === '2-2') {
-            //     this.$router.push('/ParticipatingProjects')
-            // } 
             else if (key === '3') {
                 this.$router.push('/AccountManage')
             } else if (key === '4') {

@@ -62,14 +62,6 @@ const routes = [
                 component: () => import('@/views/NetworkingList')
             },
             {
-                path: '/LeadingProjects',
-                name: 'LeadingProjects',
-                meta: {
-                    title: '本机构主持项目'
-                },
-                component: () => import('@/views/LeadingProjects')
-            },
-            {
                 path: '/ParticipatingProjects',
                 name: 'ParticipatingProjects',
                 meta: {

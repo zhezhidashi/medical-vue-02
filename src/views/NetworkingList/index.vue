@@ -9,25 +9,25 @@
 			"
 		>
 			<el-form :model="searchForm" label-width="auto" class="SearchForm">
-				<el-form-item label="组网组编号" class="SearchFormItem">
+				<el-form-item label="组网编号" class="SearchFormItem">
 					<el-input v-model="searchForm.gid"></el-input>
 				</el-form-item>
-				<el-form-item label="组网组状态" class="SearchFormItemSelect">
+				<el-form-item label="组网状态" class="SearchFormItemSelect">
 					<el-select v-model="searchForm.status" placeholder="请选择">
 						<el-option label="正常" value="0"></el-option>
 						<el-option label="异常" value="1"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="组网组描述" class="SearchFormItem">
+				<el-form-item label="描述" class="SearchFormItem">
 					<el-input v-model="searchForm.description"></el-input>
 				</el-form-item>
-				<el-form-item label="组网组名字" class="SearchFormItem">
+				<el-form-item label="平台名字" class="SearchFormItem">
 					<el-input v-model="searchForm.publicRootName"></el-input>
 				</el-form-item>
-				<el-form-item label="组网组地址" class="SearchFormItem">
+				<el-form-item label="平台地址" class="SearchFormItem">
 					<el-input v-model="searchForm.publicRootAddress"></el-input>
 				</el-form-item>
-				<el-form-item label="组网组端口" class="SearchFormItem">
+				<el-form-item label="平台端口" class="SearchFormItem">
 					<el-input v-model="searchForm.publicRootPort"></el-input>
 				</el-form-item>
 				<el-form-item label="机构DOI" class="SearchFormItem">
@@ -39,29 +39,26 @@
 			<el-divider></el-divider>
 
 			<el-table :data="tableData" style="width: 95%" stripe border>
+                <el-table-column prop="gid" label="组网编号"></el-table-column>
 				<el-table-column
 					prop="institutionDoi"
 					label="机构DOI"
 				></el-table-column>
 				<el-table-column
-					prop="institutionName"
-					label="机构名字"
+					prop="publicRootName"
+					label="平台名字"
 				></el-table-column>
 				<el-table-column
-					prop="institutionAddress"
-					label="机构IP地址"
+					prop="publicRootName"
+					label="平台地址"
 				></el-table-column>
 				<el-table-column
-					prop="institutionPort"
-					label="机构端口"
+					prop="publicRootPort"
+					label="平台端口"
 				></el-table-column>
-				<!-- <el-table-column
-					prop="institutionPublicKey"
-					label="机构公钥"
-				></el-table-column> -->
 				<el-table-column
 					prop="institutionDesc"
-					label="机构描述"
+					label="描述"
 					min-width="200"
 				></el-table-column>
 				<el-table-column
@@ -72,7 +69,7 @@
 					prop="updateTime"
 					label="修改时间"
 				></el-table-column>
-				<el-table-column prop="networkingStatus" label="机构组网状态">
+				<el-table-column prop="networkingStatus" label="组网状态">
 					<template slot-scope="scope">
 						<el-tag
 							v-if="scope.row.networkingStatus === 0"
@@ -86,7 +83,7 @@
 						>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作">
+				<!-- <el-table-column label="操作">
 					<template slot-scope="scope">
 						<el-button
 							@click="modifyNetworking(scope.row, scope.$index)"
@@ -94,14 +91,14 @@
 							size="small"
 							>修改</el-button
 						>
-						<!-- <el-button
+						<el-button
 							@click="deleteNetworking(scope.row, scope.$index)"
 							type="danger"
 							size="small"
 							>删除</el-button
-						> -->
+						>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 			</el-table>
 
             <div style="margin: 24px">
@@ -110,8 +107,8 @@
                 </el-pagination>
             </div>
 
-			<el-dialog
-				title="修改组网组"
+			<!-- <el-dialog
+				title="修改组网"
 				:visible.sync="modifyNetworkingDialogVisible"
 				width="90%"
 			>
@@ -122,26 +119,26 @@
 							placeholder="请输入机构DOI"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="机构名字" prop="institutionName">
+					<el-form-item label="平台名字" prop="publicRootName">
 						<el-input
-							v-model="modifyNetworkingForm.institutionName"
-							placeholder="请输入机构名字"
+							v-model="modifyNetworkingForm.publicRootName"
+							placeholder="请输入平台名字"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="机构IP地址" prop="institutionAddress">
+					<el-form-item label="平台地址" prop="publicRootName">
 						<el-input
-							v-model="modifyNetworkingForm.institutionAddress"
-							placeholder="请输入机构IP地址"
+							v-model="modifyNetworkingForm.publicRootName"
+							placeholder="平台地址"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="机构端口" prop="institutionPort">
+					<el-form-item label="机构端口" prop="publicRootPort">
 						<el-input
-							v-model="modifyNetworkingForm.institutionPort"
+							v-model="modifyNetworkingForm.publicRootPort"
 							placeholder="请输入机构端口"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="机构公钥" prop="institutionPublicKey">
-                        {{ modifyNetworkingForm.institutionPublicKey }}
+					<el-form-item label="机构公钥" prop="publicRootKey">
+                        {{ modifyNetworkingForm.publicRootKey }}
                         <el-upload
                             action="/api/doApplication/submitPublicKey"
                             :headers="{'Authorization': 'Bearer ' + $store.state.user.token}"
@@ -151,10 +148,10 @@
                                 <el-button type="primary" style="margin: 24px;">导入公钥</el-button>
                             </el-upload>
                     </el-form-item>
-					<el-form-item label="机构描述" prop="institutionDesc">
+					<el-form-item label="描述" prop="institutionDesc">
 						<el-input
 							v-model="modifyNetworkingForm.institutionDesc"
-							placeholder="请输入机构描述"
+							placeholder="请输入描述"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="机构组网状态" prop="networkingStatus">
@@ -170,7 +167,7 @@
 						>确定</el-button
 					>
 				</div>
-			</el-dialog>
+			</el-dialog> -->
 		</div>
 	</div>
 </template>
@@ -185,20 +182,37 @@ export default {
             pages: 1,
             // 当前页数
             currentPage: 1,
+            // 搜索表格
+			searchForm: {
+				// 组网编号
+				gid: "",
+				// 组网状态
+				status: "",
+				// 描述
+				description: "",
+				// 平台名字
+				publicRootName: "",
+				// 平台地址
+				publicRootAddress: "",
+				// 平台端口
+				publicRootPort: "",
+				// 机构DOI
+				institutionDoi: "",
+			},
 			// 表格数据
 			tableData: [
 				{
 					// 机构DOI
 					institutionDoi: "10.1000/182",
-					// 机构名字
-					institutionName: "北京301医院",
-					// 机构IP地址
-					institutionAddress: "127.0.0.1",
-					// 机构端口
-					institutionPort: "8080",
-					// 机构公钥
-					institutionPublicKey: "123456",
-					// 机构描述
+					// 平台名字
+					publicRootName: "北京301医院",
+					// 平台地址
+					publicRootName: "127.0.0.1",
+					// 平台端口
+					publicRootPort: "8080",
+					// 公钥
+					publicRootKey: "123456",
+					// 描述
 					institutionDesc: "这是一个机构",
 					// 创建时间
 					createTime: new Date().toLocaleString(),
@@ -209,44 +223,28 @@ export default {
 				},
 			],
 
-			// 修改数据
-			modifyNetworkingForm: {
-				// 机构DOI
-				institutionDoi: "",
-				// 机构名字
-				institutionName: "",
-				// 机构IP地址
-				institutionAddress: "",
-				// 机构端口
-				institutionPort: "",
-				// 机构公钥
-				institutionPublicKey: "",
-				// 机构描述
-				institutionDesc: "",
-				// 机构组网状态
-				networkingStatus: "",
-			},
+			// // 修改数据
+			// modifyNetworkingForm: {
+			// 	// 机构DOI
+			// 	institutionDoi: "",
+			// 	// 平台名字
+			// 	publicRootName: "",
+			// 	// 平台地址
+			// 	publicRootName: "",
+			// 	// 平台端口
+			// 	publicRootPort: "",
+			// 	// 公钥
+			// 	publicRootKey: "",
+			// 	// 描述
+			// 	institutionDesc: "",
+			// 	// 机构组网状态
+			// 	networkingStatus: "",
+			// },
 
-			modifyNetworkingDialogVisible: false,
-			modifyNetworkingId: "",
+			// modifyNetworkingDialogVisible: false,
+			// modifyNetworkingId: "",
 
-			// 搜索表格
-			searchForm: {
-				// 组网组编号
-				gid: "",
-				// 组网组状态
-				status: "",
-				// 组网组描述
-				description: "",
-				// 组网组名字
-				publicRootName: "",
-				// 组网组地址
-				publicRootAddress: "",
-				// 组网组端口
-				publicRootPort: "",
-				// 机构DOI
-				institutionDoi: "",
-			},
+			
 		};
 	},
 	mounted() {
@@ -269,15 +267,15 @@ export default {
 						gid: item.gid,
 						// 机构DOI
 						institutionDoi: item.institutionDoi,
-						// 机构名字
-						institutionName: item.publicRootName,
-						// 机构IP地址
-						institutionAddress: item.publicRootAddress,
-						// 机构端口
-						institutionPort: item.publicRootPort,
-						// 机构公钥
-						institutionPublicKey: item.publicRootKey,
-						// 机构描述
+						// 平台名字
+						publicRootName: item.publicRootName,
+						// 平台地址
+						publicRootName: item.publicRootAddress,
+						// 平台端口
+						publicRootPort: item.publicRootPort,
+						// 公钥
+						publicRootKey: item.publicRootKey,
+						// 描述
 						institutionDesc: item.description,
 						// 创建时间
 						createTime: new Date(item.createTime).toLocaleString(),
@@ -301,7 +299,7 @@ export default {
                     message: '导入公钥成功',
                     type: 'success'
                 });
-                this.modifyNetworkingForm.institutionPublicKey = response.data;
+                this.modifyNetworkingForm.publicRootKey = response.data;
             }
             else {
                 this.$message({
@@ -311,79 +309,79 @@ export default {
             }
         },
 
-		// 修改组网组
-		modifyNetworking(row, index) {
-			this.modifyNetworkingForm.institutionDoi = row.institutionDoi;
-			this.modifyNetworkingForm.institutionName = row.institutionName;
-			this.modifyNetworkingForm.institutionAddress = row.institutionAddress;
-			this.modifyNetworkingForm.institutionPort = row.institutionPort;
-			this.modifyNetworkingForm.institutionPublicKey =
-				row.institutionPublicKey;
-			this.modifyNetworkingForm.institutionDesc = row.institutionDesc;
+		// // 修改组网
+		// modifyNetworking(row, index) {
+		// 	this.modifyNetworkingForm.institutionDoi = row.institutionDoi;
+		// 	this.modifyNetworkingForm.publicRootName = row.publicRootName;
+		// 	this.modifyNetworkingForm.publicRootName = row.publicRootName;
+		// 	this.modifyNetworkingForm.publicRootPort = row.publicRootPort;
+		// 	this.modifyNetworkingForm.publicRootKey =
+		// 		row.publicRootKey;
+		// 	this.modifyNetworkingForm.institutionDesc = row.institutionDesc;
 	
-			this.modifyNetworkingForm.networkingStatus = row.networkingStatus;
+		// 	this.modifyNetworkingForm.networkingStatus = row.networkingStatus;
 
-			this.modifyNetworkingId = index;
-			this.modifyNetworkingDialogVisible = true;
-		},
-		// 取消修改组网组
-		modifyNetworkingCancel() {
-			this.$confirm(
-				"不保存而直接关闭可能会丢失本次编辑的信息，是否继续?",
-				"提示",
-				{
-					confirmButtonText: "确定",
-					cancelButtonText: "取消",
-					type: "warning",
-				}
-			)
-				.then(() => {
-					this.modifyNetworkingDialogVisible = false;
-				})
-				.catch(() => {
-					this.$message({
-						type: "info",
-						message: "已取消",
-					});
-				});
-		},
-		// 确定修改组网组
-		modifyNetworkingConfirm() {
+		// 	this.modifyNetworkingId = index;
+		// 	this.modifyNetworkingDialogVisible = true;
+		// },
+		// // 取消修改组网
+		// modifyNetworkingCancel() {
+		// 	this.$confirm(
+		// 		"不保存而直接关闭可能会丢失本次编辑的信息，是否继续?",
+		// 		"提示",
+		// 		{
+		// 			confirmButtonText: "确定",
+		// 			cancelButtonText: "取消",
+		// 			type: "warning",
+		// 		}
+		// 	)
+		// 		.then(() => {
+		// 			this.modifyNetworkingDialogVisible = false;
+		// 		})
+		// 		.catch(() => {
+		// 			this.$message({
+		// 				type: "info",
+		// 				message: "已取消",
+		// 			});
+		// 		});
+		// },
+		// // 确定修改组网
+		// modifyNetworkingConfirm() {
 
-            let postData = {
-                gid: this.tableData[this.modifyNetworkingId].gid,
-                institutionDoi: this.modifyNetworkingForm.institutionDoi,
-                publicRootName: this.modifyNetworkingForm.institutionName,
-                publicRootAddress: this.modifyNetworkingForm.institutionAddress,
-                publicRootPort: this.modifyNetworkingForm.institutionPort,
-                publicRootKey: this.modifyNetworkingForm.institutionPublicKey,
-                description: this.modifyNetworkingForm.institutionDesc,
-                status: this.modifyNetworkingForm.networkingStatus,
-                publicRootKey: this.modifyNetworkingForm.institutionPublicKey,
-            };
+        //     let postData = {
+        //         gid: this.tableData[this.modifyNetworkingId].gid,
+        //         institutionDoi: this.modifyNetworkingForm.institutionDoi,
+        //         publicRootName: this.modifyNetworkingForm.publicRootName,
+        //         publicRootAddress: this.modifyNetworkingForm.publicRootName,
+        //         publicRootPort: this.modifyNetworkingForm.publicRootPort,
+        //         publicRootKey: this.modifyNetworkingForm.publicRootKey,
+        //         description: this.modifyNetworkingForm.institutionDesc,
+        //         status: this.modifyNetworkingForm.networkingStatus,
+        //         publicRootKey: this.modifyNetworkingForm.publicRootKey,
+        //     };
 
-            let _this = this;
-            postForm('/networkGroups/update', postData, _this, function(res){
-                if (res.code === 200) {
-                    _this.$message({
-                        message: '修改成功',
-                        type: 'success'
-                    });
-                    _this.modifyNetworkingDialogVisible = false;
-                }
-                else {
-                    _this.$message({
-                        message: res.message,
-                        type: 'error'
-                    });
-                }
-            })
+        //     let _this = this;
+        //     postForm('/networkGroups/update', postData, _this, function(res){
+        //         if (res.code === 200) {
+        //             _this.$message({
+        //                 message: '修改成功',
+        //                 type: 'success'
+        //             });
+        //             _this.modifyNetworkingDialogVisible = false;
+        //         }
+        //         else {
+        //             _this.$message({
+        //                 message: res.message,
+        //                 type: 'error'
+        //             });
+        //         }
+        //     })
             
 			
-		},
-		// 删除组网组
+		// },
+		// 删除组网
 		// deleteNetworking(row, id) {
-		// 	this.$confirm("此操作将永久删除该组网组, 是否继续?", "提示", {
+		// 	this.$confirm("此操作将永久删除该组网, 是否继续?", "提示", {
 		// 		confirmButtonText: "确定",
 		// 		cancelButtonText: "取消",
 		// 		type: "warning",
