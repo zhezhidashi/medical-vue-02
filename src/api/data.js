@@ -114,6 +114,31 @@ export const loginRequest = (requestUrl, params, This, callback) => {
     })
 }
 
+// 导出数据
+export const exportData = (requestUrl, params, This, callback) => {
+    nprogress.start();
+    console.log('postForm 的表单', requestUrl, params)
+    store.commit('getToken')
+    const TokenValue = store.state.user.token;
+    axios.request({
+        url: baseUrl + requestUrl,
+        method: 'post',
+        data: params,
+        headers: {
+            Authorization: "Bearer " + TokenValue
+        }
+    }).then(({ data: res }) => {
+        nprogress.done()
+        console.log('postForm 的 response: ', requestUrl, res);
+        callback(res)
+    })
+    .catch((err) => {
+        nprogress.done()
+        console.log('postForm 的 error: ', baseUrl + requestUrl, err);
+    })
+}
+
+// 登陆模拟
 export const loginRequestMock = (requestUrl, params, This, callback) => {
     nprogress.start();
     console.log('postFormMock 的表单', requestUrl, params)

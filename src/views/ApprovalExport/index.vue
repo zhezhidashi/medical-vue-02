@@ -5,8 +5,8 @@
                 <el-form-item class="SearchFormItem" label="申请机构DOI">
                     <el-input v-model="searchForm.applicantInstitutionDoi"></el-input>
                 </el-form-item>
-                <el-form-item class="SearchFormItem" label="接受机构DOI">
-                    <el-input v-model="searchForm.recipientInstitutionDoi"></el-input>
+                <el-form-item class="SearchFormItem" label="申请人ID">
+                    <el-input v-model="searchForm.applicantUserId"></el-input>
                 </el-form-item>
                 <el-form-item class="SearchFormItem" label="DOI">
                     <el-input v-model="searchForm.doi"></el-input>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { postForm } from '@/api/data';
+import { postForm, exportData } from '@/api/data';
 export default {
     name: "ApprovalExport",
     data() {
@@ -82,8 +82,6 @@ export default {
                 applicantInstitutionDoi: undefined,
                 // 申请人ID
                 applicantUserId: undefined,
-                // 接受机构DOI
-                recipientInstitutionDoi: undefined,
                 // DOI
                 doi: undefined,
                 // 申请类型
@@ -104,14 +102,17 @@ export default {
 
             digitalObjectList: [
                 {
+                    appId: 1,
                     name: '数字对象1',
                     selected: false,
                 },
                 {
+                    appId: 2,
                     name: '数字对象22',
                     selected: false,
                 },
                 {
+                    appId: 3,
                     name: '数字对象333',
                     selected: false,
                 },
@@ -119,13 +120,13 @@ export default {
         };
     },
     mounted() { 
-        this.searchData();
+        // this.searchData();
     },
     methods: {
         searchData() {
             let postData = {
                 applicantInstitutionDoi: this.searchForm.applicantInstitutionDoi,
-                recipientInstitutionDoi: this.searchForm.recipientInstitutionDoi,
+                applicantUserId: this.searchForm.applicantUserId,
                 doi: this.searchForm.doi,
                 appType: this.searchForm.appType,
                 appName: this.searchForm.appName,
@@ -148,9 +149,10 @@ export default {
             this.digitalObjectList = [];
             postData.pageSize = -1;
             let _this = this;
-            postForm('/doApplication/getApprovalList', postData, _this, function(res) {
+            postForm('/doApplication/getPassedList', postData, _this, function(res) {
                 for(let item of res.data.records) {
                     _this.digitalObjectList.push({
+                        appId: appId,
                         name: item.appName,
                         selected: false,
                     })
@@ -161,6 +163,21 @@ export default {
         ferry() {
             const selectedDigitalObject = this.digitalObjectList.filter(item => item.selected);
             console.log(selectedDigitalObject);
+            let postData = {idList: []}
+            for (let item of selectedDigitalObject) {
+                postData.idList.push(item.appId);
+            }
+            let _this = this;
+            exportData('/doApplication/exportApproveDoi', postData, _this, function(res) {
+                // 将 res 写入 csv 文件
+                const link = document.createElement('a');
+                const blob = new Blob([res], { type: 'text/csv;charset=utf-8;' });
+                link.href = URL.createObjectURL(blob);
+                link.download = `data_${new Date().getTime()}.csv`
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
         },
     },
 }

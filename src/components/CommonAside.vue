@@ -25,7 +25,7 @@
             <el-submenu v-show="!isAdmin" index="8">
                 <template slot="title">数字对象摆渡</template>
                 <el-menu-item index="8-1">数字对象导入</el-menu-item>
-                <el-menu-item index="8-2">数字对象导出</el-menu-item>
+                <!-- <el-menu-item index="8-2">数字对象导出</el-menu-item> -->
             </el-submenu>
             <!-- <el-menu-item v-show="!isAdmin" index="8">数字对象摆渡</el-menu-item> -->
         </el-menu>

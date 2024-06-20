@@ -7,8 +7,8 @@
                 <el-form-item class="SearchFormItem" label="申请机构DOI">
                     <el-input v-model="searchForm.applicantInstitutionDoi"></el-input>
                 </el-form-item>
-                <el-form-item class="SearchFormItem" label="接受机构DOI">
-                    <el-input v-model="searchForm.recipientInstitutionDoi"></el-input>
+                <el-form-item class="SearchFormItem" label="申请人ID">
+                    <el-input v-model="searchForm.applicantUserId"></el-input>
                 </el-form-item>
                 <el-form-item class="SearchFormItem" label="DOI">
                     <el-input v-model="searchForm.doi"></el-input>
@@ -66,7 +66,7 @@
 
             <el-table :data="approvalTable" style="width: 95%;" stripe border>
                 <el-table-column prop="applicantInstitutionDoi" label="申请机构DOI"></el-table-column>
-                <el-table-column prop="recipientInstitutionDoi" label="接受机构DOI"></el-table-column>
+                <el-table-column prop="applicantUserId" label="申请人ID"></el-table-column>
                 <el-table-column prop="doi" label="DOI"></el-table-column>
                 <el-table-column prop="appType" label="申请类型">
                     <template slot-scope="scope">
@@ -136,8 +136,6 @@ export default {
                 applicantInstitutionDoi: undefined,
                 // 申请人ID
                 applicantUserId: undefined,
-                // 接受机构DOI
-                recipientInstitutionDoi: undefined,
                 // DOI
                 doi: undefined,
                 // 申请类型
@@ -162,7 +160,6 @@ export default {
                     appId: 1,
                     applicantInstitutionDoi: '申请机构DOI',
                     applicantUserId: '申请人ID',
-                    recipientInstitutionDoi: '接受机构DOI',
                     doi: 'DOI',
                     appType: '申请类型',
                     appName: '申请名称',
@@ -196,7 +193,7 @@ export default {
         searchData() {
             let postData = {
                 applicantInstitutionDoi: this.searchForm.applicantInstitutionDoi,
-                recipientInstitutionDoi: this.searchForm.recipientInstitutionDoi,
+                applicantUserId: this.searchForm.applicantUserId,
                 doi: this.searchForm.doi,
                 appType: this.searchForm.appType,
                 appName: this.searchForm.appName,
@@ -224,7 +221,6 @@ export default {
                         appId: item.appId,
                         applicantInstitutionDoi: item.applicantInstitutionDoi,
                         applicantUserId: item.applicantUserId,
-                        recipientInstitutionDoi: item.recipientInstitutionDoi,
                         doi: item.doi,
                         appType: item.appType,
                         appName: item.appName,
