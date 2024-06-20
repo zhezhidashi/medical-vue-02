@@ -12,7 +12,7 @@
                 <el-button type="primary">点击上传</el-button>
             </el-upload>
             
-            <el-divider></el-divider>
+            <!-- <el-divider></el-divider>
 
             <el-table :data="tableData" stripe border style="width: 95%;">
                 <el-table-column prop="doi" label="DOI"></el-table-column>
@@ -31,10 +31,10 @@
 
             <div style="text-align: center; margin: 24px;">
                 <el-button type="primary" @click="ferry">导入</el-button>
-            </div>
+            </div> -->
         </div>
 
-        <el-dialog title="数字对象修改" :visible.sync="modifyDialogVisible" :before-close="modifyCancel">
+        <!-- <el-dialog title="数字对象修改" :visible.sync="modifyDialogVisible" :before-close="modifyCancel">
             <el-form :model="modifyForm" label-width="auto" class="ModifyForm">
                 <el-form-item label="DOI" class="ModifyFormItem">
                     <el-input v-model="modifyForm.doi"></el-input>
@@ -59,7 +59,7 @@
                 <el-button @click="modifyCancel">取 消</el-button>
                 <el-button type="primary" @click="modifyConfirm">确 定</el-button>
             </span>
-        </el-dialog>
+        </el-dialog> -->
 
     </div>
 
