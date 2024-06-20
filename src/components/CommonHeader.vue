@@ -6,9 +6,13 @@
         </div>
         <div class="r-content" v-show="path !== '/Login'">
             <el-dropdown style="display: flex; align-items: center;">
-                <span class="el-dropdown-link" style="">
-                    用户：{{ username }} <i class="el-icon-arrow-down el-icon--right"></i>
-                </span>
+                <div class="el-dropdown-link" style="display: flex; flex-direction: row; align-items: center;">
+                    <div style="display: flex; flex-direction: column; font-weight: bold;">
+                        <div>机构：医院A</div>
+                        <div>用户：{{ username }}</div>
+                    </div> 
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                </div>
                 <el-dropdown-menu>
                     <el-dropdown-item align="center" @click.native="logOut">登出</el-dropdown-item>
                     <el-dropdown-item align="center" @click.native="modifyPassword">修改密码</el-dropdown-item>

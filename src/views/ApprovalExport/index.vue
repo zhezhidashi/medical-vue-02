@@ -61,12 +61,10 @@
                     </div>
                 </div>
             </div>
-
             <div style="text-align: center;">
                 <el-button type="primary" @click="ferry">导出</el-button>
             </div>
         </div>
-
     </div>
 
 </template>
@@ -167,13 +165,19 @@ export default {
             for (let item of selectedDigitalObject) {
                 postData.idList.push(item.appId);
             }
+
+            if (postData.idList.length === 0) {
+                this.$message.error('请选择要导出的数字对象');
+                return;
+            }
+
             let _this = this;
             exportData('/doApplication/exportApproveDoi', postData, _this, function(res) {
                 // 将 res 写入 csv 文件
                 const link = document.createElement('a');
                 const blob = new Blob([res], { type: 'text/csv;charset=utf-8;' });
                 link.href = URL.createObjectURL(blob);
-                link.download = `data_${new Date().getTime()}.csv`
+                link.download = `approved-digital-object${new Date().getTime()}.csv`
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);

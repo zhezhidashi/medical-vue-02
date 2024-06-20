@@ -81,7 +81,7 @@ const routes = [
                 path: '/RelationshipSystem',
                 name: 'RelationshipSystem',
                 meta: {
-                    title: '关系系统'
+                    title: '流转追溯系统'
                 },
                 component: () => import('@/views/RelationshipSystem')
             },
@@ -140,6 +140,22 @@ const routes = [
                     title: '数字对象导出'
                 },
                 component: () => import('@/views/DigitalObjectExport')
+            },
+            {
+                path: '/DigitalObjectAllocate',
+                name: 'DigitalObjectAllocate',
+                meta: {
+                    title: '数字对象分配'
+                },
+                component: () => import('@/views/DigitalObjectAllocate')
+            },
+            {
+                path: '/PrivateKeyExport',
+                name: 'PrivateKeyExport',
+                meta: {
+                    title: '导出动态私钥'
+                },
+                component: () => import('@/views/PrivateKeyExport')
             },
         ]
     },
