@@ -16,6 +16,9 @@
                     <el-input v-model="searchForm.projectDescription" placeholder="项目描述"></el-input>
                 </el-form-item>
                 
+                <el-form-item prop="involvedInstitutionDoi" label="机构DOI" class="SearchFormItem">
+                    <el-input v-model="searchForm.involvedInstitutionDoi" placeholder="机构DOI"></el-input>
+                </el-form-item>
                 <el-form-item prop="projectApplyEmail" label="申请人邮箱" class="SearchFormItem">
                     <el-input v-model="searchForm.projectApplyEmail" placeholder="申请人邮箱"></el-input>
                 </el-form-item>
@@ -66,6 +69,8 @@
                 </el-table-column>
                 <el-table-column prop="projectDescription" label="项目描述" min-width="120" align="center">
                 </el-table-column>
+                <el-table-column prop="involvedInstitutionDoi" label="机构DOI" min-width="120" align="center">
+                </el-table-column>
                 <el-table-column prop="projectApplyFile" label="项目申请文件" min-width="120" align="center">
                 </el-table-column>
                 <el-table-column prop="projectApplyTime" label="申请时间" min-width="120" align="center">
@@ -86,7 +91,7 @@
 
                 <el-table-column label="操作" align="center">
                     <template slot-scope="props">
-                        <el-button @click="changeProject(props.row, props.$index)" type="primary"
+                        <el-button @click="modifyProject(props.row, props.$index)" type="primary"
                             size="small">修改</el-button>
                     </template>
                 </el-table-column>
@@ -112,6 +117,9 @@
                     </el-form-item>
                     <el-form-item label="项目描述">
                         <el-input v-model="modifyProjectItem.projectDescription"></el-input>
+                    </el-form-item>
+                    <el-form-item label="项目DOI">
+                        <el-input v-model="modifyProjectItem.involvedInstitutionDoi"></el-input>
                     </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
                         <el-upload 
@@ -153,7 +161,7 @@
                         <el-input v-model="addProjectItem.projectDescription"></el-input>
                     </el-form-item>
                     <el-form-item label="机构DOI">
-                        <el-input v-model="addProjectItem.institutionDoi"></el-input>
+                        <el-input v-model="addProjectItem.involvedInstitutionDoi"></el-input>
                     </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
                         <el-upload class="upload-demo" 
@@ -198,6 +206,8 @@ export default {
                 projectContact: "",
                 // 项目描述
                 projectDescription: "",
+                // 机构DOI
+                involvedInstitutionDoi: "",
                 // 申请时间范围
                 projectApplyTimeRange: "",
                 // 申请人邮箱
@@ -245,6 +255,7 @@ export default {
                 projectLeader: "",
                 projectContact: "",
                 projectDescription: "",
+                involvedInstitutionDoi: "",
                 projectApplyFile: "",
                 projectApplyEmail: "",
             },
@@ -259,7 +270,7 @@ export default {
                 projectDescription: "",
                 projectApplyFile: "",
                 projectApplyEmail: "",
-                institutionDoi: "",
+                involvedInstitutionDoi: "",
             },
             // 组网组列表
             gidList: [],
@@ -300,6 +311,7 @@ export default {
                         projectLeader: item.user,
                         projectContact: item.contactInfo,
                         projectDescription: item.description,
+                        involvedInstitutionDoi: item.involvedInstitutionDoi,
                         projectApplyFile: item.applyDocumentAddress,
                         projectApplyTime: new Date(item.createTime).toLocaleDateString(),
                         projectApplyEmail: item.contactEmail,
@@ -316,6 +328,7 @@ export default {
                 user: this.searchForm.projectLeader,
                 contactInfo: this.searchForm.projectContact,
                 description: this.searchForm.projectDescription,
+                involvedInstitutionDoi: this.searchForm.involvedInstitutionDoi,
                 contactEmail: this.searchForm.projectApplyEmail,
                 status: this.searchForm.projectApprovalStatus,
                 reviewComments: this.searchForm.projectApprovalOpinion,
@@ -333,7 +346,7 @@ export default {
 
             this.getData(postData);
         },
-        changeProject(row, index) {
+        modifyProject(row, index) {
             this.modifyProjectDialogVisible = true;
             this.modifyProjectIndex = index;
             this.modifyProjectItem = JSON.parse(JSON.stringify(row));
@@ -353,13 +366,27 @@ export default {
             });
         },
         modifyProjectConfirm() {
-            console.log(this.modifyProjectItem, this.modifyProjectIndex);
-            // 更新项目列表
-            this.projectTable[this.modifyProjectIndex].institutionDoi = this.modifyProjectItem.institutionDoi;
-            this.projectTable[this.modifyProjectIndex].name = this.modifyProjectItem.name;
-            this.projectTable[this.modifyProjectIndex].remark = this.modifyProjectItem.remark;
-
-            this.modifyProjectDialogVisible = false;
+            let _this = this;
+            let postData = {
+                pid: this.modifyProjectItem.id,
+                name: this.modifyProjectItem.projectName,
+                user: this.modifyProjectItem.projectLeader,
+                contactInfo: this.modifyProjectItem.projectContact,
+                description: this.modifyProjectItem.projectDescription,
+                applyDocumentAddress: this.modifyProjectItem.projectApplyFile,
+                contactEmail: this.modifyProjectItem.projectApplyEmail,
+                involvedInstitutionDoi: this.modifyProjectItem.involvedInstitutionDoi,
+            }
+            postForm("/projectInfos/modify", postData, _this, function(res){
+                if(res.code === 200) {
+                    _this.$message({
+                        type: 'success',
+                        message: '修改成功'
+                    });
+                    _this.getData({});
+                    _this.modifyProjectDialogVisible = false;
+                }
+            })
         },
         addProject() {
             this.addProjectDialogVisible = true;
@@ -371,7 +398,7 @@ export default {
                 projectDescription: "",
                 projectApplyFile: "",
                 projectApplyEmail: "",
-                institutionDoi: "",
+                involvedInstitutionDoi: "",
             }
         },
         addProjectCancel() {
@@ -392,7 +419,7 @@ export default {
             let _this = this;
 
             // 检查有没有空值
-            if(this.addProjectItem.gid === "" || this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === ""  || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "" || this.addProjectItem.institutionDoi === "") {
+            if(this.addProjectItem.gid === "" || this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === ""  || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "" || this.addProjectItem.involvedInstitutionDoi === "") {
                 this.$message({
                     type: 'warning',
                     message: '请填写完整信息'
@@ -408,15 +435,15 @@ export default {
                 description: this.addProjectItem.projectDescription,
                 applyDocumentAddress: this.addProjectItem.projectApplyFile,
                 contactEmail: this.addProjectItem.projectApplyEmail,
-                institutionDoi: this.addProjectItem.institutionDoi,
+                involvedInstitutionDoi: this.addProjectItem.involvedInstitutionDoi,
             }
 
             postForm('/projectInfos/apply', postData, this, function(res){
                 if(res.code === 200) {
                     _this.$message({
-                    type: 'success',
-                    message: '添加成功'
-                });
+                        type: 'success',
+                        message: '添加成功'
+                    });
                     _this.getData({});
                     _this.addProjectDialogVisible = false;
                 }

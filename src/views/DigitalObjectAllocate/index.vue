@@ -190,10 +190,10 @@ export default {
                 });
                 return;
             }
-
+            let _this = this;
             postForm('/projectDo/allocateProject', postData, this, function(res){
                 if (res.code === 200) {
-                    this.$message({
+                    _this.$message({
                         message: '分配成功',
                         type: 'success'
                     });

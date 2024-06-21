@@ -3,7 +3,7 @@
         <el-menu :default-active="activeIndex" class="el-menu-demo" 
             @select="handleSelect" :unique-opened="false"
             text-color="#000080" active-text-color="#FF4040"
-            background-color="#F0F8FF" style="min-height: 92vh;">
+            background-color="#F0F8FF" style="height: 100vh;">
             <el-menu-item index="0">主页</el-menu-item>
             <el-submenu v-show="isAdmin" index="1">
                 <template slot="title">组网管理</template>
@@ -26,7 +26,7 @@
             <el-menu-item v-show="!isAdmin" index="7">数字对象检索</el-menu-item>
             <el-submenu v-show="!isAdmin" index="8">
                 <template slot="title">数字对象摆渡</template>
-                <el-menu-item index="8-1">数字对象导入</el-menu-item>
+                <el-menu-item index="8-1">元数据导入</el-menu-item>
                 <!-- <el-menu-item index="8-2">数字对象导出</el-menu-item> -->
             </el-submenu>
             <!-- <el-menu-item v-show="!isAdmin" index="8">数字对象摆渡</el-menu-item> -->

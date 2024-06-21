@@ -175,7 +175,7 @@ export default {
             postForm('/registry/searchMetaData', postData, _this, function(res){
                 if(res.code === 200) {
                     _this.pages = res.data.pages;
-                    for(let item of res.data.records) {
+                    for(let item of res.data.list) {
                         _this.resultTable.push({
                             doi: item.doi,
                             doiName: item.name,

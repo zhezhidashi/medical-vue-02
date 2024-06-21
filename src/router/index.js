@@ -129,7 +129,7 @@ const routes = [
                 path: '/DigitalObjectImport',
                 name: 'DigitalObjectImport',
                 meta: {
-                    title: '数字对象导入'
+                    title: '元数据导入'
                 },
                 component: () => import('@/views/DigitalObjectImport')
             },

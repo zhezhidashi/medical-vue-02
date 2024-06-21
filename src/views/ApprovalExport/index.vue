@@ -118,7 +118,7 @@ export default {
         };
     },
     mounted() { 
-        // this.searchData();
+        this.searchData();
     },
     methods: {
         searchData() {
@@ -150,7 +150,7 @@ export default {
             postForm('/doApplication/getPassedList', postData, _this, function(res) {
                 for(let item of res.data.records) {
                     _this.digitalObjectList.push({
-                        appId: appId,
+                        appId: item.appId,
                         name: item.appName,
                         selected: false,
                     })
