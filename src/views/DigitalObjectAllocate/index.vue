@@ -152,7 +152,7 @@ export default {
             postForm('/projectInfos/getProjectInfo', postData, _this, function(res){
                 for(let item of res.data.records) {
                     _this.projectList.push({
-                        projectDoi: item.projectDoi,
+                        projectDoi: item.doi,
                         name: item.name,
                         selected: false,
                     })
