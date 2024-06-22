@@ -8,7 +8,7 @@
             <el-dropdown style="display: flex; align-items: center;">
                 <div class="el-dropdown-link" style="display: flex; flex-direction: row; align-items: center;">
                     <div style="display: flex; flex-direction: column; font-weight: bold;">
-                        <div>机构：机构B</div>
+                        <div>机构：机构A</div>
                         <div>用户：{{ username }}</div>
                     </div> 
                     <i class="el-icon-arrow-down el-icon--right"></i>
