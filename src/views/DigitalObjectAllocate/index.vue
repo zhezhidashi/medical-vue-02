@@ -1,11 +1,11 @@
 <template>
     <div style="display: flex;">
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-            <el-form :model="doiForm" label-width="auto" class="SearchForm">
-                <el-form-item prop="doi" label="DOI" class="SearchFormItem">
-                    <el-input v-model="doiForm.doi" placeholder="DOI"></el-input>
-                </el-form-item>
-            </el-form>
+            <el-select v-model="doi" placeholder="请选择" style="margin-top: 24px;">
+                <div v-for="(item, index) in doiList" :key = index>
+                    <el-option :label="item.label" :value="item.value"></el-option>
+                </div>
+            </el-select>
             <el-divider></el-divider>
             <el-form :model="searchForm" label-width="auto" class="SearchForm">
                 <el-form-item prop="projectName" label="项目名称" class="SearchFormItem">
@@ -86,9 +86,14 @@ export default {
     data() {
         return {
             // DOI表单
-            doiForm: {
-                doi: "",
-            },
+            doi: "",
+
+            doiList: [
+                {
+                    label: 'doi',
+                    value: 'doi',
+                }
+            ],
 
             // 搜索表单
             searchForm: {
@@ -119,6 +124,8 @@ export default {
                     selected: false,
                 },
             ],
+
+            
         };
     },
     mounted() { 
@@ -128,7 +135,19 @@ export default {
     },
     methods: {
         getData(postData){
+            
+
             let _this = this;
+
+            postForm('/registry/query', {pageSize: -1}, _this, function(res){
+                _this.doiList = [];
+                for(let item of res.data.records) {
+                    _this.doiList.push({
+                        value: item.doi,
+                        label: item.name
+                    });
+                }
+            })
             _this.projectList = [];
             postForm('/projectInfos/getProjectInfo', postData, _this, function(res){
                 for(let item of res.data.records) {
@@ -136,7 +155,7 @@ export default {
                         projectDoi: item.projectDoi,
                         name: item.name,
                         selected: false,
-                    });
+                    })
                 }
             })
         },
@@ -166,7 +185,7 @@ export default {
         },
 
         allocate(){
-            if (this.doiForm.doi === "") {
+            if (this.doi === "") {
                 this.$message({
                     message: '请输入DOI',
                     type: 'warning'
@@ -174,7 +193,7 @@ export default {
                 return;
             }
             let postData = {
-                doi: this.doiForm.doi,
+                doi: this.doi,
                 projectDoiList: [],
             }
             for(let item of this.projectList) {

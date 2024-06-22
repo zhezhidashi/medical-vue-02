@@ -7,6 +7,7 @@
                         <el-option v-for="item in projectList" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
+                    <!-- <el-input v-model="searchForm.project" placeholder="请输入项目DOI"></el-input> -->
                 </el-form-item>
                 <el-form-item prop="doi" label="DOI" class="SearchFormItem">
                     <el-input v-model="searchForm.doi"></el-input>
@@ -128,7 +129,7 @@ export default {
                 for (let item of res.data.records) {
                     _this.projectList.push({
                         label: item.name,
-                        value: item.projectDoi,
+                        value: item.doi,
                     })
                 }
             }
