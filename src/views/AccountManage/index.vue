@@ -345,13 +345,13 @@ export default {
                             projects: item.pids.slice(0),
                             registerTime: new Date(
                                 item.createTime
-                            ).toLocaleString(),
+                            ).toLocaleDateString(),
                             lastLoginTime: new Date(
                                 item.lastLoginTime
-                            ).toLocaleString(),
+                            ).toLocaleDateString(),
                             lastModifyPasswordTime: new Date(
                                 item.updateTime
-                            ).toLocaleString(),
+                            ).toLocaleDateString(),
                             status: item.status === undefined ? 0 : item.status,
                             email: item.email,
                         });

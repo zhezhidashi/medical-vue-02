@@ -139,48 +139,6 @@
                 </span>
             </el-dialog>
 
-            <el-dialog title="增加项目" :visible.sync="addProjectDialogVisible" width="80%"
-                :before-close="addProjectCancel">
-                <el-form :model="addProjectItem" label-width="auto">
-                    <el-form-item label="组网组">
-                        <el-select v-model="addProjectItem.gid" placeholder="请选择">
-                            <el-option v-for="item in gidList" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="项目名称">
-                        <el-input v-model="addProjectItem.projectName"></el-input>
-                    </el-form-item>
-                    <el-form-item label="项目负责人">
-                        <el-input v-model="addProjectItem.projectLeader"></el-input>
-                    </el-form-item>
-                    <el-form-item label="项目联系方式">
-                        <el-input v-model="addProjectItem.projectContact"></el-input>
-                    </el-form-item>
-                    <el-form-item label="项目描述">
-                        <el-input v-model="addProjectItem.projectDescription"></el-input>
-                    </el-form-item>
-                    <el-form-item label="机构DOI">
-                        <el-input v-model="addProjectItem.involvedInstitutionDoi"></el-input>
-                    </el-form-item>
-                    <el-form-item label="项目申请文件" prop="projectApplyFile">
-                        <el-upload class="upload-demo" 
-                        drag action="/api/file/upload"
-                        :headers="{'Authorization': 'Bearer ' + $store.state.user.token}"
-                        :on-success="uploadSuccessAdd">
-                            <i class="el-icon-upload"></i>
-                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        </el-upload>
-                    </el-form-item>
-                    <el-form-item label="申请人邮箱">
-                        <el-input v-model="addProjectItem.projectApplyEmail"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="addProjectCancel">取 消</el-button>
-                    <el-button type="primary" @click="addProjectConfirm">确 定</el-button>
-                </span>
-            </el-dialog>
         </div>
         
     </div>
@@ -189,9 +147,11 @@
 <script>
 import { postForm } from '@/api/data';
 export default {
-    name: "ParticipatingProjects",
+    name: "ProjectsList",
     data() {
         return {
+            // gid
+            gid: "",
             // 页数
             pages: 1,
             // 当前页数
@@ -259,33 +219,13 @@ export default {
                 projectApplyFile: "",
                 projectApplyEmail: "",
             },
-            // 增加项目弹窗是否显示
-            addProjectDialogVisible: false,
-            // 项目item的拷贝
-            addProjectItem: {
-                gid: "",
-                projectName: "",
-                projectLeader: "",
-                projectContact: "",
-                projectDescription: "",
-                projectApplyFile: "",
-                projectApplyEmail: "",
-                involvedInstitutionDoi: "",
-            },
-            // 组网组列表
-            gidList: [],
         };
     },
     mounted() { 
         // 获取组网组列表
         let _this = this;
         postForm('/networkGroups/get', {}, _this, function(res){
-            for(let item of res.data.records) {
-                _this.gidList.push({
-                    label: item.publicRootName,
-                    value: item.gid,
-                });
-            }
+            _this.gid = res.data.records[0].gid;
         })
 
         // 获取项目信息
@@ -388,67 +328,7 @@ export default {
                 }
             })
         },
-        addProject() {
-            this.addProjectDialogVisible = true;
-            this.addProjectItem = {
-                gid: "",
-                projectName: "",
-                projectLeader: "",
-                projectContact: "",
-                projectDescription: "",
-                projectApplyFile: "",
-                projectApplyEmail: "",
-                involvedInstitutionDoi: "",
-            }
-        },
-        addProjectCancel() {
-            this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.addProjectDialogVisible = false;
-            }).catch(() => { 
-                this.$message({
-                    type: 'info',
-                    message: '已取消'
-                });
-            });
-        },
-        addProjectConfirm() {
-            let _this = this;
-
-            // 检查有没有空值
-            if(this.addProjectItem.gid === "" || this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === ""  || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "" || this.addProjectItem.involvedInstitutionDoi === "") {
-                this.$message({
-                    type: 'warning',
-                    message: '请填写完整信息'
-                });
-                return;
-            }
-
-            let postData = {
-                gid: this.addProjectItem.gid,
-                name: this.addProjectItem.projectName,
-                user: this.addProjectItem.projectLeader,
-                contactInfo: this.addProjectItem.projectContact,
-                description: this.addProjectItem.projectDescription,
-                applyDocumentAddress: this.addProjectItem.projectApplyFile,
-                contactEmail: this.addProjectItem.projectApplyEmail,
-                involvedInstitutionDoi: this.addProjectItem.involvedInstitutionDoi,
-            }
-
-            postForm('/projectInfos/apply', postData, this, function(res){
-                if(res.code === 200) {
-                    _this.$message({
-                        type: 'success',
-                        message: '添加成功'
-                    });
-                    _this.getData({});
-                    _this.addProjectDialogVisible = false;
-                }
-            })
-        },
+        
         // 处理上传成功
         uploadSuccessAdd(response, file, fileList) {
             if(response.code === 200) {

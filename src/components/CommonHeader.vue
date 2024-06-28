@@ -41,7 +41,7 @@
 <script>
 import { getForm, postForm } from '@/api/data';
 export default {
-    name: "CommonAside",
+    name: "CommonHeader",
     data() {
         return {
             path: '',

@@ -1,11 +1,15 @@
 <template>
     <div style="display: flex;">
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-            <el-select v-model="doi" placeholder="请选择" style="margin-top: 24px;">
-                <div v-for="(item, index) in doiList" :key = index>
-                    <el-option :label="item.label" :value="item.value"></el-option>
-                </div>
-            </el-select>
+            <div style="margin-top: 24px; display: flex; flex-direction: row; justify-content: center; align-items: center;">
+                <div style="font-size: 14px; color: #606266; line-height: 40px;padding: 0 12px 0 0;">选择数字对象</div>
+                <el-select v-model="doi" placeholder="请选择" >
+                    <div v-for="(item, index) in doiList" :key = index>
+                        <el-option :label="item.label" :value="item.value"></el-option>
+                    </div>
+                </el-select>
+            </div>
+            
             <el-divider></el-divider>
             <el-form :model="searchForm" label-width="auto" class="SearchForm">
                 <el-form-item prop="projectName" label="项目名称" class="SearchFormItem">

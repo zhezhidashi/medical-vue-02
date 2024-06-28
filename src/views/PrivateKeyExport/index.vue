@@ -20,7 +20,7 @@
 <script>
 
 export default {
-    name: "DigitalObjectImport",
+    name: "PrivateKeyExport",
     data() {
         return {};
     },

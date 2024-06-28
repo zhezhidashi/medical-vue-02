@@ -330,8 +330,8 @@ export default {
                         appName: item.appName,
                         appContent: item.appContent,
                         appFile: item.appFile,
-                        createTime: new Date(item.createTime).toLocaleString(),
-                        updateTime: new Date(item.updateTime).toLocaleString(),
+                        createTime: new Date(item.createTime).toLocaleDateString(),
+                        updateTime: new Date(item.updateTime).toLocaleDateString(),
                         appStatus: item.appStatus,
                     })
                 }

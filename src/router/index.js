@@ -54,20 +54,20 @@ const routes = [
                 component: () => import('@/views/NetworkingApply')
             },
             {
-                path: '/NetworkingList',
-                name: 'NetworkingList',
-                meta: {
-                    title: '组网列表'
-                },
-                component: () => import('@/views/NetworkingList')
-            },
-            {
-                path: '/ParticipatingProjects',
-                name: 'ParticipatingProjects',
+                path: '/ProjectsApply',
+                name: 'ProjectsApply',
                 meta: {
                     title: '项目管理'
                 },
-                component: () => import('@/views/ParticipatingProjects')
+                component: () => import('@/views/ProjectsApply')
+            },
+            {
+                path: '/ProjectsList',
+                name: 'ProjectsList',
+                meta: {
+                    title: '项目列表'
+                },
+                component: () => import('@/views/ProjectsList')
             },
             {
                 path: '/AccountManage',
@@ -126,12 +126,12 @@ const routes = [
                 component: () => import('@/views/DigitalObjectSearch')
             },
             {
-                path: '/DigitalObjectImport',
-                name: 'DigitalObjectImport',
+                path: '/MetadataImport',
+                name: 'MetadataImport',
                 meta: {
                     title: '元数据导入'
                 },
-                component: () => import('@/views/DigitalObjectImport')
+                component: () => import('@/views/MetadataImport')
             },
             {
                 path: '/DigitalObjectExport',

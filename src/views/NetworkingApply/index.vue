@@ -41,7 +41,7 @@
             </el-form>
 
             <div style="display: flex; align-items: center; justify-content: center; ">
-                <el-button :loading="loading" @click="ApplyCommit" type="primary" style="margin: 24px;">提交申请</el-button>
+                <el-button :loading="loading" @click="ApplyCommit" type="primary">提交申请</el-button>
             </div>
         </div>
     </div>
