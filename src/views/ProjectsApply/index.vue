@@ -278,13 +278,13 @@ export default {
             }
 
             if(this.searchForm.projectApplyTimeRange && this.searchForm.projectApplyTimeRange !== "") {
-                postData.createBeginTime = this.searchForm.projectApplyTimeRange[0];
-                postData.createEndTime = this.searchForm.projectApplyTimeRange[1] + 86399999;
+                postData.createTimeBegin = this.searchForm.projectApplyTimeRange[0];
+                postData.createTimeEnd = this.searchForm.projectApplyTimeRange[1] + 86399999;
             }
 
             if(this.searchForm.projectApprovalTimeRange && this.searchForm.projectApprovalTimeRange !== "") {
-                postData.updateBeginTime = this.searchForm.projectApprovalTimeRange[0];
-                postData.updateEndTime = this.searchForm.projectApprovalTimeRange[1] + 86399999;
+                postData.updateTimeBegin = this.searchForm.projectApprovalTimeRange[0];
+                postData.updateTimeEnd = this.searchForm.projectApprovalTimeRange[1] + 86399999;
             }
 
             this.getData(postData);

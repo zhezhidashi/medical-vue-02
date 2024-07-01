@@ -4,7 +4,7 @@
             <common-header></common-header>
         </el-header>
         <el-container>
-            <el-aside width="auto">
+            <el-aside width="auto" style="background-color: #F0F8FF; min-height: 100vh;">
                 <common-aside></common-aside>
             </el-aside>
             <el-main style="padding: 0; margin: 0;">
