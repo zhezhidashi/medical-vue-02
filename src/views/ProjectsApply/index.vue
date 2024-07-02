@@ -1,62 +1,60 @@
 <template>
-    <div style="display: flex;">
+    <div>
+        
+            <div style="text-align: center; margin: 24px 40px 24px 40px;">
+                <el-collapse v-model="activeNames">
+                    <el-collapse-item title="搜索栏（点击展开折叠）" name="1">
+                        <el-form :model="searchForm" label-width="auto" class="SearchForm">
+                            <el-form-item prop="projectName" label="项目名称" class="SearchFormItem">
+                                <el-input v-model="searchForm.projectName" placeholder="项目名称"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="projectLeader" label="项目负责人" class="SearchFormItem">
+                                <el-input v-model="searchForm.projectLeader" placeholder="项目负责人"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="projectContact" label="项目联系方式" class="SearchFormItem">
+                                <el-input v-model="searchForm.projectContact" placeholder="项目联系方式"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="projectDescription" label="项目描述" class="SearchFormItem">
+                                <el-input v-model="searchForm.projectDescription" placeholder="项目描述"></el-input>
+                            </el-form-item>
+
+                            <el-form-item prop="involvedInstitutionDoi" label="机构DOI" class="SearchFormItem">
+                                <el-input v-model="searchForm.involvedInstitutionDoi" placeholder="机构DOI"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="projectApplyEmail" label="申请人邮箱" class="SearchFormItem">
+                                <el-input v-model="searchForm.projectApplyEmail" placeholder="申请人邮箱"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="projectApprovalStatus" label="审批状态" class="SearchFormItem">
+                                <el-select v-model="searchForm.projectApprovalStatus" placeholder="请选择">
+                                    <el-option label="待审批" value="0"></el-option>
+                                    <el-option label="已通过" value="1"></el-option>
+                                    <el-option label="未通过" value="2"></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item prop="projectApprovalOpinion" label="审批意见" class="SearchFormItem">
+                                <el-input v-model="searchForm.projectApprovalOpinion" placeholder="审批意见"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="projectApplyTimeRange" label="申请时间" class="SearchFormTimePicker">
+                                <el-date-picker value-format="timestamp" v-model="searchForm.projectApplyTimeRange"
+                                    type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                </el-date-picker>
+                            </el-form-item>
+
+                            <el-form-item prop="projectApprovalTimeRange" label="审批时间" class="SearchFormTimePicker">
+                                <el-date-picker value-format="timestamp" v-model="searchForm.projectApprovalTimeRange"
+                                    type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-form>
+
+                        <el-button type="primary" @click="searchData">搜索</el-button>
+                    </el-collapse-item>
+                </el-collapse>
+            </div>
+            
+            
+
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-
-            <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                <el-form-item prop="projectName" label="项目名称" class="SearchFormItem">
-                    <el-input v-model="searchForm.projectName" placeholder="项目名称"></el-input>
-                </el-form-item>
-                <el-form-item prop="projectLeader" label="项目负责人" class="SearchFormItem">
-                    <el-input v-model="searchForm.projectLeader" placeholder="项目负责人"></el-input>
-                </el-form-item>
-                <el-form-item prop="projectContact" label="项目联系方式" class="SearchFormItem">
-                    <el-input v-model="searchForm.projectContact" placeholder="项目联系方式"></el-input>
-                </el-form-item>
-                <el-form-item prop="projectDescription" label="项目描述" class="SearchFormItem">
-                    <el-input v-model="searchForm.projectDescription" placeholder="项目描述"></el-input>
-                </el-form-item>
-                
-                <el-form-item prop="involvedInstitutionDoi" label="机构DOI" class="SearchFormItem">
-                    <el-input v-model="searchForm.involvedInstitutionDoi" placeholder="机构DOI"></el-input>
-                </el-form-item>
-                <el-form-item prop="projectApplyEmail" label="申请人邮箱" class="SearchFormItem">
-                    <el-input v-model="searchForm.projectApplyEmail" placeholder="申请人邮箱"></el-input>
-                </el-form-item>
-                <el-form-item prop="projectApprovalStatus" label="审批状态" class="SearchFormItem">
-                    <el-select v-model="searchForm.projectApprovalStatus" placeholder="请选择">
-                        <el-option label="待审批" value="0"></el-option>
-                        <el-option label="已通过" value="1"></el-option>
-                        <el-option label="未通过" value="2"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item prop="projectApprovalOpinion" label="审批意见" class="SearchFormItem">
-                    <el-input v-model="searchForm.projectApprovalOpinion" placeholder="审批意见"></el-input>
-                </el-form-item>
-                <el-form-item prop="projectApplyTimeRange" label="申请时间" class="SearchFormTimePicker">
-                    <el-date-picker
-                        value-format="timestamp"
-                        v-model="searchForm.projectApplyTimeRange"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                    </el-date-picker>
-                </el-form-item>
-
-                <el-form-item prop="projectApprovalTimeRange" label="审批时间" class="SearchFormTimePicker">
-                    <el-date-picker
-                        value-format="timestamp"
-                        v-model="searchForm.projectApprovalTimeRange"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                    </el-date-picker>
-                </el-form-item>
-            </el-form>
-
-            <el-button type="primary" @click="searchData">搜索</el-button>
-            <el-divider></el-divider>
 
             <div style="display: flex; align-items: center; justify-content: center;">
                 <el-button @click="addProject" type="primary" style="margin-bottom: 24px;">申请项目</el-button>
@@ -79,7 +77,7 @@
                 </el-table-column>
                 <el-table-column prop="projectApprovalStatus" label="审批状态" min-width="120" align="center">
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.projectApprovalStatus === 0" >待审批</el-tag>
+                        <el-tag v-if="scope.row.projectApprovalStatus === 0">待审批</el-tag>
                         <el-tag v-if="scope.row.projectApprovalStatus === 1" type="success">已通过</el-tag>
                         <el-tag v-if="scope.row.projectApprovalStatus === 2" type="danger">未通过</el-tag>
                     </template>
@@ -113,14 +111,14 @@
                     </el-form-item>
                     <el-form-item label="机构DOI" prop="institutionList">
                         <el-select v-model="addProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
-                            <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name" :value="item.doi"></el-option>
+                            <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
+                                :value="item.doi"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
-                        <el-upload class="upload-demo" 
-                        drag action="/api/file/upload"
-                        :headers="{'Authorization': 'Bearer ' + $store.state.user.token}"
-                        :on-success="uploadSuccessAdd">
+                        <el-upload class="upload-demo" drag action="/api/file/upload"
+                            :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }"
+                            :on-success="uploadSuccessAdd">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
@@ -135,7 +133,7 @@
                 </span>
             </el-dialog>
         </div>
-        
+
     </div>
 </template>
 
@@ -153,6 +151,8 @@ export default {
             pages: 1,
             // 当前页数
             currentPage: 1,
+            // 折叠
+            activeNames: ['1'],
             // 搜索表单
             searchForm: {
                 // 项目名称
@@ -202,7 +202,7 @@ export default {
                     projectApprovalTime: "2021-01-01",
                 }
             ],
-            
+
             // 增加项目弹窗是否显示
             addProjectDialogVisible: false,
             // 项目item的拷贝
@@ -217,13 +217,13 @@ export default {
             },
         };
     },
-    mounted() { 
+    mounted() {
         // 获取组网组列表
         let _this = this;
-        postForm('/networkGroups/get', {}, _this, function(res){
+        postForm('/networkGroups/get', {}, _this, function (res) {
             _this.gid = res.data.records[0].gid;
-            postForm('/networkGroups/getInstitutionsByGid', {gid: _this.gid}, _this, function(res){
-                for(let item of res.data.list) {
+            postForm('/networkGroups/getInstitutionsByGid', { gid: _this.gid }, _this, function (res) {
+                for (let item of res.data.list) {
                     _this.institutionDoiList.push({
                         name: item.name,
                         doi: item.doi,
@@ -241,12 +241,12 @@ export default {
             this.searchForm.page = this.currentPage;
             this.getData(this.searchForm);
         },
-        getData(postData){
+        getData(postData) {
             let _this = this;
             _this.projectTable = [];
-            postForm('/projectInfos/getApplications', postData, _this, function(res){
+            postForm('/projectInfos/getApplications', postData, _this, function (res) {
                 _this.pages = res.data.pages;
-                for(let item of res.data.records) {
+                for (let item of res.data.records) {
                     _this.projectTable.push({
                         id: item.id,
                         gid: item.gid,
@@ -265,7 +265,7 @@ export default {
                 }
             })
         },
-        searchData(){
+        searchData() {
             let postData = {
                 name: this.searchForm.projectName,
                 user: this.searchForm.projectLeader,
@@ -277,12 +277,12 @@ export default {
                 reviewComments: this.searchForm.projectApprovalOpinion,
             }
 
-            if(this.searchForm.projectApplyTimeRange && this.searchForm.projectApplyTimeRange !== "") {
+            if (this.searchForm.projectApplyTimeRange && this.searchForm.projectApplyTimeRange !== "") {
                 postData.createTimeBegin = this.searchForm.projectApplyTimeRange[0];
                 postData.createTimeEnd = this.searchForm.projectApplyTimeRange[1] + 86399999;
             }
 
-            if(this.searchForm.projectApprovalTimeRange && this.searchForm.projectApprovalTimeRange !== "") {
+            if (this.searchForm.projectApprovalTimeRange && this.searchForm.projectApprovalTimeRange !== "") {
                 postData.updateTimeBegin = this.searchForm.projectApprovalTimeRange[0];
                 postData.updateTimeEnd = this.searchForm.projectApprovalTimeRange[1] + 86399999;
             }
@@ -310,7 +310,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.addProjectDialogVisible = false;
-            }).catch(() => { 
+            }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消'
@@ -321,12 +321,12 @@ export default {
             let _this = this;
 
             // 将 selected = true 的机构 DOI 添加到 involvedInstitutionDoi 中，以逗号分隔
-            for(let item of this.addProjectItem.institutionList) {
+            for (let item of this.addProjectItem.institutionList) {
                 this.addProjectItem.involvedInstitutionDoi += item + ",";
             }
-            
+
             // 检查有没有空值
-            if(this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === ""  || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "" || this.addProjectItem.involvedInstitutionDoi === "") {
+            if (this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === "" || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "" || this.addProjectItem.involvedInstitutionDoi === "") {
                 this.$message({
                     type: 'warning',
                     message: '请填写完整信息'
@@ -345,8 +345,8 @@ export default {
                 involvedInstitutionDoi: this.addProjectItem.involvedInstitutionDoi,
             }
 
-            postForm('/projectInfos/apply', postData, this, function(res){
-                if(res.code === 200) {
+            postForm('/projectInfos/apply', postData, this, function (res) {
+                if (res.code === 200) {
                     _this.$message({
                         type: 'success',
                         message: '添加成功'
@@ -358,7 +358,7 @@ export default {
         },
         // 处理上传成功
         uploadSuccessAdd(response, file, fileList) {
-            if(response.code === 200) {
+            if (response.code === 200) {
                 this.$message({
                     message: '上传成功',
                     type: 'success'
@@ -373,7 +373,7 @@ export default {
         },
 
         uploadSuccessModify(response, file, fileList) {
-            if(response.code === 200) {
+            if (response.code === 200) {
                 this.$message({
                     message: '上传成功',
                     type: 'success'
@@ -390,7 +390,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .SearchForm {
     display: flex;
     flex-direction: row;
@@ -398,12 +398,20 @@ export default {
     flex-wrap: wrap;
     margin-top: 24px;
 }
+
 .SearchFormItem {
     margin: 0 24px 24px 24px;
     width: 280px;
 }
+
 .SearchFormTimePicker {
     margin: 0 24px 24px 24px;
     width: 460px;
+}
+.el-collapse-item__header {
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    border: 0px;
 }
 </style>

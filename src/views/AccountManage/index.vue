@@ -12,8 +12,8 @@
                 </el-form-item>
                 <el-form-item prop="status" label="账号状态" class="SearchFormItem">
                     <el-select v-model="searchForm.status" placeholder="请选择" style="width: 200px">
-                        <el-option label="已激活" value="0"></el-option>
-                        <el-option label="未激活" value="1"></el-option>
+                        <el-option label="已激活" value="1"></el-option>
+                        <el-option label="未激活" value="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item prop="email" label="用户联系邮箱" class="SearchFormItem">
@@ -75,7 +75,7 @@
                 <el-table-column prop="lastModifyPasswordTime" label="最近修改密码时间"></el-table-column>
                 <el-table-column prop="status" label="是否激活">
                     <template slot-scope="props">
-                        <el-tag v-if="props.row.status === 0" type="success">已激活</el-tag>
+                        <el-tag v-if="props.row.status === 1" type="success">已激活</el-tag>
                         <el-tag v-else type="danger">未激活</el-tag>
                     </template>
                 </el-table-column>
@@ -214,7 +214,7 @@ export default {
                     // 最近修改密码时间
                     lastModifyPasswordTime: "2021-01-01",
                     // 是否激活
-                    status: 0,
+                    status: 1,
                     // 用户联系邮箱
                     email: "aaaaa@pku.edu.cn",
                 },
@@ -244,7 +244,7 @@ export default {
                 userType: "普通用户",
                 projects: [],
                 email: "",
-                status: 0,
+                status: 1,
             },
             modifyPermissionDialogVisible: false,
             modifyPermissionDialogList: [],
@@ -259,7 +259,7 @@ export default {
                 confirmPassword: "",
                 projects: [],
                 email: "",
-                status: 0,
+                status: 1,
             },
             modifyUserIndex: 0,
 
@@ -326,7 +326,7 @@ export default {
             _this.projectsMap = {};
             _this.userTable = [];
 
-            postForm("/projectInfos/getProjectInfo", {size: -1}, _this, function (res) {
+            postForm("/projectInfos/getProjectInfo", { size: -1 }, _this, function (res) {
                 for (let item of res.data.records) {
                     _this.projectsMap[item.pid] = item.name;
                     _this.projectsList.push({
@@ -352,7 +352,7 @@ export default {
                             lastModifyPasswordTime: new Date(
                                 item.updateTime
                             ).toLocaleDateString(),
-                            status: item.status === undefined ? 0 : item.status,
+                            status: item.status === undefined ? 1 : item.status,
                             email: item.email,
                         });
                     }

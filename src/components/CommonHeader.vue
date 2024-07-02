@@ -15,19 +15,25 @@
                 </div>
                 <el-dropdown-menu>
                     <el-dropdown-item align="center" @click.native="logOut">登出</el-dropdown-item>
-                    <el-dropdown-item align="center" @click.native="modifyPassword">修改密码</el-dropdown-item>
+                    <el-dropdown-item align="center" @click.native="modifyPassword">修改信息</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
 
         <el-dialog title="修改密码" :visible.sync="modifyPasswordDialogVisible" width="50%"
             :before-close="modifyPasswordCancel">
-            <el-form :model="passwordForm" label-width="auto" >
+            <el-form :model="userInfoForm" label-width="auto" >
+                <el-form-item prop="username" label="用户名">
+                    <el-input v-model="userInfoForm.username"></el-input>
+                </el-form-item>
                 <el-form-item prop="newPassword" label="新密码">
-                    <el-input v-model="passwordForm.newPassword" type="password"></el-input>
+                    <el-input v-model="userInfoForm.newPassword" type="password"></el-input>
                 </el-form-item>
                 <el-form-item prop="confirmPassword" label="确认密码">
-                    <el-input v-model="passwordForm.confirmPassword" type="password"></el-input>
+                    <el-input v-model="userInfoForm.confirmPassword" type="password"></el-input>
+                </el-form-item>
+                <el-form-item prop="email" label="邮箱">
+                    <el-input v-model="userInfoForm.email"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -45,9 +51,11 @@ export default {
     data() {
         return {
             path: '',
-            passwordForm: {
+            userInfoForm: {
+                username: '',
                 newPassword: '',
-                confirmPassword: ''
+                confirmPassword: '',
+                email: '',
             },
             modifyPasswordDialogVisible: false,
             userType: '',
@@ -83,8 +91,8 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.modifyPasswordDialogVisible = false;
-                this.passwordForm.newPassword = '';
-                this.passwordForm.confirmPassword = '';
+                this.userInfoForm.newPassword = '';
+                this.userInfoForm.confirmPassword = '';
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -93,60 +101,36 @@ export default {
              });
         },
         modifyPasswordConfirm() {
-            if (this.passwordForm.newPassword === '') {
-                this.$message.error('密码不能为空');
+            if (this.userInfoForm.username === '' || this.userInfoForm.newPassword === '' || this.userInfoForm.email === '') {
+                this.$message.error('请填写完整信息');
                 return;
             }
-            if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
+
+            if (this.userInfoForm.newPassword !== this.userInfoForm.confirmPassword) {
                 this.$message.error('两次密码不一致');
                 return;
             }
 
+
             let _this = this;
-            if (this.userType === 'user') {
-                let postData = {
-                    username: this.username,
-                    password: this.passwordForm.newPassword
-                }
-                postForm('/users/update', postData, _this, function(res){
-                    if (res.code === 200) {
-                        _this.$message.success('修改成功');
-                        _this.modifyPasswordDialogVisible = false;
-                        _this.passwordForm.newPassword = '';
-                        _this.passwordForm.confirmPassword = '';
-                        _this.logOut();
-                    }
-                    else {
-                        _this.$message.error(res.message);
-                    }
-                })
-            } 
-            else if (this.userType === 'admin') {
-                let postData = {
-                    username: this.username,
-                    password: this.passwordForm.newPassword
-                }
-                postForm('/users/getUsers', {username: _this.username}, _this, function(res) {
-                    if (res.code === 200) {
-                        postData.uid = res.data.records[0].uid;
-                        postForm('/users/update', postData, _this, function(res) {
-                            if (res.code === 200) {
-                                _this.$message.success('修改成功');
-                                _this.modifyPasswordDialogVisible = false;
-                                _this.passwordForm.newPassword = '';
-                                _this.passwordForm.confirmPassword = '';
-                                _this.logOut();
-                            }
-                            else {
-                                _this.$message.error(res.message);
-                            }
-                        })
-                    }
-                    else {
-                        _this.$message.error(res.message);
-                    }
-                })
+           
+            let postData = {
+                username: this.userInfoForm.username,
+                password: this.userInfoForm.newPassword,
+                email: this.userInfoForm.email,
             }
+            postForm('/users/update', postData, _this, function(res){
+                if (res.code === 200) {
+                    _this.$message.success('修改成功');
+                    _this.modifyPasswordDialogVisible = false;
+                    _this.userInfoForm.newPassword = '';
+                    _this.userInfoForm.confirmPassword = '';
+                    _this.logOut();
+                }
+                else {
+                    _this.$message.error(res.message);
+                }
+            })
 
             
         }
