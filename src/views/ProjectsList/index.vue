@@ -70,7 +70,7 @@
                 <el-table-column label="操作" align="center">
                     <template slot-scope="props">
                         <el-button @click="modifyProject(props.row, props.$index)" type="primary"
-                            size="small">修改信息</el-button>
+                            size="small">修改</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -103,6 +103,12 @@
                         <el-select v-model="modifyProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
                             <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
                                 :value="item.doi"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="修改权限用户">
+                        <el-select v-model="modifyProjectItem.userBoList" multiple collapse-tags placeholder="请选择">
+                            <el-option v-for="item in userList" :key="item.uid" :label="item.name"
+                                :value="item.uid"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="项目申请文件" prop="projectApplyFile">
@@ -139,6 +145,8 @@ export default {
             pages: 1,
             // 当前页数
             currentPage: 1,
+            // 用户列表
+            userList: [],
             
             // 搜索表单
             searchForm: {
@@ -213,7 +221,11 @@ export default {
                 institutionList: [],
                 // 参与机构列表
                 involvedInstitutionDoi: "",
-            },
+                // 用户列表
+                userBoList: [],
+                // 用户列表拷贝
+                userBoListCopy: [],
+            },  
         };
     },
     mounted() { 
@@ -232,6 +244,15 @@ export default {
                 _this.getData({});
             })
         })
+        // 获取用户列表
+        postForm('/users/getUsers', {}, _this, function (res) {
+            for (let item of res.data.records) {
+                _this.userList.push({
+                    name: item.username,
+                    uid: item.uid,
+                })
+            }
+        })
 
     },
     methods: {
@@ -246,12 +267,7 @@ export default {
             postForm('/projectInfos/getProjectInfo', postData, _this, function(res){
                 _this.pages = res.data.pages;
                 for(let item of res.data.records) {
-                    // 记得注释掉
-                    if (item.involvedInstitutionDoi === undefined) {
-                        item.involvedInstitutionDoi = "10.XNYat/ins.0002,10.XNYat/ins.0003";
-                    }
-
-                    _this.projectTable.push({
+                    let dataItem = {
                         pid: item.pid,
                         gid: item.gid,
                         name: item.name,
@@ -259,14 +275,23 @@ export default {
                         projectDoi: item.projectDoi,
                         institutionDoi: item.institutionDoi,
                         involvedInstitutionDoi: item.involvedInstitutionDoi,
-                        institutionList: item.involvedInstitutionDoi.split(","),
                         contactInfo: item.contactInfo,
                         contactEmail: item.contactEmail,
                         description: item.description,
                         createTime: new Date(item.createTime).toLocaleDateString(),
                         updateTime: new Date(item.updateTime).toLocaleDateString(),
-                        userBoList: item.userBoList,
-                    });
+                        institutionList: [],
+                        userBoList: [],
+                    }
+                    if (item.involvedInstitutionDoi !== undefined && item.involvedInstitutionDoi !== "" && item.involvedInstitutionDoi !== null) {
+                        dataItem.institutionList = item.involvedInstitutionDoi.split(",");
+                    } else {
+                        dataItem.institutionList = [];
+                    }
+                    for (let item of item.userBoList) {
+                        dataItem.userBoList.push(item.uid)
+                    }
+                    _this.projectTable.push(dataItem);
                 }
             })
         },
@@ -297,6 +322,9 @@ export default {
             this.modifyProjectDialogVisible = true;
             this.modifyProjectIndex = index;
             this.modifyProjectItem = JSON.parse(JSON.stringify(row));
+            console.log(this.modifyProjectItem)
+            // 拷贝用户列表
+            this.modifyProjectItem.userBoListCopy = this.modifyProjectItem.userBoList.slice(0);
         },
 
         modifyProjectCancel() {
@@ -330,6 +358,20 @@ export default {
                 this.modifyProjectItem.involvedInstitutionDoi += item + ",";
             }
 
+            let userListAdd = [];
+            let userListDelete = [];
+            // 获取新增和删除的用户列表
+            for (let item of this.modifyProjectItem.userBoList) {
+                if (!this.modifyProjectItem.userBoListCopy.includes(item)) {
+                    userListAdd.push(item);
+                }
+            }
+            for (let item of this.modifyProjectItem.userBoListCopy) {
+                if (!this.modifyProjectItem.userBoList.includes(item)) {
+                    userListDelete.push(item);
+                }
+            }
+            
             postForm("/projectInfos/modify", postData, _this, function(res){
                 if(res.code === 200) {
                     _this.$message({
@@ -340,6 +382,36 @@ export default {
                     _this.modifyProjectDialogVisible = false;
                 }
             })
+
+            if (userListAdd.length !== 0) {
+                postData = {
+                    pid: _this.projectTable[_this.modifyProjectIndex].pid,
+                    uidList: userListAdd,
+                }
+                postForm('/projectInfos/batchAddUsers', postData, _this, function(res){
+                    if (res.code === 200) {
+                        _this.$message({
+                            type: 'success',
+                            message: '添加用户成功'
+                        });
+                    }
+                })
+            }
+            
+            if (userListDelete.length !== 0) {
+                postData = {
+                    pid: _this.projectTable[_this.modifyProjectIndex].pid,
+                    uidList: userListDelete,
+                }
+                postForm('/projectInfos/batchDeleteUsers', postData, _this, function(res){
+                    if (res.code === 200) {
+                        _this.$message({
+                            type: 'success',
+                            message: '删除用户成功'
+                        });
+                    }
+                })
+            }
         },
         
         // 处理上传成功

@@ -326,7 +326,7 @@ export default {
             }
 
             // 检查有没有空值
-            if (this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === "" || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "" || this.addProjectItem.involvedInstitutionDoi === "") {
+            if (this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === "" || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "") {
                 this.$message({
                     type: 'warning',
                     message: '请填写完整信息'
