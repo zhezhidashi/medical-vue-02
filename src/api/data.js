@@ -47,11 +47,12 @@ export const getForm = (requestUrl, This, callback) => {
     console.log('getForm 的表单', requestUrl)
     store.commit('getToken')
     const TokenValue = store.state.user.token;
+    console.log('TokenValue', TokenValue)
     axios.request({
         url: baseUrl + requestUrl,
         method: 'get',
         headers: {
-            Authorization: TokenValue
+            Authorization: "Bearer " + TokenValue
         }
     }).then(({ data: res }) => {
         nprogress.done()
@@ -60,10 +61,10 @@ export const getForm = (requestUrl, This, callback) => {
             callback(res) 
         }
         else {
-            This.$message({
-                message: res.message,
-                type: 'error'
-            });
+            // This.$message({
+            //     message: res.message,
+            //     type: 'error'
+            // });
             callback(res)
         }
     })
@@ -222,7 +223,7 @@ export const getFormMock = (requestUrl, This, callback) => {
         url: mockUrl + requestUrl + "?apifoxApiId=149513755&apifoxToken=FWfuxvo9z3Zb1yuOsKEfh",
         method: 'get',
         headers: {
-            Authorization: TokenValue
+            Authorization: "Bearer " + TokenValue
         }
     }).then(({ data: res }) => {
         nprogress.done()

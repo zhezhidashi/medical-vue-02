@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { loginRequest, loginRequestMock } from "@/api/data";
+import { getForm, loginRequest, loginRequestMock } from "@/api/data";
 export default {
     name: "Login",
     data() {

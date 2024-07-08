@@ -38,6 +38,6 @@ export default {
         },
         getUserType(state) {
             state.userType = state.userType || Cookie.get("userType")
-        }
+        },
     }
 }
