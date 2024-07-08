@@ -64,7 +64,7 @@
                 <el-table-column prop="updateTime" label="修改时间" align="center"></el-table-column>
                 <el-table-column prop="userBoList" label="用户列表" align="center">
                     <template slot-scope="scope">
-                        <div v-for="item in scope.row.userBoList" :key="item.uid">{{ item.username }}</div>
+                        <div v-for="item in scope.row.userNameList" :key="item">{{ item }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
@@ -282,6 +282,7 @@ export default {
                         updateTime: new Date(item.updateTime).toLocaleDateString(),
                         institutionList: [],
                         userBoList: [],
+                        userNameList: [],
                     }
                     if (item.involvedInstitutionDoi !== undefined && item.involvedInstitutionDoi !== "" && item.involvedInstitutionDoi !== null) {
                         dataItem.institutionList = item.involvedInstitutionDoi.split(",");
@@ -290,6 +291,7 @@ export default {
                     }
                     for (let item of item.userBoList) {
                         dataItem.userBoList.push(item.uid)
+                        dataItem.userNameList.push(item.username)
                     }
                     _this.projectTable.push(dataItem);
                 }
