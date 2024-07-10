@@ -1,134 +1,124 @@
 <template>
-    <div style="display: flex;">
-        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-
-            <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                <el-form-item prop="name" label="项目名称" class="SearchFormItem">
-                    <el-input v-model="searchForm.name"></el-input>
-                </el-form-item>
-                <el-form-item prop="user" label="项目负责人" class="SearchFormItem">
-                    <el-input v-model="searchForm.user"></el-input>
-                </el-form-item>
-                <el-form-item prop="projectDoi" label="项目DOI" class="SearchFormItem">
-                    <el-input v-model="searchForm.projectDoi"></el-input>
-                </el-form-item>
-                <el-form-item prop="institutionDoi" label="机构DOI" class="SearchFormItem">
-                    <el-input v-model="searchForm.institutionDoi"></el-input>
-                </el-form-item>
-                <el-form-item prop="contactInfo" label="项目联系方式" class="SearchFormItem">
-                    <el-input v-model="searchForm.contactInfo"></el-input>
-                </el-form-item>
-                <el-form-item prop="contactEmail" label="负责人邮箱" class="SearchFormItem">
-                    <el-input v-model="searchForm.contactEmail"></el-input>
-                </el-form-item>
-                <el-form-item prop="description" label="项目描述" class="SearchFormItem">
-                    <el-input v-model="searchForm.description"></el-input>
-                </el-form-item>
-
-                <el-form-item prop="createTimeRange" label="申请时间" class="SearchFormTimePicker">
-                    <el-date-picker
-                        value-format="timestamp"
-                        v-model="searchForm.createTimeRange"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                    </el-date-picker>
-                </el-form-item>
-
-                <el-form-item prop="updateTimeRange" label="修改时间" class="SearchFormTimePicker">
-                    <el-date-picker
-                        value-format="timestamp"
-                        v-model="searchForm.updateTimeRange"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                    </el-date-picker>
-                </el-form-item>
-            </el-form>
-
-            <el-button type="primary" @click="searchData">搜索</el-button>
-            <el-divider></el-divider>
-
-            <el-table :data="projectTable" stripe border style="width: 95%;">
-                <el-table-column prop="name" label="项目名称" align="center"></el-table-column>
-                <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
-                <el-table-column prop="projectDoi" label="项目DOI" align="center"></el-table-column>
-                <el-table-column prop="institutionDoi" label="所属机构DOI" align="center"></el-table-column>
-                <el-table-column prop="involvedInstitutionDoi" label="参与机构DOI" align="center"></el-table-column>
-                <el-table-column prop="contactInfo" label="项目联系方式" align="center"></el-table-column>
-                <el-table-column prop="contactEmail" label="负责人邮箱" align="center"></el-table-column>
-                <el-table-column prop="description" label="项目描述" align="center"></el-table-column>
-                <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
-                <el-table-column prop="updateTime" label="修改时间" align="center"></el-table-column>
-                <el-table-column prop="userBoList" label="用户列表" align="center">
-                    <template slot-scope="scope">
-                        <div v-for="item in scope.row.userNameList" :key="item">{{ item }}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" align="center">
-                    <template slot-scope="props">
-                        <el-button @click="modifyProject(props.row, props.$index)" type="primary"
-                            size="small">修改</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-
-            <div style="margin: 24px">
-                <el-pagination background layout="pager" :page-size="10" :page-count="pages"
-                    @current-change="clickPage">
-                </el-pagination>
-            </div>
-
-            <el-dialog title="修改项目" :visible.sync="modifyProjectDialogVisible" width="80%"
-                :before-close="modifyProjectCancel">
-                <el-form :model="modifyProjectItem" label-width="auto">
-                    <el-form-item label="项目名称">
-                        <el-input v-model="modifyProjectItem.name"></el-input>
+    <div style="text-align: center; margin: 24px 40px 24px 40px;">
+        <el-collapse v-model="activeNames" @change="collapseChange">
+            <el-collapse-item :title="collapseTitle" name="1">
+                <el-form :model="searchForm" label-width="auto" class="SearchForm">
+                    <el-form-item prop="name" label="项目名称" class="SearchFormItem">
+                        <el-input v-model="searchForm.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="项目负责人">
-                        <el-input v-model="modifyProjectItem.user"></el-input>
+                    <el-form-item prop="user" label="项目负责人" class="SearchFormItem">
+                        <el-input v-model="searchForm.user"></el-input>
                     </el-form-item>
-                    <el-form-item label="负责人邮箱">
-                        <el-input v-model="modifyProjectItem.contactEmail"></el-input>
+                    <el-form-item prop="projectDoi" label="项目DOI" class="SearchFormItem">
+                        <el-input v-model="searchForm.projectDoi"></el-input>
                     </el-form-item>
-                    <el-form-item label="项目联系方式">
-                        <el-input v-model="modifyProjectItem.contactInfo"></el-input>
+                    <el-form-item prop="institutionDoi" label="机构DOI" class="SearchFormItem">
+                        <el-input v-model="searchForm.institutionDoi"></el-input>
                     </el-form-item>
-                    <el-form-item label="项目描述">
-                        <el-input v-model="modifyProjectItem.description"></el-input>
+                    <el-form-item prop="contactInfo" label="项目联系方式" class="SearchFormItem">
+                        <el-input v-model="searchForm.contactInfo"></el-input>
                     </el-form-item>
-                    <el-form-item label="参与项目DOI">
-                        <el-select v-model="modifyProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
-                            <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
-                                :value="item.doi"></el-option>
-                        </el-select>
+                    <el-form-item prop="contactEmail" label="负责人邮箱" class="SearchFormItem">
+                        <el-input v-model="searchForm.contactEmail"></el-input>
                     </el-form-item>
-                    <el-form-item label="修改权限用户">
-                        <el-select v-model="modifyProjectItem.userBoList" multiple collapse-tags placeholder="请选择">
-                            <el-option v-for="item in userList" :key="item.uid" :label="item.name"
-                                :value="item.uid"></el-option>
-                        </el-select>
+                    <el-form-item prop="description" label="项目描述" class="SearchFormItem">
+                        <el-input v-model="searchForm.description"></el-input>
                     </el-form-item>
-                    <el-form-item label="项目申请文件" prop="projectApplyFile">
-                        <el-upload 
-                        drag action="/api/file/upload"
-                        :headers="{'Authorization': 'Bearer ' + $store.state.user.token}" :on-success="uploadSuccessModify">
-                            <i class="el-icon-upload"></i>
-                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                        </el-upload>
+
+                    <el-form-item prop="createTimeRange" label="申请时间" class="SearchFormTimePicker">
+                        <el-date-picker value-format="timestamp" v-model="searchForm.createTimeRange" type="daterange"
+                            range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                        </el-date-picker>
+                    </el-form-item>
+
+                    <el-form-item prop="updateTimeRange" label="修改时间" class="SearchFormTimePicker">
+                        <el-date-picker value-format="timestamp" v-model="searchForm.updateTimeRange" type="daterange"
+                            range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                        </el-date-picker>
                     </el-form-item>
                 </el-form>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="modifyProjectCancel">取 消</el-button>
-                    <el-button type="primary" @click="modifyProjectConfirm">确 定</el-button>
-                </span>
-            </el-dialog>
 
+                <el-button type="primary" @click="searchData">搜索</el-button>
+            </el-collapse-item>
+        </el-collapse>
+        <div style="margin-top: 24px;"></div>
+
+        <el-table :data="projectTable" stripe border style="width: 95%;" >
+            <el-table-column prop="name" label="项目名称" align="center"></el-table-column>
+            <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
+            <el-table-column prop="projectDoi" label="项目DOI" align="center"></el-table-column>
+            <el-table-column prop="institutionDoi" label="所属机构DOI" align="center"></el-table-column>
+            <el-table-column prop="involvedInstitutionDoi" label="参与机构DOI" align="center"></el-table-column>
+            <el-table-column prop="contactInfo" label="项目联系方式" align="center"></el-table-column>
+            <el-table-column prop="contactEmail" label="负责人邮箱" align="center"></el-table-column>
+            <el-table-column prop="description" label="项目描述" align="center"></el-table-column>
+            <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
+            <el-table-column prop="updateTime" label="修改时间" align="center"></el-table-column>
+            <el-table-column prop="userBoList" label="用户列表" align="center">
+                <template slot-scope="scope">
+                    <div v-for="item in scope.row.userNameList" :key="item">{{ item }}</div>
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="props">
+                    <el-button @click="modifyProject(props.row, props.$index)" type="primary"
+                        size="small">修改</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <div style="margin: 24px">
+            <el-pagination background layout="pager" :page-size="10" :page-count="pages" @current-change="clickPage">
+            </el-pagination>
         </div>
-        
+
+        <el-dialog title="修改项目" :visible.sync="modifyProjectDialogVisible" width="80%"
+            :before-close="modifyProjectCancel">
+            <el-form :model="modifyProjectItem" label-width="auto">
+                <el-form-item label="项目名称">
+                    <el-input v-model="modifyProjectItem.name"></el-input>
+                </el-form-item>
+                <el-form-item label="项目负责人">
+                    <el-input v-model="modifyProjectItem.user"></el-input>
+                </el-form-item>
+                <el-form-item label="负责人邮箱">
+                    <el-input v-model="modifyProjectItem.contactEmail"></el-input>
+                </el-form-item>
+                <el-form-item label="项目联系方式">
+                    <el-input v-model="modifyProjectItem.contactInfo"></el-input>
+                </el-form-item>
+                <el-form-item label="项目描述">
+                    <el-input v-model="modifyProjectItem.description"></el-input>
+                </el-form-item>
+                <el-form-item label="参与项目DOI">
+                    <el-select v-model="modifyProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
+                        <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
+                            :value="item.doi"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="修改权限用户">
+                    <el-select v-model="modifyProjectItem.userBoList" multiple collapse-tags placeholder="请选择">
+                        <el-option v-for="item in userList" :key="item.uid" :label="item.name"
+                            :value="item.uid"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="项目申请文件" prop="projectApplyFile">
+                    <el-upload drag action="/api/file/upload"
+                        :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }"
+                        :on-success="uploadSuccessModify">
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    </el-upload>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="modifyProjectCancel">取 消</el-button>
+                <el-button type="primary" @click="modifyProjectConfirm">确 定</el-button>
+            </span>
+        </el-dialog>
+
     </div>
+
 </template>
 
 <script>
@@ -147,7 +137,9 @@ export default {
             currentPage: 1,
             // 用户列表
             userList: [],
-            
+            // 折叠
+            activeNames: [],
+            collapseTitle: "搜索栏（点击展开）",
             // 搜索表单
             searchForm: {
                 // 项目名称
@@ -225,10 +217,10 @@ export default {
                 userBoList: [],
                 // 用户列表拷贝
                 userBoListCopy: [],
-            },  
+            },
         };
     },
-    mounted() { 
+    mounted() {
         // 获取组网组列表
         let _this = this;
         postForm('/networkGroups/get', {}, _this, function (res) {
@@ -261,12 +253,12 @@ export default {
             this.searchForm.page = this.currentPage;
             this.getData(this.searchForm);
         },
-        getData(postData){
+        getData(postData) {
             let _this = this;
             _this.projectTable = [];
-            postForm('/projectInfos/getProjectInfo', postData, _this, function(res){
+            postForm('/projectInfos/getProjectInfo', postData, _this, function (res) {
                 _this.pages = res.data.pages;
-                for(let item of res.data.records) {
+                for (let item of res.data.records) {
                     let dataItem = {
                         pid: item.pid,
                         gid: item.gid,
@@ -297,7 +289,16 @@ export default {
                 }
             })
         },
-        searchData(){
+
+        collapseChange(activeNames) {
+            if (activeNames.length === 0) {
+                this.collapseTitle = "搜索栏（点击展开）";
+            } else {
+                this.collapseTitle = "搜索栏（点击收起）";
+            }
+        },
+
+        searchData() {
             let postData = {
                 name: this.searchForm.name,
                 user: this.searchForm.user,
@@ -307,12 +308,12 @@ export default {
                 institutionDoi: this.searchForm.institutionDoi,
             }
 
-            if(this.searchForm.createTimeRange && this.searchForm.createTimeRange !== "") {
+            if (this.searchForm.createTimeRange && this.searchForm.createTimeRange !== "") {
                 postData.createTimeBegin = this.searchForm.createTimeRange[0];
                 postData.createTimeEnd = this.searchForm.createTimeRange[1] + 86399999;
             }
 
-            if(this.searchForm.updateTimeRange && this.searchForm.updateTimeRange !== "") {
+            if (this.searchForm.updateTimeRange && this.searchForm.updateTimeRange !== "") {
                 postData.updateTimeBegin = this.searchForm.updateTimeRange[0];
                 postData.updateTimeEnd = this.searchForm.updateTimeRange[1] + 86399999;
             }
@@ -336,7 +337,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.modifyProjectDialogVisible = false;
-            }).catch(() => { 
+            }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: '已取消'
@@ -373,9 +374,9 @@ export default {
                     userListDelete.push(item);
                 }
             }
-            
-            postForm("/projectInfos/modify", postData, _this, function(res){
-                if(res.code === 200) {
+
+            postForm("/projectInfos/modify", postData, _this, function (res) {
+                if (res.code === 200) {
                     _this.$message({
                         type: 'success',
                         message: '修改成功'
@@ -390,7 +391,7 @@ export default {
                     pid: _this.projectTable[_this.modifyProjectIndex].pid,
                     uidList: userListAdd,
                 }
-                postForm('/projectInfos/batchAddUsers', postData, _this, function(res){
+                postForm('/projectInfos/batchAddUsers', postData, _this, function (res) {
                     if (res.code === 200) {
                         _this.$message({
                             type: 'success',
@@ -399,13 +400,13 @@ export default {
                     }
                 })
             }
-            
+
             if (userListDelete.length !== 0) {
                 postData = {
                     pid: _this.projectTable[_this.modifyProjectIndex].pid,
                     uidList: userListDelete,
                 }
-                postForm('/projectInfos/batchDeleteUsers', postData, _this, function(res){
+                postForm('/projectInfos/batchDeleteUsers', postData, _this, function (res) {
                     if (res.code === 200) {
                         _this.$message({
                             type: 'success',
@@ -415,10 +416,10 @@ export default {
                 })
             }
         },
-        
+
         // 处理上传成功
         uploadSuccessAdd(response, file, fileList) {
-            if(response.code === 200) {
+            if (response.code === 200) {
                 this.$message({
                     message: '上传成功',
                     type: 'success'
@@ -433,7 +434,7 @@ export default {
         },
 
         uploadSuccessModify(response, file, fileList) {
-            if(response.code === 200) {
+            if (response.code === 200) {
                 this.$message({
                     message: '上传成功',
                     type: 'success'
@@ -450,7 +451,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .SearchForm {
     display: flex;
     flex-direction: row;
@@ -458,12 +459,21 @@ export default {
     flex-wrap: wrap;
     margin-top: 24px;
 }
+
 .SearchFormItem {
     margin: 0 24px 24px 24px;
     width: 280px;
 }
+
 .SearchFormTimePicker {
     margin: 0 24px 24px 24px;
     width: 460px;
+}
+
+.el-collapse-item__header {
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    border: 0px;
 }
 </style>

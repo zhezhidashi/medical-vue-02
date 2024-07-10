@@ -1,11 +1,7 @@
 <template>
-    <div style="display: flex">
-        <div style="
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				width: 100%;
-			">
+    <div style="text-align: center; margin: 24px 40px 24px 40px;">
+        <el-collapse v-model="activeNames" @change="collapseChange">
+            <el-collapse-item :title="collapseTitle" name="1">
             <el-form :model="searchForm" label-width="auto" class="SearchForm">
                 <el-form-item prop="username" label="用户名" class="SearchFormItem">
                     <el-input v-model="searchForm.username" style="width: 200px"></el-input>
@@ -37,13 +33,13 @@
             </el-form>
 
             <el-button type="primary" @click="searchData">搜索</el-button>
-
-            <el-divider></el-divider>
-
+        </el-collapse-item>
+    </el-collapse>
             <div style="
 					display: flex;
 					align-items: center;
 					justify-content: center;
+                    margin-top: 24px;
 				">
                 <el-button @click="addUser" type="primary"
                     style="margin-bottom: 24px; margin-right: 24px">增加用户</el-button>
@@ -168,7 +164,6 @@
                     <el-button type="primary" @click="modifyUserConfirm">确 定</el-button>
                 </span>
             </el-dialog>
-        </div>
 
         <el-dialog title="修改密码" :visible.sync="modifyUserPasswordDialogVisible"
             :before-close="modifyUserPasswordCancel">
@@ -198,6 +193,9 @@ export default {
             pages: 1,
             // 当前页数
             currentPage: 1,
+            // 折叠
+            activeNames: [],
+            collapseTitle: "搜索栏（点击展开）",
             // 用户列表
             userTable: [
                 {
@@ -218,22 +216,9 @@ export default {
                     // 用户联系邮箱
                     email: "aaaaa@pku.edu.cn",
                 },
-                {
-                    username: "user-1",
-                    userType: "普通用户",
-                    projects: [0, 1],
-                    registerTime: "2021-01-01",
-                    lastLoginTime: "2021-01-01",
-                    lastModifyPasswordTime: "2021-01-01",
-                    status: 1,
-                    email: "bbbbb@pku.edu.cn",
-                },
             ],
             // 项目列表
-            projectsMap: {
-                0: "项目1",
-                1: "项目2",
-            },
+            projectsMap: {},
             projectsList: [],
             addUserDialogVisible: false,
 
@@ -290,6 +275,14 @@ export default {
         this.getData({});
     },
     methods: {
+        collapseChange(activeNames) {
+            if (activeNames.length === 0) {
+                this.collapseTitle = "搜索栏（点击展开）";
+            } else {
+                this.collapseTitle = "搜索栏（点击收起）";
+            }
+        },
+
         searchData() {
             let postData = {
                 username: this.searchForm.username,
@@ -643,7 +636,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .TableItem {
     display: flex;
     flex-direction: column;
@@ -667,5 +660,12 @@ export default {
 .SearchFormTimePicker {
     margin: 0 24px 24px 24px;
     width: 460px;
+}
+
+.el-collapse-item__header {
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    border: 0px;
 }
 </style>

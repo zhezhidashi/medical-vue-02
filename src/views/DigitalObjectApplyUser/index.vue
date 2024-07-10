@@ -1,8 +1,8 @@
 <template>
-    <div style="display: flex;">
+    <div style="text-align: center; margin: 24px 40px 24px 40px;">
 
-        <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-
+        <el-collapse v-model="activeNames" @change="collapseChange">
+            <el-collapse-item :title="collapseTitle" name="1">
             <el-form :model="searchForm" label-width="auto" class="SearchForm">
                 <el-form-item class="SearchFormItem" label="申请机构DOI">
                     <el-input v-model="searchForm.applicantInstitutionDoi"></el-input>
@@ -61,8 +61,9 @@
             </el-form>
 
             <el-button type="primary" @click="searchData">搜索</el-button>
-
-            <el-divider></el-divider>
+        </el-collapse-item>
+    </el-collapse>
+    <div style="margin-top: 24px;"></div>
 
             <div style="display: flex; align-items: center; justify-content: center;">
                 <el-button @click="addApply" type="primary" style="margin-bottom: 24px;">增加申请</el-button>
@@ -190,7 +191,7 @@
                     <el-button type="primary" @click="modifyConfirm">确 定</el-button>
                 </span>
             </el-dialog> -->
-        </div>
+
 
     </div>
 
@@ -206,6 +207,10 @@ export default {
             pages: 1,
             // 当前页数
             currentPage: 1,
+// 折叠
+activeNames: [],
+            collapseTitle: "搜索栏（点击展开）",
+            
             searchForm : {
                 // 申请机构DOI
                 applicantInstitutionDoi: undefined,
@@ -292,6 +297,14 @@ export default {
             this.currentPage = page;
             this.searchForm.page = this.currentPage;
             this.getData(this.searchForm);
+        },
+
+        collapseChange(activeNames) {
+            if (activeNames.length === 0) {
+                this.collapseTitle = "搜索栏（点击展开）";
+            } else {
+                this.collapseTitle = "搜索栏（点击收起）";
+            }
         },
         searchData() {
             let postData = {
@@ -478,7 +491,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .SearchForm {
     display: flex;
     flex-direction: row;
@@ -493,5 +506,11 @@ export default {
 .SearchFormTimePicker {
     margin: 0 24px 24px 24px;
     width: 460px;
+}
+.el-collapse-item__header {
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    border: 0px;
 }
 </style>
