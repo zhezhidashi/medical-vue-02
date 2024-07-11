@@ -47,28 +47,28 @@ export default {
             uploadFile: "",
             uploadLoading: false,
             tableData: [
-                {
-                    // DOI
-                    doi: "",
-                    // 数字对象名称
-                    name: "",
-                    // 机构DOI
-                    institutionDoi: "",
-                    // 机构名字
-                    institutionName: "",
-                    // 数字对象描述
-                    description: "",
-                    // 数字对象类型
-                    type: "",
-                    // 数字对象状态
-                    status: "",
-                    // 数字对象来源
-                    source: "",
-                    // 创建时间
-                    createTime: "",
-                    // 修改时间
-                    updateTime: "",
-                }
+                // {
+                //     // DOI
+                //     doi: "",
+                //     // 数字对象名称
+                //     name: "",
+                //     // 机构DOI
+                //     institutionDoi: "",
+                //     // 机构名字
+                //     institutionName: "",
+                //     // 数字对象描述
+                //     description: "",
+                //     // 数字对象类型
+                //     type: "",
+                //     // 数字对象状态
+                //     status: "",
+                //     // 数字对象来源
+                //     source: "",
+                //     // 创建时间
+                //     createTime: "",
+                //     // 修改时间
+                //     updateTime: "",
+                // }
             ],
 
         };
