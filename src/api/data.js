@@ -47,7 +47,6 @@ export const getForm = (requestUrl, This, callback) => {
     console.log('getForm 的表单', requestUrl)
     store.commit('getToken')
     const TokenValue = store.state.user.token;
-    console.log('TokenValue', TokenValue)
     axios.request({
         url: baseUrl + requestUrl,
         method: 'get',

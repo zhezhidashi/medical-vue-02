@@ -95,7 +95,7 @@
             </div>
 
             <el-dialog title="增加用户" :visible.sync="addUserDialogVisible" width="90%" :before-close="addUserCancel">
-                <el-form :model="addUserForm" ref="addUserForm" label-width="auto">
+                <el-form :model="addUserForm" ref="addUserForm" label-width="auto" align="left">
                     <el-form-item prop="username" label="用户名">
                         <el-input v-model="addUserForm.username"></el-input>
                     </el-form-item>
@@ -138,7 +138,7 @@
 
             <el-dialog title="修改用户" :visible.sync="modifyUserDialogVisible" width="90%"
                 :before-close="modifyUserCancel">
-                <el-form :model="modifyUserForm" ref="modifyUserForm" label-width="auto">
+                <el-form :model="modifyUserForm" ref="modifyUserForm" label-width="auto" align="left">
                     <el-form-item prop="username" label="用户名">
                         <el-input v-model="modifyUserForm.username"></el-input>
                         <!-- {{ modifyUserForm.username }} -->
