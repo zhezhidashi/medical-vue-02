@@ -142,8 +142,6 @@ export default {
     name: "ProjectsApply",
     data() {
         return {
-            // 组网组编号
-            gid: "",
             // 机构 DOI 列表
             institutionDoiList: [],
             // 页数
@@ -222,19 +220,18 @@ export default {
     mounted() {
         // 获取组网组列表
         let _this = this;
-        postForm('/networkGroups/get', {}, _this, function (res) {
-            _this.gid = res.data.records[0].gid;
-            postForm('/networkGroups/getInstitutionsByGid', { gid: _this.gid }, _this, function (res) {
-                for (let item of res.data.list) {
-                    _this.institutionDoiList.push({
-                        name: item.name,
-                        doi: item.doi,
-                    })
-                }
-                // 获取项目信息
-                _this.getData({});
-            })
+
+        postForm('/networkGroups/getInstitutionsByGid', {}, _this, function (res) {
+            for (let item of res.data.list) {
+                _this.institutionDoiList.push({
+                    name: item.name,
+                    doi: item.doi,
+                })
+            }
+            // 获取项目信息
+            _this.getData({});
         })
+
 
     },
     methods: {
@@ -246,7 +243,11 @@ export default {
         getData(postData) {
             let _this = this;
             _this.projectTable = [];
-            postForm('/projectInfos/getApplications', postData, _this, function (res) {
+            
+            // 创建：1；修改：2
+            this.postData.type = 1;
+
+            postForm('/projectOrder/query', postData, _this, function (res) {
                 _this.pages = res.data.pages;
                 for (let item of res.data.records) {
                     _this.projectTable.push({
@@ -256,7 +257,6 @@ export default {
                         projectLeader: item.user,
                         projectContact: item.contactInfo,
                         projectDescription: item.description,
-                        involvedInstitutionDoi: item.involvedInstitutionDoi,
                         projectApplyFile: item.applyDocumentAddress,
                         projectApplyTime: new Date(item.createTime).toLocaleDateString(),
                         projectApplyEmail: item.contactEmail,
@@ -346,7 +346,6 @@ export default {
             }
 
             let postData = {
-                gid: this.gid,
                 name: this.addProjectItem.projectName,
                 user: this.addProjectItem.projectLeader,
                 contactInfo: this.addProjectItem.projectContact,
@@ -356,7 +355,7 @@ export default {
                 involvedInstitutionDoi: this.addProjectItem.involvedInstitutionDoi,
             }
 
-            postForm('/projectInfos/apply', postData, this, function (res) {
+            postForm('/projectOrder/create', postData, this, function (res) {
                 if (res.code === 200) {
                     _this.$message({
                         type: 'success',

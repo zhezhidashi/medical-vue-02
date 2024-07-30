@@ -127,8 +127,6 @@ export default {
     name: "ProjectsList",
     data() {
         return {
-            // gid
-            gid: "",
             // 机构 DOI 列表
             institutionDoiList: [],
             // 页数
@@ -223,18 +221,15 @@ export default {
     mounted() {
         // 获取组网组列表
         let _this = this;
-        postForm('/networkGroups/get', {}, _this, function (res) {
-            _this.gid = res.data.records[0].gid;
-            postForm('/networkGroups/getInstitutionsByGid', { gid: _this.gid }, _this, function (res) {
-                for (let item of res.data.list) {
-                    _this.institutionDoiList.push({
-                        name: item.name,
-                        doi: item.doi,
-                    })
-                }
-                // 获取项目信息
-                _this.getData({});
-            })
+        postForm('/networkGroups/getInstitutionsByGid', {}, _this, function (res) {
+            for (let item of res.data.list) {
+                _this.institutionDoiList.push({
+                    name: item.name,
+                    doi: item.doi,
+                })
+            }
+            // 获取项目信息
+            _this.getData({});
         })
         // 获取用户列表
         postForm('/users/getUsers', {}, _this, function (res) {
