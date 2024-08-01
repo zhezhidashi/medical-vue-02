@@ -19,6 +19,13 @@ module.exports = defineConfig({
                 ws: true,
                 changeOrigin: true
             },
+            '/ganache': {
+                // target: 'http://
+                target: process.env.GANACHE_URL,
+                pathRewrite: {'^/ganache': ''},
+                ws: true,
+                changeOrigin: true
+            }
         },
     },
 })

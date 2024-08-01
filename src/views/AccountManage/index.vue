@@ -2,168 +2,164 @@
     <div style="text-align: center; margin: 24px 40px 24px 40px;">
         <el-collapse v-model="activeNames" @change="collapseChange">
             <el-collapse-item :title="collapseTitle" name="1">
-            <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                <el-form-item prop="username" label="用户名" class="SearchFormItem">
-                    <el-input v-model="searchForm.username" style="width: 200px"></el-input>
-                </el-form-item>
-                <el-form-item prop="status" label="账号状态" class="SearchFormItem">
-                    <el-select v-model="searchForm.status" placeholder="请选择" style="width: 200px">
-                        <el-option label="已激活" value="1"></el-option>
-                        <el-option label="未激活" value="2"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item prop="email" label="用户联系邮箱" class="SearchFormItem">
-                    <el-input v-model="searchForm.email" style="width: 200px"></el-input>
-                </el-form-item>
-                <el-form-item label="注册时间" class="SearchFormTimePicker">
-                    <el-date-picker value-format="timestamp" v-model="searchForm.registerTimeRange" type="daterange"
-                        range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="最近登录时间" class="SearchFormTimePicker">
-                    <el-date-picker value-format="timestamp" v-model="searchForm.lastLoginTimeRange" type="daterange"
-                        range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="最近修改密码时间" class="SearchFormTimePicker">
-                    <el-date-picker value-format="timestamp" v-model="searchForm.lastModifyPasswordTimeRange"
-                        type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                    </el-date-picker>
-                </el-form-item>
-            </el-form>
+                <el-form :model="searchForm" label-width="auto" class="SearchForm">
+                    <el-form-item prop="username" label="用户名" class="SearchFormItem">
+                        <el-input v-model="searchForm.username" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="status" label="账号状态" class="SearchFormItem">
+                        <el-select v-model="searchForm.status" placeholder="请选择" style="width: 200px">
+                            <el-option label="已激活" value="1"></el-option>
+                            <el-option label="未激活" value="2"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item prop="email" label="用户联系邮箱" class="SearchFormItem">
+                        <el-input v-model="searchForm.email" style="width: 200px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="注册时间" class="SearchFormTimePicker">
+                        <el-date-picker value-format="timestamp" v-model="searchForm.registerTimeRange" type="daterange"
+                            range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="最近登录时间" class="SearchFormTimePicker">
+                        <el-date-picker value-format="timestamp" v-model="searchForm.lastLoginTimeRange"
+                            type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="最近修改密码时间" class="SearchFormTimePicker">
+                        <el-date-picker value-format="timestamp" v-model="searchForm.lastModifyPasswordTimeRange"
+                            type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                        </el-date-picker>
+                    </el-form-item>
+                </el-form>
 
-            <el-button type="primary" @click="searchData">搜索</el-button>
-        </el-collapse-item>
-    </el-collapse>
-            <div style="
+                <el-button type="primary" @click="searchData">搜索</el-button>
+            </el-collapse-item>
+        </el-collapse>
+        <div style="
 					display: flex;
 					align-items: center;
 					justify-content: center;
                     margin-top: 24px;
 				">
-                <el-button @click="addUser" type="primary"
-                    style="margin-bottom: 24px; margin-right: 24px">增加用户</el-button>
-                <el-upload action="/api/users/importUser" :headers="{
-                    Authorization: 'Bearer ' + $store.state.user.token,
-                }" :show-file-list="false" :on-success="importUser">
-                    <el-button type="primary" style="margin-bottom: 24px">导入用户</el-button>
-                </el-upload>
+            <el-button @click="addUser" type="primary" style="margin-bottom: 24px; margin-right: 24px">增加用户</el-button>
+            <el-upload action="/api/users/importUser" :headers="{
+                Authorization: 'Bearer ' + $store.state.user.token,
+            }" :show-file-list="false" :on-success="importUser">
+                <el-button type="primary" style="margin-bottom: 24px">导入用户</el-button>
+            </el-upload>
+        </div>
+
+        <el-table :data="userTable" style="width: 95%" stripe border>
+            <el-table-column prop="username" label="用户名"></el-table-column>
+            <el-table-column prop="userType" label="用户类型">
+                <template slot-scope="props">
+                    <el-tag v-if="props.row.userType === 2" type="success">管理员</el-tag>
+                    <el-tag v-else>普通用户</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="projects" label="已授权项目">
+                <template slot-scope="props">
+                    <div v-for="(item, index) in props.row.projects" :key="index" style="margin-right: 10px">
+                        {{ projectsMap[item] }}
+                    </div>
+                </template>
+            </el-table-column>
+
+            <el-table-column prop="registerTime" label="注册时间"></el-table-column>
+            <el-table-column prop="lastLoginTime" label="最近登录时间"></el-table-column>
+            <el-table-column prop="lastModifyPasswordTime" label="最近修改密码时间"></el-table-column>
+            <el-table-column prop="status" label="是否激活">
+                <template slot-scope="props">
+                    <el-tag v-if="props.row.status === 1" type="success">已激活</el-tag>
+                    <el-tag v-else type="danger">未激活</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column prop="email" label="用户联系邮箱"></el-table-column>
+
+            <el-table-column label="操作" width="150" align="center">
+                <template slot-scope="props">
+                    <el-button @click="changeUser(props.row, props.$index)" type="primary" size="small">修改</el-button>
+                    <el-button @click.native.prevent="
+                        deleteUser(props.$index, userTable)
+                        " type="danger" size="small">删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <div style="margin: 24px">
+            <el-pagination background layout="pager" :page-size="10" :page-count="pages" @current-change="clickPage">
+            </el-pagination>
+        </div>
+
+        <el-dialog title="增加用户" :visible.sync="addUserDialogVisible" width="90%" :before-close="addUserCancel">
+            <el-form :model="addUserForm" ref="addUserForm" label-width="auto" align="left">
+                <el-form-item prop="username" label="用户名">
+                    <el-input v-model="addUserForm.username"></el-input>
+                </el-form-item>
+                <el-form-item prop="password" label="密码">
+                    <el-input v-model="addUserForm.password" type="password"></el-input>
+                </el-form-item>
+                <el-form-item prop="confirmPassword" label="确认密码">
+                    <el-input v-model="addUserForm.confirmPassword" type="password"></el-input>
+                </el-form-item>
+                <el-form-item prop="projects" label="已授权项目">
+                    <div v-for="item in addUserForm.projects" :key="item" style="margin-right: 10px">
+                        {{ projectsMap[item] }}
+                    </div>
+                </el-form-item>
+                <el-form-item label="项目权限">
+                    <el-button type="primary" @click="changeProjectPermission(addUserForm, 0)">修改项目权限</el-button>
+                </el-form-item>
+
+                <el-form-item prop="email" label="用户联系邮箱">
+                    <el-input v-model="addUserForm.email"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="addUserCancel">取 消</el-button>
+                <el-button type="primary" @click="addUserConfirm">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <el-dialog title="修改项目权限" :visible.sync="modifyPermissionDialogVisible" width="80%"
+            :before-close="modifyPermissionCancel">
+            <div style="display: flex; justify-content: center">
+                <el-transfer v-model="modifyPermissionDialogList" :titles="['无权限项目', '有权限项目']"
+                    :data="projectsList"></el-transfer>
             </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="modifyPermissionCancel">取 消</el-button>
+                <el-button type="primary" @click="modifyPermissionConfirm">确 定</el-button>
+            </span>
+        </el-dialog>
 
-            <el-table :data="userTable" style="width: 95%" stripe border>
-                <el-table-column prop="username" label="用户名"></el-table-column>
-                <el-table-column prop="userType" label="用户类型">
-                    <template slot-scope="props">
-                        <el-tag v-if="props.row.userType === 2" type="success">管理员</el-tag>
-                        <el-tag v-else>普通用户</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="projects" label="已授权项目">
-                    <template slot-scope="props">
-                        <div v-for="(item, index) in props.row.projects" :key="index" style="margin-right: 10px">
-                            {{ projectsMap[item] }}
-                        </div>
-                    </template>
-                </el-table-column>
+        <el-dialog title="修改用户" :visible.sync="modifyUserDialogVisible" width="90%" :before-close="modifyUserCancel">
+            <el-form :model="modifyUserForm" ref="modifyUserForm" label-width="auto" align="left">
+                <el-form-item prop="username" label="用户名">
+                    <el-input v-model="modifyUserForm.username"></el-input>
+                    <!-- {{ modifyUserForm.username }} -->
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-button type="primary" @click="modifyPassword">修改密码</el-button>
+                </el-form-item>
+                <el-form-item prop="projects" label="已授权项目">
+                    <div v-for="item in modifyUserForm.projects" :key="item" style="margin-right: 10px">
+                        {{ projectsMap[item] }}
+                    </div>
+                </el-form-item>
+                <el-form-item label="项目权限">
+                    <el-button type="primary" @click="changeProjectPermission(modifyUserForm, 1)">修改项目权限</el-button>
+                </el-form-item>
 
-                <el-table-column prop="registerTime" label="注册时间"></el-table-column>
-                <el-table-column prop="lastLoginTime" label="最近登录时间"></el-table-column>
-                <el-table-column prop="lastModifyPasswordTime" label="最近修改密码时间"></el-table-column>
-                <el-table-column prop="status" label="是否激活">
-                    <template slot-scope="props">
-                        <el-tag v-if="props.row.status === 1" type="success">已激活</el-tag>
-                        <el-tag v-else type="danger">未激活</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="email" label="用户联系邮箱"></el-table-column>
-
-                <el-table-column label="操作" width="150" align="center">
-                    <template slot-scope="props">
-                        <el-button @click="changeUser(props.row, props.$index)" type="primary"
-                            size="small">修改</el-button>
-                        <el-button @click.native.prevent="
-                            deleteUser(props.$index, userTable)
-                            " type="danger" size="small">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-
-            <div style="margin: 24px">
-                <el-pagination background layout="pager" :page-size="10" :page-count="pages"
-                    @current-change="clickPage">
-                </el-pagination>
-            </div>
-
-            <el-dialog title="增加用户" :visible.sync="addUserDialogVisible" width="90%" :before-close="addUserCancel">
-                <el-form :model="addUserForm" ref="addUserForm" label-width="auto" align="left">
-                    <el-form-item prop="username" label="用户名">
-                        <el-input v-model="addUserForm.username"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="password" label="密码">
-                        <el-input v-model="addUserForm.password" type="password"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="confirmPassword" label="确认密码">
-                        <el-input v-model="addUserForm.confirmPassword" type="password"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="projects" label="已授权项目">
-                        <div v-for="item in addUserForm.projects" :key="item" style="margin-right: 10px">
-                            {{ projectsMap[item] }}
-                        </div>
-                    </el-form-item>
-                    <el-form-item label="项目权限">
-                        <el-button type="primary" @click="changeProjectPermission(addUserForm, 0)">修改项目权限</el-button>
-                    </el-form-item>
-
-                    <el-form-item prop="email" label="用户联系邮箱">
-                        <el-input v-model="addUserForm.email"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="addUserCancel">取 消</el-button>
-                    <el-button type="primary" @click="addUserConfirm">确 定</el-button>
-                </span>
-            </el-dialog>
-
-            <el-dialog title="修改项目权限" :visible.sync="modifyPermissionDialogVisible" width="80%"
-                :before-close="modifyPermissionCancel">
-                <div style="display: flex; justify-content: center">
-                    <el-transfer v-model="modifyPermissionDialogList" :titles="['无权限项目', '有权限项目']"
-                        :data="projectsList"></el-transfer>
-                </div>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="modifyPermissionCancel">取 消</el-button>
-                    <el-button type="primary" @click="modifyPermissionConfirm">确 定</el-button>
-                </span>
-            </el-dialog>
-
-            <el-dialog title="修改用户" :visible.sync="modifyUserDialogVisible" width="90%"
-                :before-close="modifyUserCancel">
-                <el-form :model="modifyUserForm" ref="modifyUserForm" label-width="auto" align="left">
-                    <el-form-item prop="username" label="用户名">
-                        <el-input v-model="modifyUserForm.username"></el-input>
-                        <!-- {{ modifyUserForm.username }} -->
-                    </el-form-item>
-                    <el-form-item label="密码">
-                        <el-button type="primary" @click="modifyPassword">修改密码</el-button>
-                    </el-form-item>
-                    <el-form-item prop="projects" label="已授权项目">
-                        <div v-for="item in modifyUserForm.projects" :key="item" style="margin-right: 10px">
-                            {{ projectsMap[item] }}
-                        </div>
-                    </el-form-item>
-                    <el-form-item label="项目权限">
-                        <el-button type="primary" @click="changeProjectPermission(modifyUserForm, 1)">修改项目权限</el-button>
-                    </el-form-item>
-
-                    <el-form-item prop="email" label="用户联系邮箱">
-                        <el-input v-model="modifyUserForm.email"></el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="modifyUserCancel">取 消</el-button>
-                    <el-button type="primary" @click="modifyUserConfirm">确 定</el-button>
-                </span>
-            </el-dialog>
+                <el-form-item prop="email" label="用户联系邮箱">
+                    <el-input v-model="modifyUserForm.email"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="modifyUserCancel">取 消</el-button>
+                <el-button type="primary" @click="modifyUserConfirm">确 定</el-button>
+            </span>
+        </el-dialog>
 
         <el-dialog title="修改密码" :visible.sync="modifyUserPasswordDialogVisible"
             :before-close="modifyUserPasswordCancel">

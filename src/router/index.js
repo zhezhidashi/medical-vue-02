@@ -157,6 +157,22 @@ const routes = [
                 },
                 component: () => import('@/views/PrivateKeyExport')
             },
+            {
+                path: '/AccountBlocksQuery',
+                name: 'AccountBlocksQuery',
+                meta: {
+                    title: '账户/区块查询'
+                },
+                component: () => import('@/views/AccountBlocksQuery')
+            },
+            {
+                path: '/PermissionControl',
+                name: 'PermissionControl',
+                meta: {
+                    title: '权限管理表'
+                },
+                component: () => import('@/views/PermissionControl')
+            },
         ]
     },
 ]

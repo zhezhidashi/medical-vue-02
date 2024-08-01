@@ -4,9 +4,9 @@ import nprogress from 'nprogress';
 import "nprogress/nprogress.css";
 
 // 注：第一个页面里面两个上传文件的部分也有baseUrl，如果要改的话，一起改
-export const baseUrl = '/api'
-// export const baseUrl = 'http://47.93.215.112:8080'
+export const backendUrl = '/api'
 export const mockUrl = "https://mock.apifox.com/m1/3980705-3616153-default"
+export const ganacheUrl = '/ganache'
 
 // post请求
 export const postForm = (requestUrl, params, This, callback) => {
@@ -15,7 +15,7 @@ export const postForm = (requestUrl, params, This, callback) => {
     store.commit('getToken')
     const TokenValue = store.state.user.token;
     axios.request({
-        url: baseUrl + requestUrl,
+        url: backendUrl + requestUrl,
         method: 'post',
         data: params,
         headers: {
@@ -37,7 +37,7 @@ export const postForm = (requestUrl, params, This, callback) => {
     })
     .catch((err) => {
         nprogress.done()
-        console.log('postForm 的 error: ', baseUrl + requestUrl, err);
+        console.log('postForm 的 error: ', backendUrl + requestUrl, err);
     })
 }
 
@@ -48,7 +48,7 @@ export const getForm = (requestUrl, This, callback) => {
     store.commit('getToken')
     const TokenValue = store.state.user.token;
     axios.request({
-        url: baseUrl + requestUrl,
+        url: backendUrl + requestUrl,
         method: 'get',
         headers: {
             Authorization: "Bearer " + TokenValue
@@ -78,7 +78,7 @@ export const loginRequest = (requestUrl, params, This, callback) => {
     nprogress.start();
     console.log('postForm 的表单', requestUrl, params)
     axios.request({
-        url: baseUrl + requestUrl,
+        url: backendUrl + requestUrl,
         method: 'post',
         data: params,
     }).then(({ data: res }) => {
@@ -121,7 +121,7 @@ export const exportData = (requestUrl, params, This, callback) => {
     store.commit('getToken')
     const TokenValue = store.state.user.token;
     axios.request({
-        url: baseUrl + requestUrl,
+        url: backendUrl + requestUrl,
         method: 'post',
         data: params,
         headers: {
@@ -134,7 +134,35 @@ export const exportData = (requestUrl, params, This, callback) => {
     })
     .catch((err) => {
         nprogress.done()
-        console.log('postForm 的 error: ', baseUrl + requestUrl, err);
+        console.log('postForm 的 error: ', backendUrl + requestUrl, err);
+    })
+}
+
+// Ganache-post请求
+export const postFormGanache = (requestUrl, params, This, callback) => {
+    nprogress.start();
+    console.log('postFormGanache 的表单', requestUrl, params)
+    axios.request({
+        url: ganacheUrl + requestUrl,
+        method: 'post',
+        data: params,
+    }).then(({ data: res }) => {
+        nprogress.done()
+        console.log('postFormGanache 的 response: ', requestUrl, res);
+        if (res.code === 200) { 
+            callback(res) 
+        }
+        else {
+            This.$message({
+                message: res.message,
+                type: 'error'
+            });
+            callback(res)
+        }
+    })
+    .catch((err) => {
+        nprogress.done()
+        console.log('postFormGanache 的 error: ', ganacheUrl + requestUrl, err);
     })
 }
 
