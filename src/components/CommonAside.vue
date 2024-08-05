@@ -25,11 +25,8 @@
             </el-submenu>
 
             <el-menu-item v-show="!isAdmin" index="7">数字对象检索</el-menu-item>
-            <el-submenu v-show="isAdmin" index="8">
-                <template slot="title">智能合约权限管理</template>
-                <el-menu-item index="8-1">账户/区块查询</el-menu-item>
-                <el-menu-item index="8-2">权限管理表</el-menu-item>
-            </el-submenu>
+            <el-menu-item v-show="isAdmin" index="8">智能合约权限管理</el-menu-item>
+
         </el-menu>
     </div>
 </template>
@@ -92,12 +89,9 @@ export default {
         else if (this.path === '/DigitalObjectSearch') {
             this.activeIndex = '7';
         }
-        else if (this.path === '/AccountBlocksQuery') {
-            this.activeIndex = '8-1';
+        else if (this.path === '/BlocksChainQuery') {
+            this.activeIndex = '8';
         } 
-        else if (this.path === '/PermissionControl') {
-            this.activeIndex = '8-2';
-        }
         
     },
     watch: {
@@ -161,7 +155,7 @@ export default {
                 this.$router.push('/DigitalObjectSearch')
             }
             else if (key === '8-1') {
-                this.$router.push('/AccountBlocksQuery')
+                this.$router.push('/BlocksChainQuery')
             }
             else if (key === '8-2') {
                 this.$router.push('/PermissionControl')
