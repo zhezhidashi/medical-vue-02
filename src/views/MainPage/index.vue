@@ -21,7 +21,7 @@
                 </el-card>
             </div>
             <!-- 卡片 -->
-            <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 95%; margin-top: 24px;">
+            <!-- <div style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 95%; margin-top: 24px;">
                 <div v-for="(item, index) in projectsList">
                     <el-card style="width: 100%; margin-bottom: 24px;">
                         <el-descriptions :title="item.name">
@@ -37,7 +37,7 @@
                 <el-pagination background layout="pager" :page-size="5" :page-count="pages"
                     @current-change="clickPage">
                 </el-pagination>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

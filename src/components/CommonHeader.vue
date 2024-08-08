@@ -8,14 +8,14 @@
             <el-dropdown style="display: flex; align-items: center;">
                 <div class="el-dropdown-link" style="display: flex; flex-direction: row; align-items: center;">
                     <div style="display: flex; flex-direction: column; font-weight: bold;">
-                        <div>机构：{{ institutionName }}</div>
-                        <div>用户：{{ username }}</div>
+                        <div>机构：{{ officeid }}</div>
+                        <!-- <div>用户：{{ username }}</div> -->
                     </div> 
                     <i class="el-icon-arrow-down el-icon--right"></i>
                 </div>
                 <el-dropdown-menu>
-                    <el-dropdown-item align="center" @click.native="logOut">登出</el-dropdown-item>
-                    <el-dropdown-item align="center" @click.native="modifyUserInfo">修改用户信息</el-dropdown-item>
+                    <!-- <el-dropdown-item align="center" @click.native="logOut">登出</el-dropdown-item> -->
+                    <!-- <el-dropdown-item align="center" @click.native="modifyUserInfo">修改用户信息</el-dropdown-item> -->
                     <el-dropdown-item v-if="userType === 'admin'" align="center" @click.native="modifyInstitution">修改机构信息</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -63,6 +63,7 @@ export default {
     name: "CommonHeader",
     data() {
         return {
+            officeid: '',
             path: '',
             userInfoForm: {
                 username: '',
@@ -86,6 +87,10 @@ export default {
         this.userType = this.$store.state.user.userType;
         this.username = this.$store.state.user.username;
         this.getInstitutionName();
+
+        this.$store.commit('getOfficeid')
+        this.officeid = this.$store.state.user.officeid;
+
     },
     watch: {
         $route(to, from) {

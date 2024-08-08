@@ -5,10 +5,10 @@
             <el-form :model="form" status-icon :rules="rules" ref="form" label-width="100px" class="login-container">
                 <h3 style="text-align: center;">系统登录</h3>
                 <el-form-item label="用户名" label-width="80px" prop="username" class="username">
-                    <el-input type="input" v-model="form.username" auto-complete="off" placeholder="请输入账号"></el-input>
+                    <el-input type="input" auto-complete="off" placeholder="请输入账号"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" label-width="80px" prop="password" class="password">
-                    <el-input type="password" v-model="form.password" auto-complete="off"
+                    <el-input type="password" auto-complete="off"
                         placeholder="请输入密码"></el-input>
                 </el-form-item>
                 <div style="display: flex; justify-content: space-around;">
@@ -52,6 +52,16 @@ export default {
                 this.login();
             }
         };
+    },
+    mounted() {
+        let proid = this.$route.query.proid;
+        this.$store.commit("setProid", proid);
+        let officeid = this.$route.query.officeid;
+        this.$store.commit("setOfficeid", officeid);
+
+        this.form.username = "abc";
+        this.form.password = "456";
+        this.login();
     },
     methods: {
         login() {

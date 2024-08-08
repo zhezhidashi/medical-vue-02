@@ -4,6 +4,8 @@ export default {
         token: "",
         username: "",
         userType: "",
+        proid: "",
+        officeid: "",
     },
     mutations: {
         setToken(state, val) {
@@ -38,6 +40,28 @@ export default {
         },
         getUserType(state) {
             state.userType = state.userType || Cookie.get("userType")
+        },
+        setProid(state, val) {
+            state.proid = val
+            Cookie.set('proid', val)
+        },
+        clearProid(state) {
+            state.proid = ''
+            Cookie.remove('proid')
+        },
+        getProid(state) {
+            state.proid = state.proid || Cookie.get("proid")
+        },
+        setOfficeid(state, val) {
+            state.officeid = val
+            Cookie.set('officeid', val)
+        },
+        clearOfficeid(state) {
+            state.officeid = ''
+            Cookie.remove('officeid')
+        },
+        getOfficeid(state) {
+            state.officeid = state.officeid || Cookie.get("officeid")
         },
     }
 }
