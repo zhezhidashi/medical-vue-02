@@ -245,7 +245,7 @@ export default {
             _this.projectTable = [];
             
             // 创建：1；修改：2
-            this.postData.type = 1;
+            postData.type = 1;
 
             postForm('/projectOrder/query', postData, _this, function (res) {
                 _this.pages = res.data.pages;
