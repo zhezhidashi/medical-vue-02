@@ -251,6 +251,12 @@ export default {
         getData(postData) {
             let _this = this;
             _this.projectTable = [];
+
+            // 设置项目id
+            this.$store.commit('getProid')
+            postData.user = this.$store.state.user.proid
+
+
             postForm('/projectInfos/getProjectInfo', postData, _this, function (res) {
                 _this.pages = res.data.pages;
                 for (let item of res.data.records) {
