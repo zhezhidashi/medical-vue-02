@@ -154,11 +154,8 @@ export default {
             else if (key === '7') {
                 this.$router.push('/DigitalObjectSearch')
             }
-            else if (key === '8-1') {
+            else if (key === '8') {
                 this.$router.push('/BlocksChainQuery')
-            }
-            else if (key === '8-2') {
-                this.$router.push('/PermissionControl')
             }
         },
     },
