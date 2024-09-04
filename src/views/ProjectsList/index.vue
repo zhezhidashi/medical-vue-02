@@ -370,7 +370,7 @@ export default {
                 }
             }
 
-            postForm("/projectInfos/modify", postData, _this, function (res) {
+            postForm("/projectOrder/modify", postData, _this, function (res) {
                 if (res.code === 200) {
                     _this.$message({
                         type: 'success',
