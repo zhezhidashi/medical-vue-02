@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
         })
     }
     else if (token && username && userType && to.name === 'Login') {
-        next({ name: 'MainPage' })
+        next({ name: 'RetraceSystem' })
     }
     else {
         next()

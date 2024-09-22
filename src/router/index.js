@@ -165,6 +165,14 @@ const routes = [
                 },
                 component: () => import('@/views/BlocksChainQuery')
             },
+            {
+                path: '/RetraceSystem',
+                name: 'RetraceSystem',
+                meta: {
+                    title: '流转追溯系统',
+                },
+                component: () => import('@/views/RetraceSystem')
+            },
         ]
     },
 ]

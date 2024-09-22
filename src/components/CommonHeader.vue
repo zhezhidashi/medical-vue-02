@@ -4,22 +4,22 @@
             <img src="favicon.png" style="height: 50px; margin-right: 10px;" />
             <div style="font-size: 25px; line-height: 200%;">医学临床数据交换公网系统</div>
         </div>
-        <!-- <div class="r-content" v-show="path !== '/Login'">
+        <div class="r-content" v-show="path !== '/Login'">
             <el-dropdown style="display: flex; align-items: center;">
                 <div class="el-dropdown-link" style="display: flex; flex-direction: row; align-items: center;">
                     <div style="display: flex; flex-direction: column; font-weight: bold;">
-                        <div>机构：{{ officeid }}</div>
-                        <div>用户：{{ username }}</div>
+                        <div>机构：正大天晴 </div>
+                        <!-- <div>用户：{{ username }}</div> -->
                     </div> 
-                    <i class="el-icon-arrow-down el-icon--right"></i>
+                    <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
                 </div>
-                <el-dropdown-menu>
+                <!-- <el-dropdown-menu>
                     <el-dropdown-item align="center" @click.native="logOut">登出</el-dropdown-item>
                     <el-dropdown-item align="center" @click.native="modifyUserInfo">修改用户信息</el-dropdown-item>
                     <el-dropdown-item v-if="userType === 'admin'" align="center" @click.native="modifyInstitution">修改机构信息</el-dropdown-item>
-                </el-dropdown-menu>
+                </el-dropdown-menu> -->
             </el-dropdown>
-        </div> -->
+        </div>
 
         <el-dialog title="修改用户信息" :visible.sync="modifyPasswordDialogVisible" width="50%"
             :before-close="modifyUserInfoCancel">

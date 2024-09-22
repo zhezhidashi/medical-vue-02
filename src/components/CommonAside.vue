@@ -37,7 +37,7 @@ export default {
     data() {
         return {
             isAdmin: false,
-            activeIndex: '0',
+            activeIndex: '4',
             path: '',
         };
     },
@@ -62,7 +62,7 @@ export default {
         else if (this.path === '/AccountManage') {
             this.activeIndex = '3';
         }
-        else if (this.path === '/RelationshipSystem') {
+        else if (this.path === '/RetraceSystem') {
             this.activeIndex = '4';
         }
         else if (this.path === '/DigitalObjectApplyUser') {
@@ -91,7 +91,7 @@ export default {
         }
         else if (this.path === '/BlocksChainQuery') {
             this.activeIndex = '8';
-        } 
+        }
         
     },
     watch: {
@@ -128,7 +128,7 @@ export default {
                 this.$router.push('/AccountManage')
             } 
             else if (key === '4') {
-                this.$router.push('/RelationshipSystem')
+                this.$router.push('/RetraceSystem')
             } 
             else if (key === '5') {
                 this.$router.push('/DigitalObjectApplyUser')

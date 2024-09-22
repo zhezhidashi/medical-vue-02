@@ -124,7 +124,7 @@ export default {
     },
     mounted() {
         let _this = this;
-        postForm('/users/getProjects', {}, _this, function(res) {
+        postForm('/projectInfos/getProjectInfo', {}, _this, function(res) {
             if(res.code === 200) {
                 for (let item of res.data.records) {
                     _this.projectList.push({

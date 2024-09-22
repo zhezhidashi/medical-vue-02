@@ -25,7 +25,13 @@ module.exports = defineConfig({
                 pathRewrite: {'^/ganache': ''},
                 ws: true,
                 changeOrigin: true
-            }
+            },
+            '/public': {
+                target: process.env.PUBLIC_URL,
+                pathRewrite: {'^/public': ''},
+                ws: true,
+                changeOrigin: true
+            },
         },
     },
 })

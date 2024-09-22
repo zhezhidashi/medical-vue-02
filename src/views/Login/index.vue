@@ -77,7 +77,7 @@ export default {
             };
 
             loginRequest('/login', params, _this, function (res) {
-                _this.$router.push({ path: "/MainPage" });
+                _this.$router.push({ path: "/RetraceSystem" });
             });
         },
     },
