@@ -9,7 +9,7 @@
                 <div class="el-dropdown-link" style="display: flex; flex-direction: row; align-items: center;">
                     <div style="display: flex; flex-direction: column; font-weight: bold;">
                         <div>机构：正大天晴 </div>
-                        <!-- <div>用户：{{ username }}</div> -->
+                        <div>用户：user</div>
                     </div> 
                     <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
                 </div>
