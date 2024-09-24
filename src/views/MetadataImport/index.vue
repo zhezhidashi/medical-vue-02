@@ -15,7 +15,7 @@
             <el-divider></el-divider>
 
             <el-table :data="tableData" stripe border style="width: 95%;">
-                <el-table-column prop="doi" label="DOI" width="180"></el-table-column>
+                <el-table-column prop="doi" label="数字对象标识" width="180"></el-table-column>
                 <el-table-column prop="name" label="数字对象名称" width="180"></el-table-column>
                 <el-table-column prop="institutionDoi" label="机构DOI" width="180"></el-table-column>
                 <el-table-column prop="institutionName" label="机构名字" width="180"></el-table-column>

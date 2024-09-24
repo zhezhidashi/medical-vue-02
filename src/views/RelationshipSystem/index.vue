@@ -2,7 +2,7 @@
     <div style="display: flex;">
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
             <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                <el-form-item prop="doi" label="DOI" class="SearchFormItem">
+                <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
                     <el-input v-model="searchForm.doi" style="width: 200px;"></el-input>
                 </el-form-item>
                 <el-form-item prop="doiName" label="数字对象名称" class="SearchFormItem">
@@ -18,7 +18,7 @@
                 <el-card style="width: 90%; margin-bottom: 24px;">
 
                     <el-descriptions title="数字对象详情" :column="1">
-                        <el-descriptions-item label="DOI">{{ doiDetail.doi }}</el-descriptions-item>
+                        <el-descriptions-item label="数字对象标识">{{ doiDetail.doi }}</el-descriptions-item>
                         <el-descriptions-item label="数字对象名称">{{ doiDetail.doiName }}</el-descriptions-item>
                         <el-descriptions-item label="数字对象来源">{{ doiDetail.doiSource }}</el-descriptions-item>
                         <el-descriptions-item label="数字对象描述">{{ doiDetail.doiDescription }}</el-descriptions-item>

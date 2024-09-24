@@ -9,7 +9,7 @@
                     </el-select>
                     <!-- <el-input v-model="searchForm.project" placeholder="请输入项目DOI"></el-input> -->
                 </el-form-item>
-                <el-form-item prop="doi" label="DOI" class="SearchFormItem">
+                <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
                     <el-input v-model="searchForm.doi"></el-input>
                 </el-form-item>
                 <el-form-item prop="name" label="数字对象名称" class="SearchFormItem">
@@ -51,7 +51,7 @@
             <el-divider></el-divider>
 
             <el-table :data="resultTable" stripe border style="width: 95%;">
-                <el-table-column prop="doi" label="DOI"></el-table-column>
+                <el-table-column prop="doi" label="数字对象标识"></el-table-column>
                 <el-table-column prop="doiName" label="数字对象名称"></el-table-column>
                 <el-table-column prop="doiSource" label="数字对象来源"></el-table-column>
                 <el-table-column prop="doiDesc" label="数字对象描述"></el-table-column>

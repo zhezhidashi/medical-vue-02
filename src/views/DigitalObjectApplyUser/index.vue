@@ -4,13 +4,13 @@
         <el-collapse v-model="activeNames" @change="collapseChange">
             <el-collapse-item :title="collapseTitle" name="1">
                 <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                    <el-form-item class="SearchFormItem" label="申请机构DOI">
+                    <el-form-item class="SearchFormItem" label="申请机构标识">
                         <el-input v-model="searchForm.applicantInstitutionDoi"></el-input>
                     </el-form-item>
-                    <el-form-item class="SearchFormItem" label="接受机构DOI">
+                    <el-form-item class="SearchFormItem" label="接受机构标识">
                         <el-input v-model="searchForm.recipientInstitutionDoi"></el-input>
                     </el-form-item>
-                    <el-form-item class="SearchFormItem" label="DOI">
+                    <el-form-item class="SearchFormItem" label="数字对象标识">
                         <el-input v-model="searchForm.doi"></el-input>
                     </el-form-item>
                     <el-form-item class="SearchFormItem" label="申请类型">
@@ -60,9 +60,9 @@
         </div>
 
         <el-table :data="applyTable" style="width: 95%;" stripe border>
-            <el-table-column prop="applicantInstitutionDoi" label="申请机构DOI"></el-table-column>
-            <el-table-column prop="recipientInstitutionDoi" label="接受机构DOI"></el-table-column>
-            <el-table-column prop="doi" label="DOI"></el-table-column>
+            <el-table-column prop="applicantInstitutionDoi" label="申请机构标识"></el-table-column>
+            <el-table-column prop="recipientInstitutionDoi" label="接受机构标识"></el-table-column>
+            <el-table-column prop="doi" label="数字对象标识"></el-table-column>
             <el-table-column prop="appType" label="申请类型">
                 <template slot-scope="scope">
                     <el-tag v-if="scope.row.appType === 1">实体型</el-tag>
@@ -98,7 +98,7 @@
         <el-dialog title="增加申请" :visible.sync="addApplyDialogVisible" width="80%" :before-close="addApplyCancel">
             <el-form :model="applyForm" ref="applyForm" label-width="auto" align="left">
                 
-                <el-form-item label="DOI" prop="doi">
+                <el-form-item label="数字对象标识" prop="doi">
                     <el-select v-model="applyForm.doi" placeholder="请选择">
                         <div v-for="(item, index) in doiList" :key=index>
                             <el-option :label="item.label" :value="item.value"></el-option>
@@ -113,7 +113,7 @@
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="接受机构DOI" prop="recipientInstitutionDoi">
+                <el-form-item label="接受机构标识" prop="recipientInstitutionDoi">
                     <el-select v-model="applyForm.recipientInstitutionDoi" placeholder="请选择">
                         <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>

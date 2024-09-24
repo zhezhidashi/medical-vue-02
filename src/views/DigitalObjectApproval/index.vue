@@ -5,13 +5,13 @@
             <el-collapse-item :title="collapseTitle" name="1">
 
                 <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                    <el-form-item class="SearchFormItem" label="申请机构DOI">
+                    <el-form-item class="SearchFormItem" label="数字对象标识">
                         <el-input v-model="searchForm.applicantInstitutionDoi"></el-input>
                     </el-form-item>
                     <el-form-item class="SearchFormItem" label="申请人ID">
                         <el-input v-model="searchForm.applicantUserId"></el-input>
                     </el-form-item>
-                    <el-form-item class="SearchFormItem" label="DOI">
+                    <el-form-item class="SearchFormItem" label="数字对象标识">
                         <el-input v-model="searchForm.doi"></el-input>
                     </el-form-item>
                     <el-form-item class="SearchFormItem" label="申请类型">
@@ -58,9 +58,9 @@
         <div style="margin-top: 24px;"></div>
         
         <el-table :data="approvalTable" style="width: 95%;" stripe border>
-            <el-table-column prop="applicantInstitutionDoi" label="申请机构DOI"></el-table-column>
+            <el-table-column prop="applicantInstitutionDoi" applicantInstitutionDoi></el-table-column>
             <el-table-column prop="applicantUserId" label="申请人ID"></el-table-column>
-            <el-table-column prop="doi" label="DOI"></el-table-column>
+            <el-table-column prop="doi" label="数字对象标识"></el-table-column>
             <el-table-column prop="appType" label="申请类型">
                 <template slot-scope="scope">
                     <el-tag v-if="scope.row.appType === 1">实体型</el-tag>

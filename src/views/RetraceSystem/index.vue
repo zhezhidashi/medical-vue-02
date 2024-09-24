@@ -6,12 +6,12 @@
                 <el-card style="width: 90%; margin-bottom: 24px;">
 
                     <el-descriptions title="数字对象详情" :column="1">
-                        <el-descriptions-item label="数字对象标识">{{ doiDetail[doiIndex].doi }}</el-descriptions-item>
-                        <el-descriptions-item label="数字对象名称">{{ doiDetail[doiIndex].doiName }}</el-descriptions-item>
-                        <!-- <el-descriptions-item label="数字对象来源">{{ doiDetail[doiIndex].doiSource }}</el-descriptions-item> -->
-                        <el-descriptions-item label="数字对象所属项目">{{ doiDetail[doiIndex].doiProject
+                        <el-descriptions-item label="数字对象标识">{{ doiDetailNow[doiIndex].doi }}</el-descriptions-item>
+                        <el-descriptions-item label="数字对象名称">{{ doiDetailNow[doiIndex].doiName }}</el-descriptions-item>
+                        <!-- <el-descriptions-item label="数字对象来源">{{ doiDetailNow[doiIndex].doiSource }}</el-descriptions-item> -->
+                        <el-descriptions-item label="数字对象所属项目">{{ doiDetailNow[doiIndex].doiProject
                             }}</el-descriptions-item>
-                        <el-descriptions-item label="数字对象类型">{{ doiDetail[doiIndex].doiType }}</el-descriptions-item>
+                        <el-descriptions-item label="数字对象类型">{{ doiDetailNow[doiIndex].doiType }}</el-descriptions-item>
                     </el-descriptions>
                 </el-card>
                 <el-card style="width: 90%; margin-bottom: 24px;">
@@ -28,9 +28,19 @@ export default {
     name: "RetraceSystem",
     data() {
         return {
+            graphNo: 2,
 
             // 数字对象详情
-            doiDetail: [
+            doiDetail1: [
+                { "doi": "86.598.7053548138\/do.d0e1a7e3-2028-4d5a-a0a3-6c122ca67e8c", "doiName": "raw-data.xlsx", "doiSource": null, "doiProject": "围术期抗栓药物管理临床路径", "doiType": "原始数据文件" },
+                { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "doiName": "EDC", "doiSource": "raw-data.xlsx", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "EDC" },
+                { "doi": "86.633.1412578611\/do.b3524146-fe5f-4a15-935c-ff1ae6213f12", "doiName": "DM", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.642.9981100019\/do.e8b05ced-4f38-4bd2-8668-76b1842a74f1", "doiName": "SUPPDM", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.546.7107975866\/do.24e9fbdb-a0ec-45fa-907f-12e9b8fc4831", "doiName": "MH", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.328.1809789528\/do.bb74025c-1cbe-432d-9e33-5eeab0db2ac3", "doiName": "SUPPMH", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+            ],
+
+            doiDetail2: [
                 { "doi": "86.999.5629936870\/do.d9f13c9c-78e4-42c6-898c-35534111a7c8", "doiName": "adrs.sas7bdat", "doiSource": "adrs.txt", "doiProject": "TQ-B2303-III-01-关键注册临床-III期", "doiType": "ADAM" },
                 { "doi": "86.778.6080935952\/do.6749e8bf-8b8d-4424-a58c-2d6d7195b7e8", "doiName": "adrs.txt", "doiSource": null, "doiProject": "TQ-B2303-III-01-关键注册临床-III期", "doiType": "代码" },
                 { "doi": "86.168.3014884855\/do.dc83dab2-32de-479c-981e-2ee1e0c017d9", "doiName": "adsl.sas7bdat", "doiSource": "dm.sas7bdat,ex.sas7bdat,ds.sas7bdat,sc.sas7bdat,vs.sas7bdat,qs.sas7bdat,lb.sas7bdat,adsl.txt", "doiProject": "TQ-B2303-III-01-关键注册临床-III期", "doiType": "ADAM" },
@@ -48,8 +58,18 @@ export default {
                 { "doi": "86.472.0045666043\/do.624a30a5-c61d-487e-a918-bb858f20bd47", "doiName": "ts.txt", "doiSource": null, "doiProject": "TQ-B2303-III-01-关键注册临床-III期", "doiType": "代码" },
                 { "doi": "86.303.5992206572\\\/do.2606ef10-c9d1-47e2-864e-1a3c3ade9fc1", "doiName": "vs.sas7bdat", "doiSource": null, "doiProject": "TQ-B2303-III-01-关键注册临床-III期", "doiType": "SDTM" },
                 { "doi": "86.438.6101112648\\\/do.ae8c75fa-e07a-482a-bdc2-d69dc29643a1", "doiName": "TQ-B2303-III-01-MERGED-DATA.csv", "doiSource": "adsl.sas7bdat,adtte.sas7bdat,adrs.sas7bdat,transfer.R", "doiProject": "TQ-B2303-III-01-关键注册临床-III期", "doiType": "结构化数据" },
-
             ],
+
+            doiDetailNow: [
+                { 
+                    "doi": "", 
+                    "doiName": "", 
+                    "doiSource": "", 
+                    "doiProject": "", 
+                    "doiType": "" 
+                }
+            ],
+
             doiIndex: 0,
 
             graphEchartsOptions: {
@@ -63,13 +83,21 @@ export default {
                 legend: [
                     {
                         // 定义图例
-                        data: ['SDTM', 'ADAM', '代码', '结构化数据', '非结构化数据']
+                        data: ["原始数据文件", "EDC", 'SDTM', 'ADAM', '代码', '结构化数据', '非结构化数据']
                     },
                 ],
                 series: {
                     type: 'graph',
                     layout: 'force',
                     categories: [
+                        {
+                            name: '原始数据文件',
+                            itemStyle: { color: 'purple' },
+                        },
+                        {
+                            name: 'EDC',
+                            itemStyle: { color: 'yellow' },
+                        },
                         {
                             name: 'SDTM',
                             itemStyle: { color: 'red' },
@@ -88,7 +116,7 @@ export default {
                         },
                         {
                             name: '非结构化数据',
-                            itemStyle: { color: 'purple' },
+                            itemStyle: { color: 'grey' },
                         },
                     ],
                     nodes: [
@@ -128,12 +156,26 @@ export default {
         };
     },
     mounted() {
-        this.initEcharts();
+        // 设置项目id
+        this.$store.commit('getProid');
+        postData.user = this.$store.state.user.proid;
+    
+        if(proid === "657cc8720201477d9453d5d0b5e27e6d") this.graphNo = 2;
+        else this.graphNo = 1;
+        
+        if (this.graphNo === 1) {
+            this.initEcharts(this.doiDetail1);
+            this.doiDetailNow = this.doiDetail1;
+        }
+        else {
+            this.initEcharts(this.doiDetail2);
+            this.doiDetailNow = this.doiDetail2;
+        }
     },
     methods: {
-        createEdge(fromIdx, toNode) {
-            for (let idx = 0; idx < this.doiDetail.length; idx++) {
-                if (this.doiDetail[idx].doiName === toNode) {
+        createEdge(fromIdx, toNode, doiList) {
+            for (let idx = 0; idx < doiList.length; idx++) {
+                if (doiList[idx].doiName === toNode) {
                     this.graphEchartsOptions.series.links.push({
                         source: fromIdx,
                         target: idx
@@ -142,18 +184,18 @@ export default {
             }
         },
 
-        initEcharts() {
-            for (let idx = 0; idx < this.doiDetail.length; idx++) {
+        initEcharts(doiList) {
+            for (let idx = 0; idx < doiList.length; idx++) {
                 this.graphEchartsOptions.series.nodes.push({
                     id: idx,
-                    name: this.doiDetail[idx].doiName,
-                    category: this.doiDetail[idx].doiType,
+                    name: doiList[idx].doiName,
+                    category: doiList[idx].doiType,
                     symbolSize: 20
                 })
-                if (this.doiDetail[idx].doiSource != null) {
-                    let edges = this.doiDetail[idx].doiSource.split(',')
+                if (doiList[idx].doiSource != null) {
+                    let edges = doiList[idx].doiSource.split(',')
                     for (let item of edges) {
-                        this.createEdge(idx, item)
+                        this.createEdge(idx, item, doiList)
                     }
                 }
 
@@ -167,12 +209,12 @@ export default {
             });
 
             // 监听点击事件
-            myChart.on('click', params => {
-                if (params.dataType === 'node') {
-                    // 执行你想要的函数
-                    this.handleClickNode(params.data.id);
-                }
-            });
+            // myChart.on('click', params => {
+            //     if (params.dataType === 'node') {
+            //         // 执行你想要的函数
+            //         this.handleClickNode(params.data.id);
+            //     }
+            // });
         },
 
 

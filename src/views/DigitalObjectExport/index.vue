@@ -8,7 +8,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item prop="doi" label="DOI" class="SearchFormItem">
+                <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
                     <el-input v-model="searchForm.doi"></el-input>
                 </el-form-item>
                 <el-form-item prop="name" label="数字对象名称" class="SearchFormItem">
