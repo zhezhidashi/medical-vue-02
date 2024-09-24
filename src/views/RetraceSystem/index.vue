@@ -158,7 +158,8 @@ export default {
     mounted() {
         // 设置项目id
         this.$store.commit('getProid');
-        postData.user = this.$store.state.user.proid;
+        let proid = this.$store.state.user.proid;
+        console.log(proid)
     
         if(proid === "657cc8720201477d9453d5d0b5e27e6d") this.graphNo = 2;
         else this.graphNo = 1;
