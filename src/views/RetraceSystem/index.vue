@@ -32,8 +32,7 @@ export default {
 
             // 数字对象详情
             doiDetail1: [
-                { "doi": "86.598.7053548138\/do.d0e1a7e3-2028-4d5a-a0a3-6c122ca67e8c", "doiName": "raw-data.xlsx", "doiSource": null, "doiProject": "围术期抗栓药物管理临床路径", "doiType": "原始数据文件" },
-                { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "doiName": "EDC", "doiSource": "raw-data.xlsx", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "EDC" },
+                { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "doiName": "EDC", "doiSource": null, "doiProject": "围术期抗栓药物管理临床路径", "doiType": "EDC" },
                 { "doi": "86.633.1412578611\/do.b3524146-fe5f-4a15-935c-ff1ae6213f12", "doiName": "DM", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
                 { "doi": "86.642.9981100019\/do.e8b05ced-4f38-4bd2-8668-76b1842a74f1", "doiName": "SUPPDM", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
                 { "doi": "86.546.7107975866\/do.24e9fbdb-a0ec-45fa-907f-12e9b8fc4831", "doiName": "MH", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
@@ -61,12 +60,12 @@ export default {
             ],
 
             doiDetailNow: [
-                { 
-                    "doi": "", 
-                    "doiName": "", 
-                    "doiSource": "", 
-                    "doiProject": "", 
-                    "doiType": "" 
+                {
+                    "doi": "",
+                    "doiName": "",
+                    "doiSource": "",
+                    "doiProject": "",
+                    "doiType": ""
                 }
             ],
 
@@ -135,10 +134,15 @@ export default {
                     },
                     lineStyle: {
                         normal: {
-                            width: 4, // 连线的粗细
-                            color: 'darkpurple', // 可以是单一颜色，也可以是颜色数组或回调函数
+                            width: 4,
+                            color: 'darkpurple',
+                            opacity: 0.9,
+                            width: 2,
+                            curveness: 0,
+                            arrow: true
                         },
                     },
+                    edgeSymbol: ['none', 'arrow'],
                     emphasis: {
                         focus: 'adjacency',
                         lineStyle: {
@@ -160,10 +164,10 @@ export default {
         this.$store.commit('getProid');
         let proid = this.$store.state.user.proid;
         console.log(proid)
-    
-        if(proid === "657cc8720201477d9453d5d0b5e27e6d") this.graphNo = 2;
+
+        if (proid === "657cc8720201477d9453d5d0b5e27e6d") this.graphNo = 2;
         else this.graphNo = 1;
-        
+
         if (this.graphNo === 1) {
             this.initEcharts(this.doiDetail1);
             this.doiDetailNow = this.doiDetail1;
@@ -178,8 +182,8 @@ export default {
             for (let idx = 0; idx < doiList.length; idx++) {
                 if (doiList[idx].doiName === toNode) {
                     this.graphEchartsOptions.series.links.push({
-                        source: fromIdx,
-                        target: idx
+                        source: idx,
+                        target: fromIdx
                     })
                 }
             }
