@@ -81,7 +81,7 @@ const routes = [
                 path: '/RelationshipSystem',
                 name: 'RelationshipSystem',
                 meta: {
-                    title: '流转追溯系统'
+                    title: '关系系统'
                 },
                 component: () => import('@/views/RelationshipSystem')
             },
@@ -165,6 +165,22 @@ const routes = [
                 },
                 component: () => import('@/views/BlocksChainQuery')
             },
+            {
+                path: '/TraceSystem',
+                name: 'TraceSystem',
+                meta: {
+                    title: '痕迹系统'
+                },
+                component: () => import('@/views/TraceSystem')
+            },
+            {
+                path: '/RetraceSystem',
+                name: 'RetraceSystem',
+                meta: {
+                    title: '追溯系统'
+                },
+                component: () => import('@/views/RetraceSystem')
+            }
         ]
     },
 ]

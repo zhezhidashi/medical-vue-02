@@ -276,6 +276,7 @@ export default {
                     } else {
                         dataItem.institutionList = [];
                     }
+
                     for (let item of item.userBoList) {
                         dataItem.userBoList.push(item.uid)
                         dataItem.userNameList.push(item.username)
@@ -341,6 +342,12 @@ export default {
         },
         modifyProjectConfirm() {
             let _this = this;
+
+            // 将 selected = true 的机构 DOI 添加到 involvedInstitutionDoi 中，以逗号分隔
+            for (let item of this.modifyProjectItem.institutionList) {
+                this.modifyProjectItem.involvedInstitutionDoi += item + ",";
+            }
+
             let postData = {
                 pid: _this.projectTable[_this.modifyProjectIndex].pid,
                 name: _this.modifyProjectItem.name,
@@ -349,13 +356,33 @@ export default {
                 contactEmail: _this.modifyProjectItem.contactEmail,
                 description: _this.modifyProjectItem.description,
                 applyDocumentAddress: _this.modifyProjectItem.projectApplyFile,
+                involvedInstitutionDoi: _this.modifyProjectItem.involvedInstitutionDoi,
             }
 
-            // 将 selected = true 的机构 DOI 添加到 involvedInstitutionDoi 中，以逗号分隔
-            for (let item of this.modifyProjectItem.institutionList) {
-                this.modifyProjectItem.involvedInstitutionDoi += item + ",";
+            
+
+            // 判断项目信息和之前有无变动，因为修改项目信息需要审批，修改用户权限不需要审批。
+            let oldInfo = _this.projectTable[_this.modifyProjectIndex];
+            let newInfo = _this.modifyProjectItem;
+            let projectInfoModify = oldInfo.name !== newInfo.name || oldInfo.user !== newInfo.user 
+            || oldInfo.contactInfo !== newInfo.contactInfo || oldInfo.contactEmail !== newInfo.contactEmail
+            || oldInfo.description !== newInfo.description || oldInfo.applyDocumentAddress !== newInfo.applyDocumentAddress
+            || oldInfo.involvedInstitutionDoi !== newInfo.involvedInstitutionDoi;
+            
+            if(projectInfoModify) {
+                postForm("/projectOrder/modify", postData, _this, function (res) {
+                    if (res.code === 200) {
+                        _this.$message({
+                            type: 'success',
+                            message: '修改成功'
+                        });
+                        _this.getData({});
+                        _this.modifyProjectDialogVisible = false;
+                    }
+                })
             }
 
+            // 修改用户权限部分
             let userListAdd = [];
             let userListDelete = [];
             // 获取新增和删除的用户列表
@@ -369,17 +396,7 @@ export default {
                     userListDelete.push(item);
                 }
             }
-
-            postForm("/projectOrder/modify", postData, _this, function (res) {
-                if (res.code === 200) {
-                    _this.$message({
-                        type: 'success',
-                        message: '修改成功'
-                    });
-                    _this.getData({});
-                    _this.modifyProjectDialogVisible = false;
-                }
-            })
+            
 
             if (userListAdd.length !== 0) {
                 postData = {
@@ -393,6 +410,7 @@ export default {
                             message: '添加用户成功'
                         });
                     }
+                    _this.getData(_this.searchForm);
                 })
             }
 
@@ -408,8 +426,14 @@ export default {
                             message: '删除用户成功'
                         });
                     }
+                    // 避免重复刷新页面
+                    if (userListAdd.length === 0) {
+                        _this.getData(_this.searchForm);
+                    }
                 })
             }
+
+            _this.modifyProjectDialogVisible = false;
         },
 
         // 处理上传成功

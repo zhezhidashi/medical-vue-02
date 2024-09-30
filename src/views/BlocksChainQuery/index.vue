@@ -76,6 +76,14 @@ export default {
         this.getPermissionControlData();
     },
     methods: {
+        InsProSync() {
+
+        },
+
+        ProUserSync() {
+
+        },
+
         getData() {
             let _this = this;
             postFormGanache('/getBalance', {}, _this, function (res) {

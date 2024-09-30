@@ -25,7 +25,7 @@
                 <div v-for="(item, index) in projectsList">
                     <el-card style="width: 100%; margin-bottom: 24px;">
                         <el-descriptions :title="item.name">
-                            <el-descriptions-item label="项目DOI">{{ item.projectDoi }}</el-descriptions-item>
+                            <el-descriptions-item label="项目标识">{{ item.projectDoi }}</el-descriptions-item>
                             <el-descriptions-item label="项目负责人">{{ item.user }}</el-descriptions-item>
                             <el-descriptions-item label="联系方式">{{ item.contactInfo }}</el-descriptions-item>
                         </el-descriptions>

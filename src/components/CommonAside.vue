@@ -12,7 +12,11 @@
                 <el-menu-item index="2-2">项目列表</el-menu-item>
             </el-submenu>
             <el-menu-item v-show="isAdmin" index="3">账号管理</el-menu-item>
-            <el-menu-item v-show="!isAdmin" index="4">流转追溯系统</el-menu-item>
+            <el-submenu v-show="!isAdmin" index="4">
+                <template slot="title">流转追溯系统</template>
+                <el-menu-item index="4-1">痕迹系统</el-menu-item>
+                <el-menu-item index="4-2">追溯系统</el-menu-item>
+            </el-submenu>
             <el-menu-item v-show="!isAdmin" index="5">数字对象申请</el-menu-item>
             <el-submenu v-show="isAdmin" index="6">
                 <template slot="title">数字对象管理</template>
@@ -62,8 +66,11 @@ export default {
         else if (this.path === '/AccountManage') {
             this.activeIndex = '3';
         }
-        else if (this.path === '/RelationshipSystem') {
-            this.activeIndex = '4';
+        else if (this.path === '/TraceSystem') {
+            this.activeIndex = '4-1';
+        }
+        else if (this.path === '/RetraceSystem') {
+            this.activeIndex = '4-2'
         }
         else if (this.path === '/DigitalObjectApplyUser') {
             this.activeIndex = '5';
@@ -127,9 +134,12 @@ export default {
             else if (key === '3') {
                 this.$router.push('/AccountManage')
             } 
-            else if (key === '4') {
-                this.$router.push('/RelationshipSystem')
+            else if (key === '4-1') {
+                this.$router.push('/TraceSystem')
             } 
+            else if (key === '4-2') {
+                this.$router.push('/RetraceSystem')
+            }
             else if (key === '5') {
                 this.$router.push('/DigitalObjectApplyUser')
             } 

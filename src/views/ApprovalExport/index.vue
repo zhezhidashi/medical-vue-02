@@ -3,7 +3,7 @@
         <el-collapse v-model="activeNames" @change="collapseChange">
             <el-collapse-item :title="collapseTitle" name="1">
                 <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                    <el-form-item class="SearchFormItem" label="申请机构DOI">
+                    <el-form-item class="SearchFormItem" label="申请机构标识">
                         <el-input v-model="searchForm.applicantInstitutionDoi"></el-input>
                     </el-form-item>
                     <el-form-item class="SearchFormItem" label="申请人ID">

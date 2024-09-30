@@ -4,13 +4,13 @@
         <el-collapse v-model="activeNames" @change="collapseChange">
             <el-collapse-item :title="collapseTitle" name="1">
                 <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                    <el-form-item class="SearchFormItem" label="申请机构DOI">
+                    <el-form-item class="SearchFormItem" label="申请机构标识">
                         <el-input v-model="searchForm.applicantInstitutionDoi"></el-input>
                     </el-form-item>
-                    <el-form-item class="SearchFormItem" label="接受机构DOI">
+                    <el-form-item class="SearchFormItem" label="接受机构标识">
                         <el-input v-model="searchForm.recipientInstitutionDoi"></el-input>
                     </el-form-item>
-                    <el-form-item class="SearchFormItem" label="DOI">
+                    <el-form-item class="SearchFormItem" label="数字对象标识">
                         <el-input v-model="searchForm.doi"></el-input>
                     </el-form-item>
                     <el-form-item class="SearchFormItem" label="申请类型">
@@ -55,9 +55,9 @@
         </el-collapse>
         <div style="margin-top: 24px;"></div>
         <el-table :data="applyTable" style="width: 95%;" stripe border>
-            <el-table-column prop="applicantInstitutionDoi" label="申请机构DOI"></el-table-column>
-            <el-table-column prop="recipientInstitutionDoi" label="接受机构DOI"></el-table-column>
-            <el-table-column prop="doi" label="DOI"></el-table-column>
+            <el-table-column prop="applicantInstitutionDoi" label="申请机构标识"></el-table-column>
+            <el-table-column prop="recipientInstitutionDoi" label="接受机构标识"></el-table-column>
+            <el-table-column prop="doi" label="数字对象标识"></el-table-column>
             <el-table-column prop="appType" label="申请类型">
                 <template slot-scope="scope">
                     <el-tag v-if="scope.row.appType === 1">实体型</el-tag>
@@ -133,7 +133,7 @@ export default {
                     applicantInstitutionDoi: '申请机构DOI',
                     applicantUserId: '申请人ID',
                     recipientInstitutionDoi: '接受机构DOI',
-                    doi: 'DOI',
+                    doi: '数字对象标识',
                     appType: '申请类型',
                     appName: '申请名称',
                     appContent: '申请内容',
