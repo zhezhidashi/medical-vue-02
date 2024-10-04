@@ -9,10 +9,10 @@
                     <el-form-item prop="user" label="项目负责人" class="SearchFormItem">
                         <el-input v-model="searchForm.user"></el-input>
                     </el-form-item>
-                    <el-form-item prop="projectDoi" label="项目DOI" class="SearchFormItem">
+                    <el-form-item prop="projectDoi" label="项目标识" class="SearchFormItem">
                         <el-input v-model="searchForm.projectDoi"></el-input>
                     </el-form-item>
-                    <el-form-item prop="institutionDoi" label="机构DOI" class="SearchFormItem">
+                    <el-form-item prop="institutionDoi" label="机构标识" class="SearchFormItem">
                         <el-input v-model="searchForm.institutionDoi"></el-input>
                     </el-form-item>
                     <el-form-item prop="contactInfo" label="项目联系方式" class="SearchFormItem">
@@ -25,7 +25,7 @@
                         <el-input v-model="searchForm.description"></el-input>
                     </el-form-item>
 
-                    <el-form-item prop="createTimeRange" label="申请时间" class="SearchFormTimePicker">
+                    <!-- <el-form-item prop="createTimeRange" label="申请时间" class="SearchFormTimePicker">
                         <el-date-picker value-format="timestamp" v-model="searchForm.createTimeRange" type="daterange"
                             range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
@@ -35,7 +35,7 @@
                         <el-date-picker value-format="timestamp" v-model="searchForm.updateTimeRange" type="daterange"
                             range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
-                    </el-form-item>
+                    </el-form-item> -->
                 </el-form>
 
                 <el-button type="primary" @click="searchData">搜索</el-button>
@@ -45,14 +45,14 @@
 
         <el-table :data="projectTable" stripe border style="width: 95%;">
             <el-table-column prop="name" label="项目名称" align="center"></el-table-column>
-            <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
-            <el-table-column prop="projectDoi" label="项目DOI" align="center"></el-table-column>
-            <el-table-column prop="institutionDoi" label="所属机构DOI" align="center"></el-table-column>
-            <el-table-column prop="involvedInstitutionDoi" label="参与机构DOI" align="center"></el-table-column>
+            <el-table-column prop="user" label="机构" align="center"></el-table-column>
+            <el-table-column prop="projectDoi" label="项目标识" align="center"></el-table-column>
+            <el-table-column prop="institutionDoi" label="机构标识" align="center"></el-table-column>
+            <!-- <el-table-column prop="involvedInstitutionDoi" label="参与机构标识" align="center"></el-table-column> -->
             <el-table-column prop="contactInfo" label="项目联系方式" align="center"></el-table-column>
             <el-table-column prop="contactEmail" label="负责人邮箱" align="center"></el-table-column>
             <el-table-column prop="description" label="项目描述" align="center"></el-table-column>
-            <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
+            <!-- <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column> -->
             <el-table-column prop="updateTime" label="修改时间" align="center"></el-table-column>
             <el-table-column prop="userBoList" label="用户列表" align="center">
                 <template slot-scope="scope">

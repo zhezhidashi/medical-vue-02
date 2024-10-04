@@ -10,7 +10,7 @@
                 <div class="el-dropdown-link" style="display: flex; flex-direction: row; align-items: center;">
                     <div style="display: flex; flex-direction: column; font-weight: bold;">
                         <div>机构：{{ insName }} </div>
-                        <div>用户：user</div>
+                        <div>用户：user001</div>
                     </div>
 
                 </div>
