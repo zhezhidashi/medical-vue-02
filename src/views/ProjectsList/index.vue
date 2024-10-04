@@ -43,7 +43,7 @@
         </el-collapse>
         <div style="margin-top: 24px;"></div>
 
-        <el-table :data="projectTable" stripe border style="width: 95%;" >
+        <el-table :data="projectTable" stripe border style="width: 95%;">
             <el-table-column prop="name" label="项目名称" align="center"></el-table-column>
             <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
             <el-table-column prop="projectDoi" label="项目DOI" align="center"></el-table-column>
@@ -221,6 +221,7 @@ export default {
     mounted() {
         // 获取组网组列表
         let _this = this;
+
         postForm('/networkGroups/getInstitutionsByGid', {}, _this, function (res) {
             for (let item of res.data.list) {
                 _this.institutionDoiList.push({
@@ -254,8 +255,9 @@ export default {
 
             // 设置项目id
             this.$store.commit('getProid')
-            postData.user = this.$store.state.user.proid
-
+            let proid = this.$store.state.user.proid
+            postData.description = proid
+            console.log("@@@", proid)
 
             postForm('/projectInfos/getProjectInfo', postData, _this, function (res) {
                 _this.pages = res.data.pages;
@@ -364,17 +366,17 @@ export default {
                 involvedInstitutionDoi: _this.modifyProjectItem.involvedInstitutionDoi,
             }
 
-            
+
 
             // 判断项目信息和之前有无变动，因为修改项目信息需要审批，修改用户权限不需要审批。
             let oldInfo = _this.projectTable[_this.modifyProjectIndex];
             let newInfo = _this.modifyProjectItem;
-            let projectInfoModify = oldInfo.name !== newInfo.name || oldInfo.user !== newInfo.user 
-            || oldInfo.contactInfo !== newInfo.contactInfo || oldInfo.contactEmail !== newInfo.contactEmail
-            || oldInfo.description !== newInfo.description || oldInfo.applyDocumentAddress !== newInfo.applyDocumentAddress
-            || oldInfo.involvedInstitutionDoi !== newInfo.involvedInstitutionDoi;
-            
-            if(projectInfoModify) {
+            let projectInfoModify = oldInfo.name !== newInfo.name || oldInfo.user !== newInfo.user
+                || oldInfo.contactInfo !== newInfo.contactInfo || oldInfo.contactEmail !== newInfo.contactEmail
+                || oldInfo.description !== newInfo.description || oldInfo.applyDocumentAddress !== newInfo.applyDocumentAddress
+                || oldInfo.involvedInstitutionDoi !== newInfo.involvedInstitutionDoi;
+
+            if (projectInfoModify) {
                 postForm("/projectOrder/modify", postData, _this, function (res) {
                     if (res.code === 200) {
                         _this.$message({

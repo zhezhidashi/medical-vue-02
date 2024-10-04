@@ -21,6 +21,7 @@ router.beforeEach((to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title;
     }
+
     // 没登录的话强制跳到登录页面
     store.commit('getToken')
     const token = store.state.user.token
@@ -32,7 +33,7 @@ router.beforeEach((to, from, next) => {
         })
     }
     else if (token && username && userType && to.name === 'Login') {
-        next({ name: 'RetraceSystem' })
+        next({ name: 'ProjectsList' })
     }
     else {
         next()

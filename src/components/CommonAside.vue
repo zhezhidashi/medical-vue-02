@@ -5,6 +5,7 @@
             text-color="#000080" active-text-color="#FF4040"
             background-color="#F0F8FF" >
             <el-menu-item index="0">主页</el-menu-item>
+            <el-menu-item index="2-2">项目列表</el-menu-item>
             <!-- <el-menu-item index="1">组网申请</el-menu-item> -->
             <!-- <el-submenu index="2">
                 <template slot="title">项目管理</template>
@@ -26,7 +27,7 @@
 
             <el-menu-item index="7">数字对象检索</el-menu-item>
             <!-- <el-menu-item index="8">智能合约权限管理</el-menu-item> -->
-
+            
         </el-menu>
     </div>
 </template>
