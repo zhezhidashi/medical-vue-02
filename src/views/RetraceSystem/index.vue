@@ -33,10 +33,16 @@ export default {
             // 数字对象详情
             doiDetail1: [
                 { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "doiName": "EDC", "doiSource": null, "doiProject": "围术期抗栓药物管理临床路径", "doiType": "EDC" },
-                { "doi": "86.633.1412578611\/do.b3524146-fe5f-4a15-935c-ff1ae6213f12", "doiName": "DM", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.633.1412578611\/do.b3524146-fe5f-4a15-935c-ff1ae6213f12", "doiName": "CM", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
                 { "doi": "86.642.9981100019\/do.e8b05ced-4f38-4bd2-8668-76b1842a74f1", "doiName": "SUPPDM", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
-                { "doi": "86.546.7107975866\/do.24e9fbdb-a0ec-45fa-907f-12e9b8fc4831", "doiName": "MH", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
-                { "doi": "86.328.1809789528\/do.bb74025c-1cbe-432d-9e33-5eeab0db2ac3", "doiName": "SUPPMH", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.546.7107975866\/do.24e9fbdb-a0ec-45fa-907f-12e9b8fc4831", "doiName": "DM", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.328.1809789528\/do.bb74025c-1cbe-432d-9e33-5eeab0db2ac3", "doiName": "SUPPDM", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.239.6314865150\/do.1d26018d-e7cf-4b6a-8384-d6f66660adff", "doiName": "EC", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.469.4473469688\/do.74b20618-1b46-4268-b4a8-3cdab5421890", "doiName": "SUPPEC", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.203.2508123815\/do.7f2a8048-bd6e-4bed-904c-e529ca4873f9", "doiName": "LB", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.074.8623266330\/do.e3f03938-0c6a-4c62-85b3-00e5df644f45", "doiName": "MH", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.905.1027919175\/do.f1773111-3f6e-4f69-9a6b-4d11c2ea3296", "doiName": "QS", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
+                { "doi": "86.269.9425625366\/do.4a2a2e4a-4a11-48d1-9a2c-2fe49e829fc7", "doiName": "SUPPQS", "doiSource": "EDC", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
             ],
 
             doiDetail2: [
