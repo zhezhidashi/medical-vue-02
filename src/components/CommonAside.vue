@@ -25,7 +25,7 @@
                 <el-menu-item index="6-6">导出动态私钥</el-menu-item>
             </el-submenu> -->
 
-            <el-menu-item index="7">数字对象检索</el-menu-item>
+            <!-- <el-menu-item index="7">数字对象检索</el-menu-item> -->
             <!-- <el-menu-item index="8">智能合约权限管理</el-menu-item> -->
             <el-menu-item index="9">数字对象封装</el-menu-item>
             
