@@ -27,6 +27,7 @@
 
             <el-menu-item index="7">数字对象检索</el-menu-item>
             <!-- <el-menu-item index="8">智能合约权限管理</el-menu-item> -->
+            <el-menu-item index="9">数字对象封装</el-menu-item>
             
         </el-menu>
     </div>
@@ -160,6 +161,9 @@ export default {
             }
             else if (key === '8-2') {
                 this.$router.push('/PermissionControl')
+            }
+            else if (key === '9') {
+                window.open("http://8.130.160.66:8085/")
             }
         },
     },
