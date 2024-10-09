@@ -14,6 +14,7 @@
             </el-submenu> -->
             <!-- <el-menu-item index="3">账号管理</el-menu-item> -->
             <el-menu-item index="4">流转追溯系统</el-menu-item>
+            <el-menu-item index="10">痕迹系统</el-menu-item>
             <el-menu-item index="5">数字对象申请</el-menu-item>
             <!-- <el-submenu index="6">
                 <template slot="title">数字对象管理</template>
