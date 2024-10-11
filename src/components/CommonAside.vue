@@ -164,7 +164,7 @@ export default {
                 this.$router.push('/PermissionControl')
             }
             else if (key === '9') {
-                window.open("http://8.130.160.66:8085/")
+                window.open("http://8.130.160.66:8085/Login?insName=正大天晴")
             }
         },
     },
