@@ -54,7 +54,7 @@
             <el-table-column prop="description" label="项目描述" align="center"></el-table-column>
             <!-- <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column> -->
             <el-table-column prop="updateTime" label="修改时间" align="center"></el-table-column>
-            <el-table-column prop="userBoList" label="用户列表" align="center">
+            <!-- <el-table-column prop="userBoList" label="用户列表" align="center">
                 <template slot-scope="scope">
                     <div v-for="item in scope.row.userNameList" :key="item">{{ item }}</div>
                 </template>
@@ -64,7 +64,7 @@
                     <el-button @click="modifyProject(props.row, props.$index)" type="primary"
                         size="small">修改</el-button>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
         </el-table>
 
         <div style="margin: 24px">
