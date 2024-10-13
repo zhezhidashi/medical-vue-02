@@ -65,7 +65,7 @@ const routes = [
                 path: '/ProjectsList',
                 name: 'ProjectsList',
                 meta: {
-                    title: '项目列表'
+                    title: '项目详情'
                 },
                 component: () => import('@/views/ProjectsList')
             },

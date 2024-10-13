@@ -219,17 +219,43 @@ export default {
         };
     },
     mounted() {
+        let _this = this;
         let proid = this.$route.query.proid;
         this.$store.commit("setProid", proid);
         let officeid = this.$route.query.officeid;
         this.$store.commit("setOfficeid", officeid);
+        let userid = this.$route.query.userid;
+        this.$store.commit("setUserid", userid);
 
-        console.log("***", proid, officeid)
+        if(userid === "8ead3a16f61c4362852b750cd49c95d2") {
+            _this.$store.commit("setNormalUsername", "user001")
+            _this.$store.commit("setInsName", "中日友好医院");
+        }
+        else if (userid === "1308da365f5a4cbfa2f3c1fb88c41025") {
+            _this.$store.commit("setNormalUsername", "user002")
+            _this.$store.commit("setInsName", "正大天晴药业集团股份有限公司");
+        }
+        else if (userid === "b86a7e041e36435fbcd8cc868f2753b1") {
+            _this.$store.commit("setNormalUsername", "user003")
+            _this.$store.commit("setInsName", "中国生物技术股份有限公司");
+        }
+        else if (userid === "cad5417cf1924e57b9ff89708a6cc380") {
+            _this.$store.commit("setNormalUsername", "user004")
+            _this.$store.commit("setInsName", "数据分析用户");
+        }
 
-        let _this = this;
-        loginRequest('/login', { username: "abc", password: "456" }, _this, function (res) {
-            _this.$router.push('/ProjectsList')
+        postForm("/userdes/getUserByDes", { description: userid }, _this, function (res) {
+            let normalUsername = res.data.username
+            let normalUid = res.data.uid
+            _this.$store.commit("setNormalUsername", normalUsername)
+            _this.$store.commit("setNormalUid", normalUid)
+
+            loginRequest('/login', { username: "abc", password: "456" }, _this, function (res) {
+                _this.$router.push('/ProjectsList')
+            })
         })
+
+
 
     },
     methods: {

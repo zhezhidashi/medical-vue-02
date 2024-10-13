@@ -257,7 +257,6 @@ export default {
             this.$store.commit('getProid')
             let proid = this.$store.state.user.proid
             postData.description = proid
-            console.log("@@@", proid)
 
             postForm('/projectInfos/getProjectInfo', postData, _this, function (res) {
                 _this.pages = res.data.pages;
