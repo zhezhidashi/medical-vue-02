@@ -44,13 +44,6 @@ export default {
     mounted() {
         let _this = this;
 
-        // this.$store.commit('getProid');
-        // let proid = this.$store.state.user.proid;
-
-        // console.log("&&&", proid)
-        // if(proid == "7b50c2e43ebf459996060ab50961f57c") this.insName = "中日友好医院"
-        // else this.insName = "正大天晴"
-
         this.$store.commit('getInsName')
         this.insName = this.$store.state.user.insName
         this.$store.commit('getNormalUsername')

@@ -243,6 +243,10 @@ export default {
             _this.$store.commit("setNormalUsername", "user004")
             _this.$store.commit("setInsName", "数据分析方");
         }
+        else if (userid === "69431cf525f54dca9bd004433199f782") {
+            _this.$store.commit("setNormalUsername", "user005")
+            _this.$store.commit("setInsName", "正大天晴药业集团股份有限公司");
+        }
 
         postForm("/userdes/getUserByDes", { description: userid }, _this, function (res) {
             let normalUsername = res.data.username
