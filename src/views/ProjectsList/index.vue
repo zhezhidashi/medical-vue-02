@@ -288,6 +288,7 @@ export default {
                         dataItem.userNameList.push(item.username)
                     }
                     _this.projectTable.push(dataItem);
+                    break;
                 }
             })
         },
