@@ -84,33 +84,6 @@ export default {
                     userBoList: [],
                 }
             ],
-            // 修改项目弹窗是否显示
-            modifyProjectDialogVisible: false,
-            // 修改项目的 index
-            modifyProjectIndex: 0,
-            // 项目item的拷贝
-            modifyProjectItem: {
-                // 项目名称
-                name: "",
-                // 项目负责人
-                user: "",
-                // 项目联系方式
-                contactInfo: "",
-                // 负责人邮箱
-                contactEmail: "",
-                // 项目描述
-                description: "",
-                // 项目申请文件
-                applyDocumentAddress: "",
-                // 机构列表
-                institutionList: [],
-                // 参与机构列表
-                involvedInstitutionDoi: "",
-                // 用户列表
-                userBoList: [],
-                // 用户列表拷贝
-                userBoListCopy: [],
-            },
         };
     },
     mounted() {

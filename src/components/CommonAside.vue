@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 200px;" v-show="path !== '/Login'">
+    <div style="width: 200px;">
         <el-menu :default-active="activeIndex" class="el-menu-demo" 
             @select="handleSelect" :unique-opened="false"
             text-color="#000080" active-text-color="#FF4040"
