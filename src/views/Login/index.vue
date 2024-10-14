@@ -4,8 +4,8 @@
 
         <el-descriptions title="项目详情" :column="1" border>
             <el-descriptions-item label="项目名称">{{projectTable[0].name}}</el-descriptions-item>
-            <el-descriptions-item label="机构" >{{projectTable[0].user}}</el-descriptions-item>
             <el-descriptions-item label="项目标识" >{{projectTable[0].projectDoi}}</el-descriptions-item>
+            <el-descriptions-item label="机构名称" >{{projectTable[0].user}}</el-descriptions-item>
             <el-descriptions-item label="机构标识" >{{projectTable[0].institutionDoi}}</el-descriptions-item>
             <el-descriptions-item label="项目联系方式" >{{projectTable[0].contactInfo}}</el-descriptions-item>
             <el-descriptions-item label="负责人邮箱" >{{projectTable[0].contactEmail}}</el-descriptions-item>
