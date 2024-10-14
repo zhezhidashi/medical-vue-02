@@ -241,7 +241,7 @@ export default {
         }
         else if (userid === "cad5417cf1924e57b9ff89708a6cc380") {
             _this.$store.commit("setNormalUsername", "user004")
-            _this.$store.commit("setInsName", "数据分析用户");
+            _this.$store.commit("setInsName", "数据分析方");
         }
 
         postForm("/userdes/getUserByDes", { description: userid }, _this, function (res) {
