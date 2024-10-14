@@ -95,6 +95,9 @@ export default {
         else if (this.path === '/BlocksChainQuery') {
             this.activeIndex = '8';
         }
+        else if (this.path === '/TraceSystem') {
+            this.activeIndex = '10';
+        }
         
     },
     watch: {
@@ -167,6 +170,9 @@ export default {
                 this.$store.commit('getInsName')
                 let insName = this.$store.state.user.insName
                 window.open("http://8.130.160.66:8085/Login?insName=" + insName)
+            }
+            else if (key === '10') {
+                this.$router.push('/TraceSystem')
             }
         },
     },

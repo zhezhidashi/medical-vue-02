@@ -173,6 +173,14 @@ const routes = [
                 },
                 component: () => import('@/views/RetraceSystem')
             },
+            {
+                path: "/TraceSystem",
+                name: "TraceSystem",
+                meta: {
+                    title: "痕迹系统"
+                },
+                component: () => import('@/views/TraceSystem')
+            }
         ]
     },
 ]
