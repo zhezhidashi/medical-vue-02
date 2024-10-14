@@ -40,7 +40,7 @@ export default {
     data() {
         return {
             isAdmin: false,
-            activeIndex: '4',
+            activeIndex: '2-2',
             path: '',
         };
     },
