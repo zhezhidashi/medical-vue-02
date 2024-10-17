@@ -99,7 +99,7 @@ export default {
 
         // 获取项目名
         let postData = {
-            descriptions: this.proid
+            description: this.proid
         }
         postForm('/projectInfos/getProjectInfo', postData, _this, function (res) {
             _this.projectName = res.data.records[0].name
