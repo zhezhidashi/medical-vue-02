@@ -103,7 +103,7 @@ export default {
         }
         postForm('/projectInfos/getProjectInfo', postData, _this, function (res) {
             _this.projectName = res.data.records[0].name
-            console.log("***", _this.projectName);
+            // console.log("***", _this.projectName);
             _this.getData({})
         })
     },
