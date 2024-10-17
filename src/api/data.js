@@ -7,6 +7,7 @@ import "nprogress/nprogress.css";
 export const backendUrl = '/api'
 export const mockUrl = "https://mock.apifox.com/m1/3980705-3616153-default"
 export const ganacheUrl = '/ganache'
+export const publicUrl = "/public"
 
 // post请求
 export const postForm = (requestUrl, params, This, callback) => {
@@ -135,6 +136,34 @@ export const exportData = (requestUrl, params, This, callback) => {
     .catch((err) => {
         nprogress.done()
         console.log('postForm 的 error: ', backendUrl + requestUrl, err);
+    })
+}
+
+// 第三方平台post请求
+export const postFormPublic = (requestUrl, params, This, callback) => {
+    nprogress.start();
+    console.log('postFormPublic 的表单', requestUrl, params)
+    axios.request({
+        url: publicUrl + requestUrl,
+        method: 'post',
+        data: params,
+    }).then(({ data: res }) => {
+        nprogress.done()
+        console.log('postFormPublic 的 response: ', requestUrl, res);
+        if (res.code === 200) { 
+            callback(res) 
+        }
+        else {
+            This.$message({
+                message: res.message,
+                type: 'error'
+            });
+            callback(res)
+        }
+    })
+    .catch((err) => {
+        nprogress.done()
+        console.log('postFormPublic 的 error: ', backendUrl + requestUrl, err);
     })
 }
 
@@ -271,3 +300,5 @@ export const getFormMock = (requestUrl, This, callback) => {
         console.log('getFormMock 的 error: ', requestUrl, err);
     })
 }
+
+
