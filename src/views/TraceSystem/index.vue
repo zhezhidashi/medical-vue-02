@@ -142,7 +142,7 @@ export default {
                                     createTime: item.createTime,
                                     projectName: _this.projectName,
                                     userDoi: item.userDoi,
-                                    user: item.user,
+                                    user: _this.insName,
                                     operationDoi: item.operationDoi,
                                     operation: item.operation,
                                     hashValue: item.hashValue
