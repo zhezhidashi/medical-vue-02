@@ -48,9 +48,7 @@ export default {
                 { "doi": "86.100.3976183865\/do.453a3671-f546-4f78-a688-509384699dad", "doiName": "CM", "doiSource": "SDTM-02", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
                 { "doi": "86.708.3672867577\/do.31a13d39-4e8b-4841-96bf-beaca7cd3f20", "doiName": "DM", "doiSource": "SDTM-02", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
                 { "doi": "86.044.8826212971\/do.56842ecc-35ed-43a8-a508-31cf7e6b3cc2", "doiName": "LB", "doiSource": "SDTM-02", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "SDTM" },
-                { "doi": "86.159.8913230823\/do.91888cfa-c97f-4198-9cc7-9b3b767e9818", "doiName": "ref_LB", "doiSource": null, "doiProject": "围术期抗栓药物管理临床路径", "doiType": "结构化数据" },
                 { "doi": "86.705.6680948492\/do.3042ec3e-2a40-4654-bde0-c1bc39850a4c", "doiName": "IMPUTATION-DATA", "doiSource": "SDTM-01", "doiProject": "围术期抗栓药物管理临床路径", "doiType": "结构化数据" },
-                { "doi": "86.400.5655549060\/do.5cbc5693-b575-4e11-b658-d617c235abf1", "doiName": "Clopidogrel", "doiSource": null, "doiProject": "围术期抗栓药物管理临床路径", "doiType": "结构化数据" },
             ],
 
             doiDetail2: [
