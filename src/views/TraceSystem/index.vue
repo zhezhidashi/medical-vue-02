@@ -18,7 +18,7 @@
                 <el-table-column prop="createTime" label="时间"></el-table-column>
                 <el-table-column prop="projectName" label="项目名称"></el-table-column>
                 <el-table-column prop="userDoi" label="用户标识"></el-table-column>
-                <el-table-column prop="user" label="机构名"></el-table-column>
+                <!-- <el-table-column prop="user" label="机构名"></el-table-column> -->
                 <el-table-column prop="operationDoi" label="操作标识"></el-table-column>
                 <el-table-column prop="operation" label="操作内容"></el-table-column>
                 <el-table-column prop="hashValue" label="账本哈希值"></el-table-column>
