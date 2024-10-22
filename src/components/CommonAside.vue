@@ -7,9 +7,15 @@
             <el-menu-item index="0">主页</el-menu-item>
             <el-menu-item v-show="isAdmin" index="1">组网申请</el-menu-item>
             <el-submenu v-show="isAdmin" index="2">
-                <template slot="title">项目管理</template>
-                <el-menu-item index="2-1">项目申请</el-menu-item>
-                <el-menu-item index="2-2">项目列表</el-menu-item>
+                <template slot="title">牵头项目</template>
+                <el-menu-item index="2-1">创建项目</el-menu-item>
+                <el-menu-item index="2-2">牵头项目列表</el-menu-item>
+                <el-menu-item index="2-3">项目审批</el-menu-item>
+            </el-submenu>
+            <el-submenu v-show="isAdmin" index="9">
+                <template slot="title">参与项目</template>
+                <el-menu-item index="9-1">申请项目权限</el-menu-item>
+                <el-menu-item index="9-2">参与项目列表</el-menu-item>
             </el-submenu>
             <el-menu-item v-show="isAdmin" index="3">账号管理</el-menu-item>
             <el-submenu v-show="!isAdmin" index="4">
@@ -62,6 +68,15 @@ export default {
         }
         else if (this.path === '/ProjectsList') {
             this.activeIndex = '2-2'
+        }
+        else if (this.path === '/ProjectsApproval') {
+            this.activeIndex = '2-3'
+        }
+        else if (this.path === "/ProjectsApplyParticipate") {
+            this.activeIndex = '9-1'
+        }
+        else if (this.path === '/ProjectsListParticipate') {
+            this.activeIndex = '9-2'
         }
         else if (this.path === '/AccountManage') {
             this.activeIndex = '3';
@@ -130,6 +145,15 @@ export default {
             }
             else if (key === '2-2') {
                 this.$router.push('/ProjectsList')
+            }
+            else if (key === '2-3') {
+                this.$router.push('/ProjectsApproval')
+            }
+            else if (key === '9-1') {
+                this.$router.push('/ProjectsApplyParticipate')
+            }
+            else if (key === '9-2') {
+                this.$router.push('/ProjectsListParticipate')
             }
             else if (key === '3') {
                 this.$router.push('/AccountManage')

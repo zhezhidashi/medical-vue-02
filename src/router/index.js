@@ -57,17 +57,41 @@ const routes = [
                 path: '/ProjectsApply',
                 name: 'ProjectsApply',
                 meta: {
-                    title: '项目管理'
+                    title: '创建项目'
                 },
                 component: () => import('@/views/ProjectsApply')
+            },
+            {
+                path: '/ProjectsApplyParticipate',
+                name: 'ProjectsApplyParticipate',
+                meta: {
+                    title: '申请项目权限'
+                },
+                component: () => import('@/views/ProjectsApplyParticipate')
+            },
+            {
+                path: '/ProjectsApproval',
+                name: 'ProjectsApproval',
+                meta: {
+                    title: '项目审批'
+                },
+                component: () => import('@/views/ProjectsApproval')
             },
             {
                 path: '/ProjectsList',
                 name: 'ProjectsList',
                 meta: {
-                    title: '项目列表'
+                    title: '牵头项目列表'
                 },
                 component: () => import('@/views/ProjectsList')
+            },
+            {
+                path: "/ProjectsListParticipate",
+                name: 'ProjectsListParticipate',
+                meta: {
+                    title: '参与项目列表'
+                },
+                component: () => import('@/views/ProjectsListParticipate')
             },
             {
                 path: '/AccountManage',

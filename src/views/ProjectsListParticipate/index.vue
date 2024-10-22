@@ -24,20 +24,6 @@
                     <el-form-item prop="institutionDoi" label="所属机构标识" class="SearchFormItem">
                         <el-input v-model="searchForm.institutionDoi"></el-input>
                     </el-form-item>
-                    <el-form-item prop="institutionDoi" label="参与机构" class="SearchFormItem">
-                        <el-input v-model="searchForm.institutionDoi"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="createTimeRange" label="申请时间" class="SearchFormTimePicker">
-                        <el-date-picker value-format="timestamp" v-model="searchForm.createTimeRange" type="daterange"
-                            range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-form-item>
-
-                    <el-form-item prop="updateTimeRange" label="修改时间" class="SearchFormTimePicker">
-                        <el-date-picker value-format="timestamp" v-model="searchForm.updateTimeRange" type="daterange"
-                            range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-form-item>
                 </el-form>
 
                 <el-button type="primary" @click="searchData">搜索</el-button>
@@ -53,9 +39,6 @@
             <el-table-column prop="description" label="项目描述" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="所属机构名称" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="所属机构标识" align="center"></el-table-column>
-            <el-table-column prop="institutionDoi" label="参与机构" align="center"></el-table-column>
-            <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
-            <el-table-column prop="updateTime" label="修改时间" align="center"></el-table-column>
             <el-table-column prop="userBoList" label="用户列表" align="center">
                 <template slot-scope="scope">
                     <div v-for="item in scope.row.userNameList" :key="item">{{ item }}</div>
@@ -64,11 +47,7 @@
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
                     <el-button @click="modifyProject(props.row, props.$index)" type="primary"
-                        size="small" style="margin: 5px;">修改项目信息</el-button>
-                        <el-button @click="modifyProject(props.row, props.$index)" type="primary"
-                        size="small" style="margin: 5px;">修改参与机构</el-button>
-                        <el-button @click="modifyProject(props.row, props.$index)" type="primary"
-                        size="small" style="margin: 5px;">修改权限用户</el-button>
+                        size="small">修改权限用户</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -81,24 +60,6 @@
         <el-dialog title="修改项目" :visible.sync="modifyProjectDialogVisible" width="80%"
             :before-close="modifyProjectCancel">
             <el-form :model="modifyProjectItem" label-width="auto" align="left">
-                <el-form-item label="项目名称">
-                    <el-input v-model="modifyProjectItem.name"></el-input>
-                </el-form-item>
-                <el-form-item label="项目负责人">
-                    <el-input v-model="modifyProjectItem.user"></el-input>
-                </el-form-item>
-                <el-form-item label="联系方式">
-                    <el-input v-model="modifyProjectItem.contactInfo"></el-input>
-                </el-form-item>
-                <el-form-item label="项目描述">
-                    <el-input v-model="modifyProjectItem.description"></el-input>
-                </el-form-item>
-                <el-form-item label="修改参与机构">
-                    <el-select v-model="modifyProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
-                        <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
-                            :value="item.doi"></el-option>
-                    </el-select>
-                </el-form-item>
                 <el-form-item label="修改权限用户">
                     <el-select v-model="modifyProjectItem.userBoList" multiple collapse-tags placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.uid" :label="item.name"
@@ -119,7 +80,7 @@
 <script>
 import { postForm } from '@/api/data';
 export default {
-    name: "ProjectsList",
+    name: "ProjectsListParticipate",
     data() {
         return {
             // 机构 DOI 列表

@@ -48,10 +48,6 @@
 
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
 
-            <div style="display: flex; align-items: center; justify-content: center;">
-                <el-button @click="addProject" type="primary" style="margin-bottom: 24px;">申请项目</el-button>
-            </div>
-
             <el-table :data="projectTable" stripe border style="width: 95%;">
                 <el-table-column prop="projectName" label="项目名称" min-width="120" align="center"></el-table-column>
                 <el-table-column prop="projectLeader" label="项目负责人" min-width="120" align="center"></el-table-column>
@@ -74,6 +70,12 @@
                 </el-table-column>
                 <el-table-column prop="projectApprovalTime" label="审批时间" min-width="120" align="center">
                 </el-table-column>
+                <el-table-column label="操作" align="center">
+                    <template slot-scope="props">
+                        <el-button @click="addProject(props.row, props.$index)" type="primary"
+                            size="small">审批</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
 
             <div style="margin: 24px">
@@ -82,31 +84,14 @@
                 </el-pagination>
             </div>
 
-            <el-dialog title="申请项目" :visible.sync="addProjectDialogVisible" width="80%"
+            <el-dialog title="审批项目" :visible.sync="addProjectDialogVisible" width="80%"
                 :before-close="addProjectCancel">
                 <el-form :model="addProjectItem" label-width="auto">
-                    <el-form-item label="项目名称">
-                        <el-input v-model="addProjectItem.projectName"></el-input>
+                    <el-form-item label="选择项目">
+                        <el-radio v-model="addProjectItem.projectApplyFile" label="1">通过</el-radio>
+                        <el-radio v-model="addProjectItem.projectApplyFile" label="2">拒绝</el-radio>
                     </el-form-item>
-                    <el-form-item label="项目负责人">
-                        <el-input v-model="addProjectItem.projectLeader"></el-input>
-                    </el-form-item>
-                    <el-form-item label="联系方式">
-                        <el-input v-model="addProjectItem.projectContact"></el-input>
-                    </el-form-item>
-                    <el-form-item label="项目描述">
-                        <el-input v-model="addProjectItem.projectDescription"></el-input>
-                    </el-form-item>
-                    <el-form-item label="项目参与机构" prop="institutionList">
-                        <el-select v-model="addProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
-                            <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
-                                :value="item.doi"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="项目申请文件" prop="projectApplyFile">
-                        <el-button type="primary">点击上传</el-button>
-                    </el-form-item>
-                    <el-form-item label="申请人邮箱">
+                    <el-form-item label="审批意见">
                         <el-input v-model="addProjectItem.projectApplyEmail"></el-input>
                     </el-form-item>
                 </el-form>
@@ -123,7 +108,7 @@
 <script>
 import { postForm } from '@/api/data';
 export default {
-    name: "ProjectsApply",
+    name: "ProjectsApproval",
     data() {
         return {
             // 机构 DOI 列表
@@ -157,39 +142,25 @@ export default {
                 projectApprovalTimeRange: "",
             },
 
-           
+
 
             // 项目列表
             projectTable: [
+                {}
             ],
 
             // 增加项目弹窗是否显示
             addProjectDialogVisible: false,
             // 项目item的拷贝
             addProjectItem: {
-                projectName: "",
-                projectLeader: "",
-                projectContact: "",
-                projectDescription: "",
                 projectApplyFile: "",
                 projectApplyEmail: "",
-                involvedInstitutionDoi: [],
             },
         };
     },
     mounted() {
         // 获取组网组列表
         let _this = this;
-
-        postForm('/networkGroups/getInstitutionsByGid', {}, _this, function (res) {
-            for (let item of res.data.list) {
-                _this.institutionDoiList.push({
-                    name: item.name,
-                    doi: item.doi,
-                })
-            }
-        })
-
 
     },
     methods: {
@@ -199,31 +170,7 @@ export default {
             this.getData(this.searchForm);
         },
         getData(postData) {
-            let _this = this;
-            _this.projectTable = [];
-            
-            // 创建：1；修改：2
-            postData.type = 1;
 
-            postForm('/projectOrder/query', postData, _this, function (res) {
-                _this.pages = res.data.pages;
-                for (let item of res.data.records) {
-                    _this.projectTable.push({
-                        id: item.id,
-                        gid: item.gid,
-                        projectName: item.name,
-                        projectLeader: item.user,
-                        projectContact: item.contactInfo,
-                        projectDescription: item.description,
-                        projectApplyFile: item.applyDocumentAddress,
-                        projectApplyTime: new Date(item.createTime).toLocaleDateString(),
-                        projectApplyEmail: item.contactEmail,
-                        projectApprovalStatus: item.status,
-                        projectApprovalOpinion: item.reviewComments,
-                        projectApprovalTime: new Date(item.updateTime).toLocaleDateString(),
-                    });
-                }
-            })
         },
 
         collapseChange(activeNames) {
@@ -236,16 +183,6 @@ export default {
 
         addProject() {
             this.addProjectDialogVisible = true;
-            this.addProjectItem = {
-                projectName: "",
-                projectLeader: "",
-                projectContact: "",
-                projectDescription: "",
-                projectApplyFile: "",
-                projectApplyEmail: "",
-                institutionList: [],
-                involvedInstitutionDoi: "",
-            }
         },
         addProjectCancel() {
             this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
@@ -262,22 +199,6 @@ export default {
             });
         },
         addProjectConfirm() {
-            let _this = this;
-
-            // 将 selected = true 的机构 DOI 添加到 involvedInstitutionDoi 中，以逗号分隔
-            for (let item of this.addProjectItem.institutionList) {
-                this.addProjectItem.involvedInstitutionDoi += item + ",";
-            }
-
-            // 检查有没有空值
-            if (this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === "" || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "") {
-                this.$message({
-                    type: 'warning',
-                    message: '请填写完整信息'
-                });
-                return;
-            }
-
             _this.addProjectDialogVisible = false;
         },
     },
