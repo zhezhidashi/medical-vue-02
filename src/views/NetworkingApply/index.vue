@@ -6,11 +6,11 @@
             </div>
 
             <el-form :model="networkingApplyForm" :rules="rules" label-width="auto" style="width: 65vw;">
-                <el-form-item prop="institutionName" label="机构名字">
-                    <el-input v-model="networkingApplyForm.institutionName"></el-input>
-                </el-form-item>
                 <el-form-item prop="publicRootAddress" label="第三方平台地址">
                     <el-input v-model="networkingApplyForm.publicRootAddress"></el-input>
+                </el-form-item>
+                <el-form-item prop="institutionName" label="机构名字">
+                    <el-input v-model="networkingApplyForm.institutionName"></el-input>
                 </el-form-item>
                 <el-form-item prop="networkingDesc" label="机构描述">
                     <el-input v-model="networkingApplyForm.networkingDesc"></el-input>
