@@ -67,7 +67,13 @@ export default {
             };
 
             loginRequest('/login', params, _this, function (res) {
-                _this.$router.push({ path: "/MainPage" });
+                let isAdmin = _this.$store.state.user.userType === 'admin';
+                if(isAdmin) {
+                    _this.$router.push({ path: "/MainPage" });
+                }
+                else {
+                    _this.$router.push({ path: "/ProjectsListNormalUser" })
+                }
             });
         },
     },

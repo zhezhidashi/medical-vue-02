@@ -15,9 +15,6 @@
                 <el-form-item prop="networkingDesc" label="机构描述">
                     <el-input v-model="networkingApplyForm.networkingDesc"></el-input>
                 </el-form-item>
-                <el-form-item prop="userName" label="机构管理员名字">
-                    <el-input v-model="networkingApplyForm.userName"></el-input>
-                </el-form-item>
             </el-form>
 
             <div style="display: flex; align-items: center; justify-content: center; ">
@@ -46,20 +43,11 @@ export default {
                 userName: '',
             },
             rules: {
-                institutionName: [
-                    { required: true, message: '请输入机构名字', trigger: 'blur' }
-                ],
                 publicRootAddress: [
                     { required: true, message: '请输入第三方平台地址', trigger: 'blur' }
                 ],
-                institutionAddress: [
-                    { required: true, message: '请输入机构地址', trigger: 'blur' }
-                ],
-                networkingDesc: [
-                    { required: true, message: '请输入组网描述', trigger: 'blur' }
-                ],
-                userName: [
-                    { required: true, message: '请输入申请人名称', trigger: 'blur' }
+                institutionName: [
+                    { required: true, message: '请输入机构名字', trigger: 'blur' }
                 ],
             },
         };

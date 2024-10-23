@@ -37,17 +37,12 @@
             <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
             <el-table-column prop="contactInfo" label="联系方式" align="center"></el-table-column>
             <el-table-column prop="description" label="项目描述" align="center"></el-table-column>
-            <el-table-column prop="institutionDoi" label="所属机构名称" align="center"></el-table-column>
+            <el-table-column prop="institutionName" label="所属机构名称" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="所属机构标识" align="center"></el-table-column>
-            <el-table-column prop="userBoList" label="用户列表" align="center">
-                <template slot-scope="scope">
-                    <div v-for="item in scope.row.userNameList" :key="item">{{ item }}</div>
-                </template>
-            </el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
-                    <el-button @click="modifyProject(props.row, props.$index)" type="primary"
-                        size="small">修改权限用户</el-button>
+                    <el-button @click="selectProject(props.row, props.$index)" type="primary"
+                        size="small">查看详情</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -56,23 +51,6 @@
             <el-pagination background layout="pager" :page-size="10" :page-count="pages" @current-change="clickPage">
             </el-pagination>
         </div>
-
-        <el-dialog title="修改项目" :visible.sync="modifyProjectDialogVisible" width="80%"
-            :before-close="modifyProjectCancel">
-            <el-form :model="modifyProjectItem" label-width="auto" align="left">
-                <el-form-item label="修改权限用户">
-                    <el-select v-model="modifyProjectItem.userBoList" multiple collapse-tags placeholder="请选择">
-                        <el-option v-for="item in userList" :key="item.uid" :label="item.name"
-                            :value="item.uid"></el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="modifyProjectCancel">取 消</el-button>
-                <el-button type="primary" @click="modifyProjectConfirm">确 定</el-button>
-            </span>
-        </el-dialog>
-
     </div>
 
 </template>
@@ -80,7 +58,7 @@
 <script>
 import { postForm } from '@/api/data';
 export default {
-    name: "ProjectsListParticipate",
+    name: "ProjectsListNormalUser",
     data() {
         return {
             // 机构 DOI 列表
@@ -120,82 +98,24 @@ export default {
             projectTable: [
                 {
                     // 项目名称
-                    name: "",
+                    name: "围术期抗栓药物管理临床路径研究",
+                    // 项目标识
+                    projectDoi: "86.771.6049046735/pro.5f60449b-32b5-4042-9d2f-1c6ceae60050",
                     // 项目负责人
-                    user: "",
-                    // 项目DOI
-                    projectDoi: "",
+                    user: "李主任",
+                    // 所属机构
+                    institutionName: "中日友好医院",
                     // 所属机构DOI
-                    institutionDoi: "",
-                    // 参与机构DOI
-                    involvedInstitutionDoi: "",
-                    // 机构列表
-                    institutionList: [],
+                    institutionDoi: "86.259.5868980074/ins.8b390aec-c794-44bb-b4b1-6aa37aedbb7c",
                     // 项目联系方式
-                    contactInfo: "",
-                    // 负责人邮箱
-                    contactEmail: "",
+                    contactInfo: "72158345436",
                     // 项目描述
-                    description: "",
-                    // 申请时间
-                    createTime: "",
-                    // 修改时间
-                    updateTime: "",
-                    // 用户列表
-                    userBoList: [],
+                    description: "7b50c2e43ebf459996060ab50961f57c",
                 }
             ],
-            // 修改项目弹窗是否显示
-            modifyProjectDialogVisible: false,
-            // 修改项目的 index
-            modifyProjectIndex: 0,
-            // 项目item的拷贝
-            modifyProjectItem: {
-                // 项目名称
-                name: "",
-                // 项目负责人
-                user: "",
-                // 项目联系方式
-                contactInfo: "",
-                // 负责人邮箱
-                contactEmail: "",
-                // 项目描述
-                description: "",
-                // 项目申请文件
-                applyDocumentAddress: "",
-                // 机构列表
-                institutionList: [],
-                // 参与机构列表
-                involvedInstitutionDoi: "",
-                // 用户列表
-                userBoList: [],
-                // 用户列表拷贝
-                userBoListCopy: [],
-            },
         };
     },
-    mounted() {
-        // 获取组网组列表
-        let _this = this;
-        postForm('/networkGroups/getInstitutionsByGid', {}, _this, function (res) {
-            for (let item of res.data.list) {
-                _this.institutionDoiList.push({
-                    name: item.name,
-                    doi: item.doi,
-                })
-            }
-        })
-        // 获取用户列表
-        postForm('/users/getUsers', {}, _this, function (res) {
-            for (let item of res.data.records) {
-                _this.userList.push({
-                    name: item.username,
-                    uid: item.uid,
-                })
-            }
-        })
-
-    },
+    mounted() {},
     methods: {
         clickPage(page) {
             this.currentPage = page;
@@ -216,32 +136,8 @@ export default {
         searchData() {
         },
 
-        modifyProject(row, index) {
-            this.modifyProjectDialogVisible = true;
-            this.modifyProjectIndex = index;
-            this.modifyProjectItem = JSON.parse(JSON.stringify(row));
-            console.log(this.modifyProjectItem)
-            // 拷贝用户列表
-            this.modifyProjectItem.userBoListCopy = this.modifyProjectItem.userBoList.slice(0);
-        },
-
-        modifyProjectCancel() {
-            this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.modifyProjectDialogVisible = false;
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消'
-                });
-            });
-        },
-        modifyProjectConfirm() {
-
-            _this.modifyProjectDialogVisible = false;
+        selectProject() {
+            this.$router.push({path: "/ProjectDetail"})
         },
     },
 }

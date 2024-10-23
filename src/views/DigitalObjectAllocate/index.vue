@@ -62,7 +62,7 @@
         <div style="margin-bottom: 24px; display: flex; justify-content: center; width: 100%;">
             <div style="display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; width: 70vw; padding: 5px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
-                <div v-for="(item, index) in projectList" :key="index">
+                <div v-for="(item, index) in ProjectsList" :key="index">
                     <el-checkbox style="margin: 5px;" v-model="item.selected">{{ item.name }}</el-checkbox>
                 </div>
             </div>
@@ -119,7 +119,7 @@ export default {
                 projectApprovalTimeRange: "",
             },
 
-            projectList: [
+            ProjectsList: [
                 {
                     projectDoi: 1,
                     name: '项目1',
@@ -150,10 +150,10 @@ export default {
                     });
                 }
             })
-            _this.projectList = [];
+            _this.ProjectsList = [];
             postForm('/projectInfos/getProjectInfo', postData, _this, function (res) {
                 for (let item of res.data.records) {
-                    _this.projectList.push({
+                    _this.ProjectsList.push({
                         projectDoi: item.projectDoi,
                         name: item.name,
                         selected: false,
@@ -206,7 +206,7 @@ export default {
                 doi: this.doi,
                 projectDoiList: [],
             }
-            for (let item of this.projectList) {
+            for (let item of this.ProjectsList) {
                 if (item.selected) {
                     postData.projectDoiList.push(item.projectDoi);
                 }

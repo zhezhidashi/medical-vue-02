@@ -173,6 +173,7 @@ export default {
             this.user.userType = '管理员';
         } else if (userType === 'user') {
             this.user.userType = '普通用户';
+            this.$router.push({path: "ProjectsListNormalUser"})
         }
         this.initEcharts();
         this.getProjectsList({ page: 1, size: 5});

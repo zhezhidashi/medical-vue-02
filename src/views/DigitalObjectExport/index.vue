@@ -4,7 +4,7 @@
             <el-form :model="searchForm" label-width="auto" :rules="rules" class="SearchForm">
                 <el-form-item prop="project" label="项目" class="SearchFormItem">
                     <el-select v-model="searchForm.project" placeholder="请选择项目">
-                        <el-option v-for="item in projectList" :key="item.value" :label="item.label" :value="item.value">
+                        <el-option v-for="item in ProjectsList" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -79,7 +79,7 @@ export default {
         return {
             pages: 1,
             currentPage: 1,
-            projectList: [],
+            ProjectsList: [],
             searchForm: {
                 // 项目
                 project: '',
@@ -132,7 +132,7 @@ export default {
         postForm('/projectInfos/getProjectInfo', {size: -1}, _this, function(res) {
             if(res.code === 200) {
                 for (let item of res.data.records) {
-                    _this.projectList.push({
+                    _this.ProjectsList.push({
                         label: item.name,
                         value: item.projectDoi,
                     })

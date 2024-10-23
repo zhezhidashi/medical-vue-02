@@ -6,11 +6,8 @@
                     <el-form-item prop="username" label="用户名" class="SearchFormItem">
                         <el-input v-model="searchForm.username" style="width: 200px"></el-input>
                     </el-form-item>
-                    <el-form-item prop="status" label="账号状态" class="SearchFormItem">
-                        <el-select v-model="searchForm.status" placeholder="请选择" style="width: 200px">
-                            <el-option label="已激活" value="1"></el-option>
-                            <el-option label="未激活" value="2"></el-option>
-                        </el-select>
+                    <el-form-item prop="username" label="用户标识" class="SearchFormItem">
+                        <el-input v-model="searchForm.username" style="width: 200px"></el-input>
                     </el-form-item>
                     <el-form-item prop="email" label="用户联系邮箱" class="SearchFormItem">
                         <el-input v-model="searchForm.email" style="width: 200px"></el-input>
@@ -51,12 +48,14 @@
 
         <el-table :data="userTable" style="width: 95%" stripe border>
             <el-table-column prop="username" label="用户名"></el-table-column>
+            <el-table-column prop="username" label="用户标识"></el-table-column>
             <el-table-column prop="userType" label="用户类型">
                 <template slot-scope="props">
                     <el-tag v-if="props.row.userType === 2" type="success">管理员</el-tag>
                     <el-tag v-else>普通用户</el-tag>
                 </template>
             </el-table-column>
+            <el-table-column prop="email" label="用户联系邮箱"></el-table-column>
             <el-table-column prop="projects" label="已授权项目">
                 <template slot-scope="props">
                     <div v-for="(item, index) in props.row.projects" :key="index" style="margin-right: 10px">
@@ -64,17 +63,11 @@
                     </div>
                 </template>
             </el-table-column>
-
+<el-table-column prop="email" label="用户联系邮箱"></el-table-column>
             <el-table-column prop="registerTime" label="注册时间"></el-table-column>
             <el-table-column prop="lastLoginTime" label="最近登录时间"></el-table-column>
             <el-table-column prop="lastModifyPasswordTime" label="最近修改密码时间"></el-table-column>
-            <el-table-column prop="status" label="是否激活">
-                <template slot-scope="props">
-                    <el-tag v-if="props.row.status === 1" type="success">已激活</el-tag>
-                    <el-tag v-else type="danger">未激活</el-tag>
-                </template>
-            </el-table-column>
-            <el-table-column prop="email" label="用户联系邮箱"></el-table-column>
+            
 
             <el-table-column label="操作" width="150" align="center">
                 <template slot-scope="props">

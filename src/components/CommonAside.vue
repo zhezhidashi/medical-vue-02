@@ -1,10 +1,10 @@
 <template>
-    <div style="width: 200px;" v-show="path !== '/Login'">
+    <div style="width: 200px;" v-show="path !== '/Login' && path !== '/ProjectsListNormalUser'">
         <el-menu :default-active="activeIndex" class="el-menu-demo" 
             @select="handleSelect" :unique-opened="false"
             text-color="#000080" active-text-color="#FF4040"
             background-color="#F0F8FF" >
-            <el-menu-item index="0">主页</el-menu-item>
+            <el-menu-item v-show="isAdmin" index="0">主页</el-menu-item>
             <el-menu-item v-show="isAdmin" index="1">组网申请</el-menu-item>
             <el-submenu v-show="isAdmin" index="2">
                 <template slot="title">牵头项目</template>
@@ -18,6 +18,7 @@
                 <el-menu-item index="9-2">参与项目列表</el-menu-item>
             </el-submenu>
             <el-menu-item v-show="isAdmin" index="3">账号管理</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="10">项目详情</el-menu-item>
             <el-submenu v-show="!isAdmin" index="4">
                 <template slot="title">流转追溯系统</template>
                 <el-menu-item index="4-1">痕迹系统</el-menu-item>
@@ -72,12 +73,6 @@ export default {
         else if (this.path === '/ProjectsApproval') {
             this.activeIndex = '2-3'
         }
-        else if (this.path === "/ProjectsApplyParticipate") {
-            this.activeIndex = '9-1'
-        }
-        else if (this.path === '/ProjectsListParticipate') {
-            this.activeIndex = '9-2'
-        }
         else if (this.path === '/AccountManage') {
             this.activeIndex = '3';
         }
@@ -114,7 +109,15 @@ export default {
         else if (this.path === '/BlocksChainQuery') {
             this.activeIndex = '8';
         } 
-        
+        else if (this.path === "/ProjectsApplyParticipate") {
+            this.activeIndex = '9-1'
+        }
+        else if (this.path === '/ProjectsListParticipate') {
+            this.activeIndex = '9-2'
+        }
+        else if (this.path === '/ProjectDetail') {
+            this.activeIndex = '10'
+        }
     },
     watch: {
         $route(to, from) {
@@ -135,7 +138,12 @@ export default {
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
             if (key === '0') {
-                this.$router.push('/MainPage')
+                if(isAdmin) {
+                    this.$router.push('/MainPage')
+                }
+                else {
+                    _this.$router.push({ path: "/ProjectsListNormalUser" })
+                }
             }
             else if (key === '1') {
                 this.$router.push('/NetworkingApply')
@@ -148,12 +156,6 @@ export default {
             }
             else if (key === '2-3') {
                 this.$router.push('/ProjectsApproval')
-            }
-            else if (key === '9-1') {
-                this.$router.push('/ProjectsApplyParticipate')
-            }
-            else if (key === '9-2') {
-                this.$router.push('/ProjectsListParticipate')
             }
             else if (key === '3') {
                 this.$router.push('/AccountManage')
@@ -190,6 +192,15 @@ export default {
             }
             else if (key === '8') {
                 this.$router.push('/BlocksChainQuery')
+            }
+            else if (key === '9-1') {
+                this.$router.push('/ProjectsApplyParticipate')
+            }
+            else if (key === '9-2') {
+                this.$router.push('/ProjectsListParticipate')
+            }
+            else if (key === '10') {
+                this.$router.push('/ProjectDetail')
             }
         },
     },

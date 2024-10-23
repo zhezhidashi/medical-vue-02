@@ -15,10 +15,13 @@
 
             <div style="margin-top: 24px;"></div>
             <el-table :data="resultTable" stripe border style="width: 95%;">
-                <el-table-column prop="userDoi" label="用户标识"></el-table-column>
+                <el-table-column prop="createTime" label="时间"></el-table-column>
+                <el-table-column prop="projectName" label="项目名称"></el-table-column>
+                <el-table-column prop="projectDoi" label="项目标识"></el-table-column>
                 <el-table-column prop="user" label="机构名"></el-table-column>
-                <el-table-column prop="operationDoi" label="操作标识"></el-table-column>
+                <el-table-column prop="userDoi" label="机构标识"></el-table-column>
                 <el-table-column prop="operation" label="操作内容"></el-table-column>
+                <el-table-column prop="operationDoi" label="操作标识"></el-table-column>
                 <el-table-column prop="hashValue" label="账本哈希值"></el-table-column>
             </el-table>
 
@@ -39,7 +42,7 @@ export default {
         return {
             pages: 1,
             currentPage: 1,
-            projectList: [],
+            ProjectsList: [],
             searchForm: {
                 // 系统
                 system: 3,
@@ -62,16 +65,20 @@ export default {
 
             resultTable: [
                 {
+                    // 时间
+                    createTime: "2024",
                     // 项目名称
                     projectName: "围术期",
-                    // 用户标识
-                    userDoi: "86.334.9807698985/user.ae7465b8-35be-46e7-9fbe-b5979021de93",
-                    // 用户
+                    // 项目标识
+                    projectDoi: "86.334.9807698985/pro.ae7465b8-35be-46e7-9fbe-b5979021de93",
+                    // 机构名
                     user: "正大天晴",
+                    // 机构标识
+                    userDoi: "86.334.9807698985/user.ae7465b8-35be-46e7-9fbe-b5979021de93",
+                    // 操作内容
+                    operation: "数据流转",
                     // 操作标识
                     operationDoi: "86.228.0956386869/op.41bebd18-10b8-418b-b066-a7acd2a47356",
-                    // 操作
-                    operation: "数据流转",
                     // 账本哈希值
                     hashValue: "8408631c62a85ea415fbc19f028f86094b9bf5bbfbe85c9a80310a854b380f28",
                 }
@@ -90,38 +97,7 @@ export default {
         },
 
         getData(postData) {
-            return;
-
-            this.resultTable = [];
-            postData.pageSize = 10;
-            postData.pageNo = this.currentPage;
-            let _this = this;
-
-            let postUrl = "/trace/subject1/list"
-            if(this.searchForm.system === 1) {
-                postUrl = "/trace/subject1/list"
-            }
-            else if(this.searchForm.system === 2) {
-                postUrl = "/trace/subject2/list"
-            }
-            else if(this.searchForm.system === 3) {
-                postUrl = "/trace/subject3/list"
-            }
             
-            postForm(postUrl, postData, _this, function (res) {
-                if (res.code === 200) {
-                    _this.pages = res.data.pages;
-                    for (let item of res.data.list) {
-                        _this.resultTable.push({
-                            userDoi: item.userDoi,
-                            user: item.user,
-                            operationDoi: item.operationDoi,
-                            operation: item.operation,
-                            hashValue: item.hashValue
-                        })
-                    }
-                }
-            })
         }
     },
 }

@@ -94,6 +94,22 @@ const routes = [
                 component: () => import('@/views/ProjectsListParticipate')
             },
             {
+                path: "/ProjectDetail",
+                name: 'ProjectsDetail',
+                meta: {
+                    title: '项目详情'
+                },
+                component: () => import('@/views/ProjectDetail')
+            },
+            {
+                path: "/ProjectsListNormalUser",
+                name: 'ProjectsListNormalUser',
+                meta: {
+                    title: '用户参与项目列表'
+                },
+                component: () => import('@/views/ProjectsListNormalUser')
+            },
+            {
                 path: '/AccountManage',
                 name: 'AccountManage',
                 meta: {

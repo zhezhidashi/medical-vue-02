@@ -47,9 +47,9 @@
 
         <el-table :data="projectTable" stripe border style="width: 95%;" >
             <el-table-column prop="name" label="项目名称" align="center"></el-table-column>
+            <el-table-column prop="projectDoi" label="项目标识" align="center"></el-table-column>
             <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
             <el-table-column prop="contactInfo" label="联系方式" align="center"></el-table-column>
-            <el-table-column prop="projectDoi" label="项目标识" align="center"></el-table-column>
             <el-table-column prop="description" label="项目描述" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="所属机构名称" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="所属机构标识" align="center"></el-table-column>

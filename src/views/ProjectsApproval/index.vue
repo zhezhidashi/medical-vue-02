@@ -50,6 +50,7 @@
 
             <el-table :data="projectTable" stripe border style="width: 95%;">
                 <el-table-column prop="projectName" label="项目名称" min-width="120" align="center"></el-table-column>
+                <el-table-column prop="projectDoi" label="项目标识" align="center"></el-table-column>
                 <el-table-column prop="projectLeader" label="项目负责人" min-width="120" align="center"></el-table-column>
                 <el-table-column prop="projectContact" label="联系方式" min-width="120" align="center">
                 </el-table-column>
@@ -124,6 +125,8 @@ export default {
             searchForm: {
                 // 项目名称
                 projectName: "",
+                // 项目标识
+                projectDoi: "",
                 // 项目负责人
                 projectLeader: "",
                 // 项目联系方式
