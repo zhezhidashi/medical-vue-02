@@ -8,10 +8,10 @@
                     <el-descriptions title="数字对象详情" :column="1">
                         <el-descriptions-item label="数字对象标识">{{ doiDetail[doiIndex].doi }}</el-descriptions-item>
                         <el-descriptions-item label="数字对象名称">{{ doiDetail[doiIndex].doiName }}</el-descriptions-item>
-                        <!-- <el-descriptions-item label="数字对象来源">{{ doiDetail[doiIndex].doiSource }}</el-descriptions-item> -->
-                        <el-descriptions-item label="数字对象所属项目">{{ doiDetail[doiIndex].doiProject
-                            }}</el-descriptions-item>
+                        <el-descriptions-item label="数字对象描述"></el-descriptions-item>
                         <el-descriptions-item label="数字对象类型">{{ doiDetail[doiIndex].doiType }}</el-descriptions-item>
+                        <el-descriptions-item label="所属项目名称">{{ doiDetail[doiIndex].doiProject }}</el-descriptions-item>
+                        <el-descriptions-item label="所属项目标识"></el-descriptions-item>
                     </el-descriptions>
                 </el-card>
                 <el-card style="width: 90%; margin-bottom: 24px;">

@@ -45,7 +45,7 @@
         </el-collapse>
         <div style="margin-top: 24px;"></div>
 
-        <el-table :data="projectTable" stripe border style="width: 95%;" >
+        <el-table :data="projectTable" stripe border style="width: 100%;" >
             <el-table-column prop="name" label="项目名称" align="center"></el-table-column>
             <el-table-column prop="projectDoi" label="项目标识" align="center"></el-table-column>
             <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
@@ -61,7 +61,7 @@
                     <div v-for="item in scope.row.userNameList" :key="item">{{ item }}</div>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" width="150" align="center">
                 <template slot-scope="props">
                     <el-button @click="modifyProject(props.row, props.$index)" type="primary"
                         size="small" style="margin: 5px;">修改项目信息</el-button>

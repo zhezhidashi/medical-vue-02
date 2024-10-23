@@ -161,7 +161,7 @@ const routes = [
                 path: '/DigitalObjectSearch',
                 name: 'DigitalObjectSearch',
                 meta: {
-                    title: '数字对象检索'
+                    title: '数字对象列表'
                 },
                 component: () => import('@/views/DigitalObjectSearch')
             },

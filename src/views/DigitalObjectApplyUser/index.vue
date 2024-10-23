@@ -59,7 +59,7 @@
             <el-button @click="addApply" type="primary" style="margin-bottom: 24px;">增加申请</el-button>
         </div>
 
-        <el-table :data="applyTable" style="width: 95%;" stripe border>
+        <el-table :data="applyTable" style="width: 100%;" stripe border>
             <el-table-column prop="applicantInstitutionDoi" label="申请机构标识"></el-table-column>
             <el-table-column prop="recipientInstitutionDoi" label="接受机构标识"></el-table-column>
             <el-table-column prop="doi" label="数字对象标识"></el-table-column>

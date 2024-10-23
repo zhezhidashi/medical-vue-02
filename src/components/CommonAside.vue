@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 200px;" v-show="path !== '/Login' && path !== '/ProjectsListNormalUser'">
+    <div style="width: 200px;" v-if="path !== '/Login' && path !== '/ProjectsListNormalUser'">
         <el-menu :default-active="activeIndex" class="el-menu-demo" 
             @select="handleSelect" :unique-opened="false"
             text-color="#000080" active-text-color="#FF4040"
@@ -18,13 +18,12 @@
                 <el-menu-item index="9-2">参与项目列表</el-menu-item>
             </el-submenu>
             <el-menu-item v-show="isAdmin" index="3">账号管理</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="11">用户参与项目列表</el-menu-item>
             <el-menu-item v-show="!isAdmin" index="10">项目详情</el-menu-item>
-            <el-submenu v-show="!isAdmin" index="4">
-                <template slot="title">流转追溯系统</template>
-                <el-menu-item index="4-1">痕迹系统</el-menu-item>
-                <el-menu-item index="4-2">追溯系统</el-menu-item>
-            </el-submenu>
-            <el-menu-item v-show="!isAdmin" index="5">数字对象申请</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="4-1">流转追溯系统</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="4-2">痕迹系统</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="7">数字对象列表</el-menu-item>
+            <!-- <el-menu-item v-show="!isAdmin" index="5">数字对象申请</el-menu-item> -->
             <el-submenu v-show="isAdmin" index="6">
                 <template slot="title">数字对象管理</template>
                 <el-menu-item index="6-1">元数据导入</el-menu-item>
@@ -35,7 +34,6 @@
                 <el-menu-item index="6-6">导出动态私钥</el-menu-item>
             </el-submenu>
 
-            <el-menu-item v-show="!isAdmin" index="7">数字对象检索</el-menu-item>
             <el-menu-item v-show="isAdmin" index="8">智能合约权限管理</el-menu-item>
 
         </el-menu>
@@ -117,6 +115,9 @@ export default {
         }
         else if (this.path === '/ProjectDetail') {
             this.activeIndex = '10'
+        }
+        else if (this.path === '/ProjectsListNormalUser') {
+            this.activeIndex = '11'
         }
     },
     watch: {
@@ -201,6 +202,9 @@ export default {
             }
             else if (key === '10') {
                 this.$router.push('/ProjectDetail')
+            }
+            else if (key === '11') {
+                this.$router.push("/ProjectsListNormalUser")
             }
         },
     },

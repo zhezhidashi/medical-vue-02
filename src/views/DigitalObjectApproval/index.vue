@@ -57,7 +57,7 @@
 
         <div style="margin-top: 24px;"></div>
         
-        <el-table :data="approvalTable" style="width: 95%;" stripe border>
+        <el-table :data="approvalTable" style="width: 100%;" stripe border>
             <el-table-column prop="applicantInstitutionDoi"  label="申请机构标识"></el-table-column>
             <el-table-column prop="applicantUserId" label="申请人ID"></el-table-column>
             <el-table-column prop="doi" label="数字对象标识"></el-table-column>

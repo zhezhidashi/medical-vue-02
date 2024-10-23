@@ -46,7 +46,7 @@
             </el-upload>
         </div>
 
-        <el-table :data="userTable" style="width: 95%" stripe border>
+        <el-table :data="userTable" style="width: 100%" stripe border>
             <el-table-column prop="username" label="用户名"></el-table-column>
             <el-table-column prop="username" label="用户标识"></el-table-column>
             <el-table-column prop="userType" label="用户类型">

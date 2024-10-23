@@ -29,7 +29,7 @@
                 <el-form-item prop="institutionDoi" label="机构DOI" class="SearchFormItem">
                     <el-input v-model="searchForm.institutionDoi"></el-input>
                 </el-form-item>
-                <el-form-item prop="institutionName" label="机构名字" class="SearchFormItem">
+                <el-form-item prop="institutionName" label="机构名称" class="SearchFormItem">
                     <el-input v-model="searchForm.institutionName"></el-input>
                 </el-form-item>
                 <el-form-item prop="createTimeRange" label="创建时间范围" class="SearchFormTimePicker">
@@ -97,7 +97,7 @@ export default {
                 source: '',
                 // 机构DOI
                 institutionDoi: '',
-                // 机构名字
+                // 机构名称
                 institutionName: '',
                 // 创建时间范围
                 createTimeRange: [],

@@ -49,7 +49,7 @@
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
 
             <div style="display: flex; align-items: center; justify-content: center;">
-                <el-button @click="addProject" type="primary" style="margin-bottom: 24px;">申请项目</el-button>
+                <el-button @click="addProject" type="primary" style="margin-bottom: 24px;">申请创建项目</el-button>
             </div>
 
             <el-table :data="projectTable" stripe border style="width: 95%;">
