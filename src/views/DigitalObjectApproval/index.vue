@@ -6,48 +6,31 @@
 
                 <el-form :model="searchForm" label-width="auto" class="SearchForm">
                     <el-form-item class="SearchFormItem" label="数字对象标识">
-                        <el-input v-model="searchForm.applicantInstitutionDoi"></el-input>
-                    </el-form-item>
-                    <el-form-item class="SearchFormItem" label="申请人ID">
-                        <el-input v-model="searchForm.applicantUserId"></el-input>
-                    </el-form-item>
-                    <el-form-item class="SearchFormItem" label="DOI">
                         <el-input v-model="searchForm.doi"></el-input>
                     </el-form-item>
-                    <el-form-item class="SearchFormItem" label="申请类型">
-                        <el-select v-model="searchForm.appType" placeholder="请选择" clearable>
-                            <el-option label="实体型" value="1"></el-option>
-                            <el-option label="指针型" value="2"></el-option>
-                        </el-select>
+                    <el-form-item class="SearchFormItem" label="数字对象名字">
+                        <el-input v-model="searchForm.name"></el-input>
                     </el-form-item>
-                    <el-form-item class="SearchFormItem" label="申请名称">
-                        <el-input v-model="searchForm.appName"></el-input>
+                    <el-form-item prop="description" label="数字对象描述" class="SearchFormItem">
+                        <el-input v-model="searchForm.description"></el-input>
                     </el-form-item>
-                    <el-form-item class="SearchFormItem" label="申请内容">
-                        <el-input v-model="searchForm.appContent"></el-input>
+                    <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
+                        <el-input v-model="searchForm.type"></el-input>
                     </el-form-item>
-                    <el-form-item class="SearchFormItem" label="申请文件">
-                        <el-input v-model="searchForm.applyFile"></el-input>
+                    <el-form-item class="SearchFormItem" label="申请人邮箱">
+                        <el-input v-model="searchForm.applyEmail"></el-input>
                     </el-form-item>
-                    <el-form-item class="SearchFormTimePicker" label="创建时间范围">
+                    <el-form-item prop="institutionName" label="所属项目名称" class="SearchFormItem">
+                        <el-input v-model="searchForm.institutionName"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="institutionDoi" label="所属项目标识" class="SearchFormItem">
+                        <el-input v-model="searchForm.institutionDoi"></el-input>
+                    </el-form-item>
+                    <el-form-item class="SearchFormTimePicker" label="申请时间">
                         <el-date-picker v-model="searchForm.createTimeRange" value-format="timestamp"
                             type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
                             align="right">
                         </el-date-picker>
-                    </el-form-item>
-                    <el-form-item class="SearchFormTimePicker" label="更新时间范围">
-                        <el-date-picker v-model="searchForm.updateTimeRange" value-format="timestamp"
-                            type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                            align="right">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item class="SearchFormItem" label="申请状态">
-                        <el-select v-model="searchForm.appStatus" placeholder="请选择" clearable>
-                            <el-option label="已批准" value="1"></el-option>
-                            <el-option label="已拒绝" value="2"></el-option>
-                            <el-option label="待审核" value="3"></el-option>
-                            <el-option label="无效记录" value="4"></el-option>
-                        </el-select>
                     </el-form-item>
                 </el-form>
 
@@ -58,28 +41,19 @@
         <div style="margin-top: 24px;"></div>
         
         <el-table :data="approvalTable" style="width: 100%;" stripe border>
-            <el-table-column prop="applicantInstitutionDoi"  label="申请机构标识"></el-table-column>
-            <el-table-column prop="applicantUserId" label="申请人ID"></el-table-column>
             <el-table-column prop="doi" label="数字对象标识"></el-table-column>
-            <el-table-column prop="appType" label="申请类型">
+            <el-table-column prop="doName" label="数字对象名称"></el-table-column>
+            <el-table-column prop="doDesc" label="数字对象描述"></el-table-column>
+            <el-table-column prop="doType" label="数字对象类型"></el-table-column>
+            <el-table-column prop="projectName" label="所属项目名称"></el-table-column>
+            <el-table-column prop="projectDoi" label="所属项目标识"></el-table-column>
+            <el-table-column prop="applyFile" label="申请文件" align="center">
                 <template slot-scope="scope">
-                    <el-tag v-if="scope.row.appType === 1">实体型</el-tag>
-                    <el-tag v-else-if="scope.row.appType === 2">指针型</el-tag>
+                    <el-button type="primary" size="mini">下载</el-button>
                 </template>
             </el-table-column>
-            <el-table-column prop="appName" label="申请名称"></el-table-column>
-            <el-table-column prop="appContent" label="申请内容"></el-table-column>
-            <el-table-column prop="applyFile" label="申请文件"></el-table-column>
-            <el-table-column prop="createTime" label="创建时间"></el-table-column>
-            <el-table-column prop="updateTime" label="更新时间"></el-table-column>
-            <el-table-column prop="appStatus" label="申请状态">
-                <template slot-scope="scope">
-                    <el-tag v-if="scope.row.appStatus === 1" type="success">已批准</el-tag>
-                    <el-tag v-else-if="scope.row.appStatus === 2" type="error">已拒绝</el-tag>
-                    <el-tag v-else-if="scope.row.appStatus === 3">待审核</el-tag>
-                    <el-tag v-else-if="scope.row.appStatus === 4" type="warning">无效记录</el-tag>
-                </template>
-            </el-table-column>
+            <el-table-column prop="applyEmail" label="申请人邮箱"></el-table-column>
+            <el-table-column prop="createTime" label="申请时间"></el-table-column>
             <el-table-column prop="operation" label="操作" align="center">
                 <template slot-scope="scope">
                     <el-button type="primary" @click="conductApproval(scope.row, scope.$index)"
@@ -130,40 +104,29 @@ export default {
             collapseTitle: "搜索栏（点击展开）",
 
             searchForm: {
-                // 申请机构DOI
-                applicantInstitutionDoi: undefined,
-                // 申请人ID
-                applicantUserId: undefined,
-                // DOI
-                doi: undefined,
-                // 申请类型
-                appType: undefined,
-                // 申请名称
-                appName: undefined,
-                // 申请内容
-                appContent: undefined,
-                // 申请文件
-                applyFile: undefined,
-                // 创建时间范围
-                createTimeRange: undefined,
-                // 更新时间范围
-                updateTimeRange: undefined,
-                // 申请状态
-                appStatus: undefined,
             },
 
             // 表格数据
             approvalTable: [
                 {
-                    appId: 1,
-                    applicantInstitutionDoi: '申请机构DOI',
-                    applicantUserId: '申请人ID',
-                    doi: 'DOI',
-                    appType: '申请类型',
-                    appName: '申请名称',
-                    appContent: '申请内容',
+                    doi: 'DOI1',
+                    doName: "名字1",
+                    doDesc: "描述",
+                    doType: 'EDC',
+                    applyEmail: "12345@pku.edu.cn",
                     applyFile: '申请文件',
-                    createTime: '创建时间',
+                    createTime: '2024',
+                    updateTime: '更新时间',
+                    appStatus: 1,
+                },
+                {
+                    doi: 'DOI2',
+                    doName: "名字2",
+                    doDesc: "描述",
+                    doType: 'SDTM',
+                    applyEmail: "12345@pku.edu.cn",
+                    applyFile: '申请文件',
+                    createTime: '2024',
                     updateTime: '更新时间',
                     appStatus: 1,
                 }
@@ -180,7 +143,6 @@ export default {
         };
     },
     mounted() {
-        this.getData({});
     },
     methods: {
         clickPage(page) {
@@ -189,24 +151,6 @@ export default {
             this.getData(this.searchForm);
         },
         searchData() {
-            let postData = {
-                applicantInstitutionDoi: this.searchForm.applicantInstitutionDoi,
-                applicantUserId: this.searchForm.applicantUserId,
-                doi: this.searchForm.doi,
-                appType: this.searchForm.appType,
-                appName: this.searchForm.appName,
-                appContent: this.searchForm.appContent,
-                applyFile: this.searchForm.applyFile,
-                appStatus: this.searchForm.appStatus,
-            }
-            if (this.searchForm.createTimeRange && this.searchForm.createTimeRange.length > 1) {
-                postData.createTimeBegin = this.searchForm.createTimeRange[0];
-                postData.createTimeEnd = this.searchForm.createTimeRange[1] + 86399999;
-            }
-            if (this.searchForm.updateTimeRange && this.searchForm.updateTimeRange.length > 1) {
-                postData.updateTimeBegin = this.searchForm.updateTimeRange[0];
-                postData.updateTimeEnd = this.searchForm.updateTimeRange[1] + 86399999;
-            }
             this.getData(postData);
         },
         collapseChange(activeNames) {
@@ -217,26 +161,6 @@ export default {
             }
         },
         getData(postData) {
-            let _this = this;
-            this.approvalTable = [];
-            postForm('/doApplication/getApprovalList', postData, _this, function (res) {
-                _this.pages = res.data.pages;
-                for (let item of res.data.records) {
-                    _this.approvalTable.push({
-                        appId: item.appId,
-                        applicantInstitutionDoi: item.applicantInstitutionDoi,
-                        applicantUserId: item.applicantUserId,
-                        doi: item.doi,
-                        appType: item.appType,
-                        appName: item.appName,
-                        appContent: item.appContent,
-                        applyFile: item.applyFile,
-                        createTime: new Date(item.createTime).toLocaleDateString(),
-                        updateTime: new Date(item.updateTime).toLocaleDateString(),
-                        appStatus: item.appStatus,
-                    })
-                }
-            })
         },
         // 进行审批
         conductApproval(row, index) {
@@ -261,22 +185,7 @@ export default {
         },
         // 确定审批
         approvalConfirm() {
-            let postData = {
-                id: this.approvalTable[this.approvalIndex].appId,
-                status: this.approvalForm.approvalStatus,
-                approvalOpinion: this.approvalForm.approvalOpinion,
-            }
-            let _this = this;
-            postForm('/doApplication/submitApproval', postData, _this, function (res) {
-                if (res.code === 200) {
-                    _this.$message({
-                        message: '审批完成',
-                        type: 'success'
-                    });
-                    _this.approvalDialogVisible = false;
-                    _this.getData({});
-                }
-            })
+           this.approvalDialogVisible = false;
         }
     },
 }

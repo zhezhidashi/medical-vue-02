@@ -1,9 +1,7 @@
 <template>
     <div style="width: 200px;" v-if="path !== '/Login' && path !== '/ProjectsListNormalUser'">
-        <el-menu :default-active="activeIndex" class="el-menu-demo" 
-            @select="handleSelect" :unique-opened="false"
-            text-color="#000080" active-text-color="#FF4040"
-            background-color="#F0F8FF" >
+        <el-menu :default-active="activeIndex" class="el-menu-demo" @select="handleSelect" :unique-opened="false"
+            text-color="#000080" active-text-color="#FF4040" background-color="#F0F8FF">
             <el-menu-item v-show="isAdmin" index="0">主页</el-menu-item>
             <el-menu-item v-show="isAdmin" index="1">组网申请</el-menu-item>
             <el-submenu v-show="isAdmin" index="2">
@@ -26,11 +24,15 @@
             <!-- <el-menu-item v-show="!isAdmin" index="5">数字对象申请</el-menu-item> -->
             <el-submenu v-show="isAdmin" index="6">
                 <template slot="title">数字对象管理</template>
-                <el-menu-item index="6-1">元数据导入</el-menu-item>
                 <el-menu-item index="6-2">数字对象分配</el-menu-item>
                 <el-menu-item index="6-3">数字对象审批</el-menu-item>
-                <el-menu-item index="6-4">机构申请列表</el-menu-item>
-                <el-menu-item index="6-5">审批通过导出</el-menu-item>
+
+            </el-submenu>
+            <el-submenu v-show="isAdmin" index="12">
+                <template slot="title">数字对象摆渡</template>
+                <el-menu-item index="6-1">元数据导入</el-menu-item>
+                <!-- <el-menu-item index="6-4">机构申请列表</el-menu-item> -->
+                <el-menu-item index="6-5">审批通过列表</el-menu-item>
                 <el-menu-item index="6-6">导出动态私钥</el-menu-item>
             </el-submenu>
 
@@ -106,7 +108,7 @@ export default {
         }
         else if (this.path === '/BlocksChainQuery') {
             this.activeIndex = '8';
-        } 
+        }
         else if (this.path === "/ProjectsApplyParticipate") {
             this.activeIndex = '9-1'
         }
@@ -139,7 +141,7 @@ export default {
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
             if (key === '0') {
-                if(isAdmin) {
+                if (isAdmin) {
                     this.$router.push('/MainPage')
                 }
                 else {
@@ -160,31 +162,31 @@ export default {
             }
             else if (key === '3') {
                 this.$router.push('/AccountManage')
-            } 
+            }
             else if (key === '4-1') {
                 this.$router.push('/TraceSystem')
-            } 
+            }
             else if (key === '4-2') {
                 this.$router.push('/RetraceSystem')
             }
             else if (key === '5') {
                 this.$router.push('/DigitalObjectApplyUser')
-            } 
+            }
             else if (key === '6-1') {
                 this.$router.push('/MetadataImport')
-            } 
+            }
             else if (key === '6-2') {
                 this.$router.push('/DigitalObjectAllocate')
-            } 
+            }
             else if (key === '6-3') {
                 this.$router.push('/DigitalObjectApproval')
-            } 
+            }
             else if (key === '6-4') {
                 this.$router.push('/DigitalObjectApplyInstitution')
-            } 
+            }
             else if (key === '6-5') {
                 this.$router.push('/ApprovalExport')
-            } 
+            }
             else if (key === '6-6') {
                 this.$router.push('/PrivateKeyExport')
             }

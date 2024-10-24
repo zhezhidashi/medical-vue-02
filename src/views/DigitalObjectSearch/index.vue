@@ -2,7 +2,7 @@
     <div style="text-align: center; margin: 24px 40px 24px 40px;">
         <el-collapse v-model="activeNames" @change="collapseChange">
             <el-collapse-item :title="collapseTitle" name="1">
-                <el-form :model="searchForm" label-width="auto" :rules="rules" class="SearchForm">
+                <el-form :model="searchForm" label-width="auto" class="SearchForm">
                     <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
                         <el-input v-model="searchForm.doi"></el-input>
                     </el-form-item>

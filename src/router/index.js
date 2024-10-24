@@ -153,7 +153,7 @@ const routes = [
                 path: '/ApprovalExport',
                 name: 'ApprovalExport',
                 meta: {
-                    title: '审批通过导出'
+                    title: '审批通过列表'
                 },
                 component: () => import('@/views/ApprovalExport')
             },

@@ -3,15 +3,16 @@
         <div style="font-size: 20px; font-weight: bold; line-height: 300%;">账户余额：{{ balance }}</div>
         <el-progress type="circle" :percentage="balancePercent"></el-progress>
 
-        <el-card class="box-card" style="margin: 24px; width: 100%;">
+        <!-- <el-card class="box-card" style="margin: 24px; width: 100%;">
             <div slot="header" class="clearfix">
                 <span>智能合约权限访问控制表</span>
             </div>
             <div style="text-align: center; margin: 24px 40px 24px 40px;">
                 <el-tree :data="tableData" :props="defaultProps"></el-tree>
             </div>
-        </el-card>
+        </el-card> -->
 
+        <div style="margin-top: 24px"></div>
         <el-table :data="blocks" stripe border style="width: 100%;">
             <el-table-column prop="number" label="区块编号"></el-table-column>
             <el-table-column prop="gasUsed" label="gas使用量"></el-table-column>

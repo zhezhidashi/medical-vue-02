@@ -1,167 +1,113 @@
 <template>
     <div style="text-align: center; margin: 24px 40px 24px 40px;">
-        <div
-            style="margin-top: 24px; display: flex; flex-direction: row; justify-content: center; align-items: center;">
-            <div style="font-size: 14px; color: #606266; line-height: 40px;padding: 0 12px 0 0;">选择数字对象</div>
-            <el-select v-model="doi" placeholder="请选择">
-                <div v-for="(item, index) in doiList" :key=index>
-                    <el-option :label="item.label" :value="item.value"></el-option>
-                </div>
-            </el-select>
+        <el-collapse v-model="activeNames" @change="collapseChange">
+            <el-collapse-item :title="collapseTitle" name="1">
+                <el-form :model="searchForm" label-width="auto" class="SearchForm">
+                    <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
+                        <el-input v-model="searchForm.doi"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="name" label="数字对象名称" class="SearchFormItem">
+                        <el-input v-model="searchForm.name"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="description" label="数字对象描述" class="SearchFormItem">
+                        <el-input v-model="searchForm.description"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
+                        <el-input v-model="searchForm.type"></el-input>
+                    </el-form-item>
+                </el-form>
+
+                <el-button type="primary" @click="searchData">搜索</el-button>
+            </el-collapse-item>
+        </el-collapse>
+        <el-divider></el-divider>
+
+        <el-table :data="resultTable" stripe border style="width: 100%;">
+            <el-table-column prop="doi" label="数字对象标识"></el-table-column>
+            <el-table-column prop="doiName" label="数字对象名称"></el-table-column>
+            <el-table-column prop="doiDesc" label="数字对象描述"></el-table-column>
+            <el-table-column prop="type" label="数字对象类型"></el-table-column>
+            <el-table-column label="操作" align="center">
+                <template slot-scope="props">
+                    <el-button @click="apply(props.row, props.$index)" type="primary"
+                        size="small">分配项目</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <div style="margin: 24px">
+            <el-pagination background layout="pager" :page-size="10" :page-count="pages" @current-change="clickPage">
+            </el-pagination>
         </div>
 
-        <div style="margin-top: 24px; margin-bottom: 24px;">
-            <el-collapse v-model="activeNames" @change="collapseChange">
-                <el-collapse-item :title="collapseTitle" name="1">
-                    <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                        <el-form-item prop="projectName" label="项目名称" class="SearchFormItem">
-                            <el-input v-model="searchForm.projectName" placeholder="项目名称"></el-input>
-                        </el-form-item>
-                        <el-form-item prop="projectLeader" label="项目负责人" class="SearchFormItem">
-                            <el-input v-model="searchForm.projectLeader" placeholder="项目负责人"></el-input>
-                        </el-form-item>
-                        <el-form-item prop="projectContact" label="项目联系方式" class="SearchFormItem">
-                            <el-input v-model="searchForm.projectContact" placeholder="项目联系方式"></el-input>
-                        </el-form-item>
-                        <el-form-item prop="projectDescription" label="项目描述" class="SearchFormItem">
-                            <el-input v-model="searchForm.projectDescription" placeholder="项目描述"></el-input>
-                        </el-form-item>
-
-                        <el-form-item prop="projectApplyEmail" label="申请人邮箱" class="SearchFormItem">
-                            <el-input v-model="searchForm.projectApplyEmail" placeholder="申请人邮箱"></el-input>
-                        </el-form-item>
-                        <el-form-item prop="projectApprovalStatus" label="审批状态" class="SearchFormItem">
-                            <el-select v-model="searchForm.projectApprovalStatus" placeholder="请选择">
-                                <el-option label="待审批" value="0"></el-option>
-                                <el-option label="已通过" value="1"></el-option>
-                                <el-option label="未通过" value="2"></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item prop="projectApprovalOpinion" label="审批意见" class="SearchFormItem">
-                            <el-input v-model="searchForm.projectApprovalOpinion" placeholder="审批意见"></el-input>
-                        </el-form-item>
-                        <el-form-item prop="projectApplyTimeRange" label="申请时间" class="SearchFormTimePicker">
-                            <el-date-picker value-format="timestamp" v-model="searchForm.projectApplyTimeRange"
-                                type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                            </el-date-picker>
-                        </el-form-item>
-
-                        <el-form-item prop="projectApprovalTimeRange" label="审批时间" class="SearchFormTimePicker">
-                            <el-date-picker value-format="timestamp" v-model="searchForm.projectApprovalTimeRange"
-                                type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-form>
-
-                    <el-button type="primary" @click="searchData">搜索</el-button>
-
-                </el-collapse-item>
-            </el-collapse>
-        </div>
-
-        <div style="margin-bottom: 24px; display: flex; justify-content: center; width: 100%;">
-            <div style="display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; width: 70vw; padding: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
-                <div v-for="(item, index) in ProjectsList" :key="index">
-                    <el-checkbox style="margin: 5px;" v-model="item.selected">{{ item.name }}</el-checkbox>
-                </div>
-            </div>
-        </div>
-
-        <div style="text-align: center; margin-bottom: 24px;">
-            <el-button type="primary" @click="allocate">分配</el-button>
-        </div>
-
-
-
-
+        <el-dialog title="申请项目" :visible.sync="applyVisible" width="80%" :before-close="applyCancel" style="text-align: left;">
+            <el-form :model="applyForm" label-width="auto">
+                <el-form-item label="选择项目" prop="applyFile">
+                    <el-select v-model="applyForm.project" placeholder="请选择">
+                        <el-option v-for="(item, index) in projectsList" :label="item.name" :value="item.projectDoi" :key="index">
+                            {{ item.name }}
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="applyCancel">取 消</el-button>
+                <el-button type="primary" @click="applyConfirm">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-import { postForm } from '@/api/data';
 export default {
     name: "DigitalObjectAllocate",
     data() {
         return {
-            // DOI表单
-            doi: "",
-
-            doiList: [
-                {
-                    label: 'doi',
-                    value: 'doi',
-                }
-            ],
-
+            pages: 1,
+            currentPage: 1,
             // 折叠
             activeNames: [],
             collapseTitle: "搜索栏（点击展开）",
-            // 搜索表单
             searchForm: {
-                // 项目名称
-                projectName: "",
-                // 项目负责人
-                projectLeader: "",
-                // 项目联系方式
-                projectContact: "",
-                // 项目描述
-                projectDescription: "",
-                // 申请时间范围
-                projectApplyTimeRange: "",
-                // 申请人邮箱
-                projectApplyEmail: "",
-                // 审批状态
-                projectApprovalStatus: "",
-                // 审批意见
-                projectApprovalOpinion: "",
-                // 审批时间范围
-                projectApprovalTimeRange: "",
+                // DOI
+                doi: '',
+                // 数字对象名称
+                name: '',
+                // 数字对象类型
+                type: '',
+                // 数字对象状态
+                status: '',
+                // 数字对象描述
+                description: '',
+                // 页码
+                pageNo: 1,
             },
 
-            ProjectsList: [
+            resultTable: [
                 {
-                    projectDoi: 1,
-                    name: '项目1',
-                    selected: false,
+                    doi: 'doi1',
+                    doiName: '数字对象1',
+                    doiDesc: '描述1',
+                    type: "EDC",
                 },
             ],
 
+            projectsList: [
+                {
+                    name: "项目1",
+                    projectDoi: "doi1",
+                }
+            ],
 
+            applyVisible: false,
+            applyForm: {
+                project: ""
+            }
         };
     },
     mounted() {
-        // 获取项目信息
-        this.getData({});
-
     },
     methods: {
-        getData(postData) {
-
-
-            let _this = this;
-
-            postForm('/registry/query', { pageSize: -1 }, _this, function (res) {
-                _this.doiList = [];
-                for (let item of res.data.records) {
-                    _this.doiList.push({
-                        value: item.doi,
-                        label: item.name
-                    });
-                }
-            })
-            _this.ProjectsList = [];
-            postForm('/projectInfos/getProjectInfo', postData, _this, function (res) {
-                for (let item of res.data.records) {
-                    _this.ProjectsList.push({
-                        projectDoi: item.projectDoi,
-                        name: item.name,
-                        selected: false,
-                    })
-                }
-            })
-        },
-
         collapseChange(activeNames) {
             if (activeNames.length === 0) {
                 this.collapseTitle = "搜索栏（点击展开）";
@@ -169,67 +115,39 @@ export default {
                 this.collapseTitle = "搜索栏（点击收起）";
             }
         },
+        clickPage(page) {
+            this.currentPage = page;
+            this.searchForm.pageNo = this.currentPage;
+            this.getData(this.searchForm);
+        },
         searchData() {
-            let postData = {
-                name: this.searchForm.projectName,
-                user: this.searchForm.projectLeader,
-                contactInfo: this.searchForm.projectContact,
-                description: this.searchForm.projectDescription,
-                contactEmail: this.searchForm.projectApplyEmail,
-                status: this.searchForm.projectApprovalStatus,
-                reviewComments: this.searchForm.projectApprovalOpinion,
-                size: -1,
-            }
-
-            if (this.searchForm.projectApplyTimeRange && this.searchForm.projectApplyTimeRange !== "") {
-                postData.createBeginTime = this.searchForm.projectApplyTimeRange[0];
-                postData.createEndTime = this.searchForm.projectApplyTimeRange[1] + 86399999;
-            }
-
-            if (this.searchForm.projectApprovalTimeRange && this.searchForm.projectApprovalTimeRange !== "") {
-                postData.updateBeginTime = this.searchForm.projectApprovalTimeRange[0];
-                postData.updateEndTime = this.searchForm.projectApprovalTimeRange[1] + 86399999;
-            }
-
-            this.getData(postData);
         },
 
-        allocate() {
-            if (this.doi === "") {
-                this.$message({
-                    message: '请输入DOI',
-                    type: 'warning'
-                });
-                return;
-            }
-            let postData = {
-                doi: this.doi,
-                projectDoiList: [],
-            }
-            for (let item of this.ProjectsList) {
-                if (item.selected) {
-                    postData.projectDoiList.push(item.projectDoi);
-                }
-            }
-
-            if (postData.projectDoiList.length === 0) {
-                this.$message({
-                    message: '请选择项目',
-                    type: 'warning'
-                });
-                return;
-            }
-            let _this = this;
-            postForm('/projectDo/allocateProject', postData, this, function (res) {
-                if (res.code === 200) {
-                    _this.$message({
-                        message: '分配成功',
-                        type: 'success'
-                    });
-                }
-            })
+        getData(postData) {
         },
 
+        apply() {
+            this.applyVisible = true;
+        },
+
+        applyCancel() {
+            this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.applyVisible = false;
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消'
+                });
+            });
+        },
+
+        applyConfirm() {
+            this.applyVisible = false;
+        },
     },
 }
 </script>
