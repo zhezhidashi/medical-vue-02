@@ -111,7 +111,7 @@ export default {
                 {
                     doi: 'DOI1',
                     doName: "名字1",
-                    doDesc: "描述",
+                    doDesc: "加密",
                     doType: 'EDC',
                     applyEmail: "12345@pku.edu.cn",
                     applyFile: '申请文件',

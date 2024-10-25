@@ -68,7 +68,7 @@
         </div>
 
         <div div style="text-align: center">
-            <el-button type="primary">导出</el-button>
+            <el-button type="primary" @click="exportApproval">导出</el-button>
         </div>
     </div>
 </template>
@@ -95,8 +95,8 @@ export default {
             approvalTable: [
                 {
                     doi: '123456',
-                    doName: "名字1",
-                    doDesc: "描述",
+                    doName: "名称1",
+                    doDesc: "加密",
                     doType: 'EDC',
                     applyEmail: "12345@pku.edu.cn",
                     applyFile: '申请文件',
@@ -106,8 +106,8 @@ export default {
                 },
                 {
                     doi: '123457',
-                    doName: "名字2",
-                    doDesc: "描述",
+                    doName: "名称2",
+                    doDesc: "加密",
                     doType: 'SDTM',
                     applyEmail: "12345@pku.edu.cn",
                     applyFile: '申请文件',
@@ -138,6 +138,12 @@ export default {
             }
         },
         getData(postData) {
+        },
+        exportApproval() {
+            this.$message({
+                type: "success",
+                message: "已导出审批通过的数字对象标识及其对应的动态公钥"
+            })
         },
     },
 }

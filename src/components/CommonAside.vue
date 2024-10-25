@@ -141,7 +141,7 @@ export default {
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
             if (key === '0') {
-                if (isAdmin) {
+                if (this.isAdmin) {
                     this.$router.push('/MainPage')
                 }
                 else {

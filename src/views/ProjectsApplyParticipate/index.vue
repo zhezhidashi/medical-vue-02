@@ -52,7 +52,7 @@
                 <el-button @click="addProject" type="primary" style="margin-bottom: 24px;">申请项目权限</el-button>
             </div>
 
-            <el-table :data="projectTable" stripe border style="width: 100%;">
+            <el-table :data="projectTable" stripe border style="width: 95%;">
                 <el-table-column prop="projectName" label="项目名称" min-width="120" align="center"></el-table-column>
                 <el-table-column prop="projectDoi" label="项目标识" align="center"></el-table-column>
                 <el-table-column prop="projectLeader" label="项目负责人" min-width="120" align="center"></el-table-column>
@@ -60,7 +60,9 @@
                 </el-table-column>
                 <el-table-column prop="projectDescription" label="项目描述" min-width="120" align="center">
                 </el-table-column>
-                <el-table-column prop="involvedInstitutionDoi" label="项目参与机构" min-width="120" align="center">
+                <el-table-column prop="involvedInstitutionDoi" label="所属机构名称" min-width="120" align="center">
+                </el-table-column>
+                <el-table-column prop="involvedInstitutionDoi" label="所属机构标识" min-width="120" align="center">
                 </el-table-column>
                 <el-table-column prop="projectApplyTime" label="申请时间" min-width="120" align="center">
                 </el-table-column>

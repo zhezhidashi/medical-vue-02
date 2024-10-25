@@ -13,7 +13,9 @@
                         <el-input v-model="searchForm.description"></el-input>
                     </el-form-item>
                     <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
-                        <el-input v-model="searchForm.type"></el-input>
+                        <el-select placeholder="请选择" v-model="searchForm.type">
+                            <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value" :key="index"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item prop="institutionDoi" label="所属项目名称" class="SearchFormItem">
                         <el-input v-model="searchForm.institutionDoi"></el-input>
@@ -34,7 +36,7 @@
             <el-table-column prop="doiDesc" label="数字对象描述"></el-table-column>
             <el-table-column prop="type" label="数字对象类型"></el-table-column>
             <el-table-column prop="project" label="所属项目名称"></el-table-column>
-            <el-table-column prop="institution" label="所属项目标识"></el-table-column>
+            <el-table-column prop="projectDoi" label="所属项目标识"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
                     <el-button v-if="props.row.permission === 0" @click="apply(props.row, props.$index)" type="primary"
@@ -99,20 +101,20 @@ export default {
             resultTable: [
                 {
                     doi: 'doi1',
-                    doiName: '数字对象1',
-                    doiDesc: '描述1',
+                    doiName: '名称1',
+                    doiDesc: '加密',
                     type: "EDC",
                     project: '项目1',
-                    institution: '机构1',
+                    projectDoi: '456789',
                     permission: 0,
                 },
                 {
-                    doi: 'doi1',
-                    doiName: '数字对象1',
-                    doiDesc: '描述1',
-                    type: "EDC",
+                    doi: 'doi2',
+                    doiName: '名称2',
+                    doiDesc: '加密',
+                    type: "ADAM",
                     project: '项目1',
-                    institution: '机构1',
+                    projectDoi: '123456',
                     permission: 1,
                 }
             ],
@@ -121,7 +123,14 @@ export default {
             applyForm: {
                 applyFile: "",
                 applyEmail: "",
-            }
+            },
+
+            doTypeList: [
+                { name: "EDC",  value: 0 },
+                { name: "SDTM",  value: 1 },
+                { name: "ADAM",  value: 2 },
+                { name: "代码",  value: 3 },
+            ],
         };
     },
     mounted() {

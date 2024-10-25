@@ -54,13 +54,13 @@
             <el-table-column prop="institutionDoi" label="所属机构名称" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="所属机构标识" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="参与机构" align="center"></el-table-column>
-            <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
-            <el-table-column prop="updateTime" label="修改时间" align="center"></el-table-column>
             <el-table-column prop="userBoList" label="用户列表" align="center">
                 <template slot-scope="scope">
                     <div v-for="item in scope.row.userNameList" :key="item">{{ item }}</div>
                 </template>
             </el-table-column>
+            <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
+            <el-table-column prop="updateTime" label="修改时间" align="center"></el-table-column>
             <el-table-column label="操作" width="150" align="center">
                 <template slot-scope="props">
                     <el-button @click="modifyProject(props.row, props.$index)" type="primary"
