@@ -71,7 +71,7 @@
 <script>
 import { postForm } from '@/api/data'
 export default {
-    name: "DigitalObjectSearch",
+    name: "DigitalObjectList",
     data() {
         return {
             pages: 1,

@@ -76,10 +76,10 @@ export default {
         else if (this.path === '/AccountManage') {
             this.activeIndex = '3';
         }
-        else if (this.path === '/TraceSystem') {
+        else if (this.path === '/RetraceSystem') {
             this.activeIndex = '4-1';
         }
-        else if (this.path === '/RetraceSystem') {
+        else if (this.path === '/TraceSystem') {
             this.activeIndex = '4-2'
         }
         else if (this.path === '/DigitalObjectApplyUser') {
@@ -103,7 +103,7 @@ export default {
         else if (this.path === '/PrivateKeyExport') {
             this.activeIndex = '6-6'
         }
-        else if (this.path === '/DigitalObjectSearch') {
+        else if (this.path === '/DigitalObjectList') {
             this.activeIndex = '7';
         }
         else if (this.path === '/BlocksChainQuery') {
@@ -191,7 +191,7 @@ export default {
                 this.$router.push('/PrivateKeyExport')
             }
             else if (key === '7') {
-                this.$router.push('/DigitalObjectSearch')
+                this.$router.push('/DigitalObjectList')
             }
             else if (key === '8') {
                 this.$router.push('/BlocksChainQuery')
