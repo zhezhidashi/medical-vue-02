@@ -15,8 +15,10 @@
                     <el-input v-model="searchForm.name"></el-input>
                 </el-form-item>
                 <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
-                    <el-input v-model="searchForm.type"></el-input>
-                </el-form-item>
+                        <el-select placeholder="请选择" v-model="searchForm.type">
+                            <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value" :key="index"></el-option>
+                        </el-select>
+                    </el-form-item>
                 <el-form-item prop="status" label="数字对象状态" class="SearchFormItem">
                     <el-input v-model="searchForm.status"></el-input>
                 </el-form-item>
@@ -124,6 +126,13 @@ export default {
                     name: '数字对象333',
                     selected: false,
                 },
+            ],
+
+            doTypeList: [
+                { name: "EDC",  value: 0 },
+                { name: "SDTM",  value: 1 },
+                { name: "ADAM",  value: 2 },
+                { name: "代码",  value: 3 },
             ],
         };
     },

@@ -15,7 +15,9 @@
                         <el-input v-model="searchForm.description"></el-input>
                     </el-form-item>
                     <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
-                        <el-input v-model="searchForm.type"></el-input>
+                        <el-select placeholder="请选择" v-model="searchForm.type">
+                            <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value" :key="index"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item class="SearchFormItem" label="申请人邮箱">
                         <el-input v-model="searchForm.applyEmail"></el-input>
@@ -117,6 +119,12 @@ export default {
                 }
             ],
 
+            doTypeList: [
+                { name: "EDC",  value: 0 },
+                { name: "SDTM",  value: 1 },
+                { name: "ADAM",  value: 2 },
+                { name: "代码",  value: 3 },
+            ],
         };
     },
     mounted() {
