@@ -118,12 +118,12 @@ const routes = [
                 component: () => import('@/views/ApprovalExport')
             },
             {
-                path: '/DigitalObjectSearch',
-                name: 'DigitalObjectSearch',
+                path: '/DigitalObjectList',
+                name: 'DigitalObjectList',
                 meta: {
                     title: '数字对象检索'
                 },
-                component: () => import('@/views/DigitalObjectSearch')
+                component: () => import('@/views/DigitalObjectList')
             },
             {
                 path: '/MetadataImport',
