@@ -49,49 +49,25 @@ const routes = [
                 path: '/NetworkingApply',
                 name: 'NetworkingApply',
                 meta: {
-                    title: '组网申请'
+                    title: '组网管理'
                 },
                 component: () => import('@/views/NetworkingApply')
             },
             {
-                path: '/ProjectsApply',
-                name: 'ProjectsApply',
+                path: '/NetworkingModify',
+                name: 'NetworkingModify',
                 meta: {
-                    title: '创建项目'
+                    title: '组网管理'
                 },
-                component: () => import('@/views/ProjectsApply')
-            },
-            {
-                path: '/ProjectsApplyParticipate',
-                name: 'ProjectsApplyParticipate',
-                meta: {
-                    title: '申请项目权限'
-                },
-                component: () => import('@/views/ProjectsApplyParticipate')
-            },
-            {
-                path: '/ProjectsApproval',
-                name: 'ProjectsApproval',
-                meta: {
-                    title: '项目审批'
-                },
-                component: () => import('@/views/ProjectsApproval')
+                component: () => import('@/views/NetworkingModify')
             },
             {
                 path: '/ProjectsList',
                 name: 'ProjectsList',
                 meta: {
-                    title: '牵头项目列表'
+                    title: '项目管理'
                 },
                 component: () => import('@/views/ProjectsList')
-            },
-            {
-                path: "/ProjectsListParticipate",
-                name: 'ProjectsListParticipate',
-                meta: {
-                    title: '参与项目列表'
-                },
-                component: () => import('@/views/ProjectsListParticipate')
             },
             {
                 path: "/ProjectDetail",
@@ -118,36 +94,12 @@ const routes = [
                 component: () => import('@/views/AccountManage')
             },
             {
-                path: '/RelationshipSystem',
-                name: 'RelationshipSystem',
-                meta: {
-                    title: '关系系统'
-                },
-                component: () => import('@/views/RelationshipSystem')
-            },
-            {
-                path: '/DigitalObjectApplyUser',
-                name: 'DigitalObjectApplyUser',
-                meta: {
-                    title: '数字对象申请'
-                },
-                component: () => import('@/views/DigitalObjectApplyUser')
-            },
-            {
                 path: '/DigitalObjectApproval',
                 name: 'DigitalObjectApproval',
                 meta: {
                     title: '数字对象审批'
                 },
                 component: () => import('@/views/DigitalObjectApproval')
-            },
-            {
-                path: '/DigitalObjectApplyInstitution',
-                name: 'DigitalObjectApplyInstitution',
-                meta: {
-                    title: '机构申请列表'
-                },
-                component: () => import('@/views/DigitalObjectApplyInstitution')
             },
             {
                 path: '/ApprovalExport',
@@ -164,6 +116,14 @@ const routes = [
                     title: '数字对象列表'
                 },
                 component: () => import('@/views/DigitalObjectList')
+            },
+            {
+                path: '/DigitalObjectSearch',
+                name: 'DigitalObjectSearch',
+                meta: {
+                    title: '数字对象检索'
+                },
+                component: () => import('@/views/DigitalObjectSearch')
             },
             {
                 path: '/MetadataImport',

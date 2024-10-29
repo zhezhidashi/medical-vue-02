@@ -19,21 +19,6 @@
                             <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value" :key="index"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item class="SearchFormItem" label="申请人邮箱">
-                        <el-input v-model="searchForm.applyEmail"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="institutionName" label="所属项目名称" class="SearchFormItem">
-                        <el-input v-model="searchForm.institutionName"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="institutionDoi" label="所属项目标识" class="SearchFormItem">
-                        <el-input v-model="searchForm.institutionDoi"></el-input>
-                    </el-form-item>
-                    <el-form-item class="SearchFormTimePicker" label="申请时间">
-                        <el-date-picker v-model="searchForm.createTimeRange" value-format="timestamp"
-                            type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-                            align="right">
-                        </el-date-picker>
-                    </el-form-item>
                 </el-form>
 
                 <el-button type="primary" @click="searchData">搜索</el-button>
@@ -47,8 +32,6 @@
             <el-table-column prop="doName" label="数字对象名称"></el-table-column>
             <el-table-column prop="doDesc" label="数字对象描述"></el-table-column>
             <el-table-column prop="doType" label="数字对象类型"></el-table-column>
-            <el-table-column prop="projectName" label="所属项目名称"></el-table-column>
-            <el-table-column prop="projectDoi" label="所属项目标识"></el-table-column>
             <el-table-column prop="applyFile" label="申请文件" align="center">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini">下载</el-button>
@@ -71,8 +54,8 @@
 
 
         <el-dialog title="审批" :visible.sync="approvalDialogVisible">
-            <el-form :model="approvalForm" label-width="80px">
-                <el-form-item label="审批状态">
+            <el-form :model="approvalForm" label-width="80px" align="left">
+                <el-form-item label="* 审批结果">
                     <el-select v-model="approvalForm.approvalStatus" placeholder="请选择">
                         <el-option label="通过" :value="1"></el-option>
                         <el-option label="拒绝" :value="2"></el-option>
@@ -148,6 +131,8 @@ export default {
                 { name: "SDTM",  value: 1 },
                 { name: "ADAM",  value: 2 },
                 { name: "代码",  value: 3 },
+                { name: "结构化数据", value: 4 },
+                { name: "非结构化数据", value: 5 }
             ],
         };
     },

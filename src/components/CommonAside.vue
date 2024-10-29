@@ -3,40 +3,41 @@
         <el-menu :default-active="activeIndex" class="el-menu-demo" @select="handleSelect" :unique-opened="false"
             text-color="#000080" active-text-color="#FF4040" background-color="#F0F8FF">
             <el-menu-item v-show="isAdmin" index="0">主页</el-menu-item>
-            <el-menu-item v-show="isAdmin" index="1">组网申请</el-menu-item>
-            <el-submenu v-show="isAdmin" index="2">
-                <template slot="title">牵头项目</template>
+            <el-menu-item v-show="isAdmin" index="1">组网管理（未组网时显示）</el-menu-item>
+            <el-menu-item v-show="isAdmin" index="1-1">组网管理（已组网时显示）</el-menu-item>
+            <el-menu-item v-show="isAdmin" index="2">项目管理</el-menu-item>
+            <el-menu-item v-show="isAdmin" index="3">账号管理</el-menu-item>
+            <el-submenu v-show="isAdmin" index="4">
+                <template slot="title">数字对象管理</template>
+                <el-menu-item index="4-1">数字对象分配</el-menu-item>
+                <el-menu-item index="4-2">数字对象审批</el-menu-item>
+            </el-submenu>
+            <!-- <el-submenu v-show="isAdmin" index="2">
+                <template slot="title">项目管理</template>
                 <el-menu-item index="2-1">创建项目</el-menu-item>
                 <el-menu-item index="2-2">牵头项目列表</el-menu-item>
                 <el-menu-item index="2-3">项目审批</el-menu-item>
-            </el-submenu>
-            <el-submenu v-show="isAdmin" index="9">
+            </el-submenu> -->
+            <!-- <el-submenu v-show="isAdmin" index="9">
                 <template slot="title">参与项目</template>
                 <el-menu-item index="9-1">申请项目权限</el-menu-item>
                 <el-menu-item index="9-2">参与项目列表</el-menu-item>
-            </el-submenu>
-            <el-menu-item v-show="isAdmin" index="3">账号管理</el-menu-item>
-            <el-menu-item v-show="!isAdmin" index="11">用户参与项目列表</el-menu-item>
-            <el-menu-item v-show="!isAdmin" index="10">项目详情</el-menu-item>
-            <el-menu-item v-show="!isAdmin" index="4-1">流转追溯系统</el-menu-item>
-            <el-menu-item v-show="!isAdmin" index="4-2">痕迹系统</el-menu-item>
-            <el-menu-item v-show="!isAdmin" index="7">数字对象列表</el-menu-item>
+            </el-submenu> -->
+            
+            <el-menu-item v-show="!isAdmin" index="5"> < 返回参与项目列表</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="6">项目详情</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="7">数字对象检索</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="8">数字对象列表</el-menu-item>
             <!-- <el-menu-item v-show="!isAdmin" index="5">数字对象申请</el-menu-item> -->
-            <el-submenu v-show="isAdmin" index="6">
-                <template slot="title">数字对象管理</template>
-                <el-menu-item index="6-2">数字对象分配</el-menu-item>
-                <el-menu-item index="6-3">数字对象审批</el-menu-item>
-
-            </el-submenu>
-            <el-submenu v-show="isAdmin" index="12">
+            
+            <!-- <el-submenu v-show="isAdmin" index="12">
                 <template slot="title">数字对象摆渡</template>
                 <el-menu-item index="6-1">元数据导入</el-menu-item>
-                <!-- <el-menu-item index="6-4">机构申请列表</el-menu-item> -->
                 <el-menu-item index="6-5">审批通过列表</el-menu-item>
                 <el-menu-item index="6-6">导出动态私钥</el-menu-item>
-            </el-submenu>
+            </el-submenu> -->
 
-            <el-menu-item v-show="isAdmin" index="8">智能合约权限管理</el-menu-item>
+            <!-- <el-menu-item v-show="isAdmin" index="8">智能合约权限管理</el-menu-item> -->
 
         </el-menu>
     </div>
@@ -55,72 +56,6 @@ export default {
     mounted() {
         this.isAdmin = this.$store.state.user.userType === 'admin';
         this.path = this.$router.history.current.path;
-        if (this.path === '/Login') {
-            this.activeIndex = '0';
-        }
-        else if (this.path === '/MainPage') {
-            this.activeIndex = '0';
-        }
-        else if (this.path === '/NetworkingApply') {
-            this.activeIndex = '1';
-        }
-        else if (this.path === '/ProjectsApply') {
-            this.activeIndex = '2-1'
-        }
-        else if (this.path === '/ProjectsList') {
-            this.activeIndex = '2-2'
-        }
-        else if (this.path === '/ProjectsApproval') {
-            this.activeIndex = '2-3'
-        }
-        else if (this.path === '/AccountManage') {
-            this.activeIndex = '3';
-        }
-        else if (this.path === '/RetraceSystem') {
-            this.activeIndex = '4-1';
-        }
-        else if (this.path === '/TraceSystem') {
-            this.activeIndex = '4-2'
-        }
-        else if (this.path === '/DigitalObjectApplyUser') {
-            this.activeIndex = '5';
-        }
-        else if (this.path === 'MetadataImport') {
-            this.activeIndex = '6-1'
-        }
-        else if (this.path === '/DigitalObjectAllocate') {
-            this.activeIndex = '6-2'
-        }
-        else if (this.path === '/DigitalObjectApproval') {
-            this.activeIndex = '6-3';
-        }
-        else if (this.path === '/DigitalObjectApplyInstitution') {
-            this.activeIndex = '6-4'
-        }
-        else if (this.path === '/ApprovalExport') {
-            this.activeIndex = '6-5'
-        }
-        else if (this.path === '/PrivateKeyExport') {
-            this.activeIndex = '6-6'
-        }
-        else if (this.path === '/DigitalObjectList') {
-            this.activeIndex = '7';
-        }
-        else if (this.path === '/BlocksChainQuery') {
-            this.activeIndex = '8';
-        }
-        else if (this.path === "/ProjectsApplyParticipate") {
-            this.activeIndex = '9-1'
-        }
-        else if (this.path === '/ProjectsListParticipate') {
-            this.activeIndex = '9-2'
-        }
-        else if (this.path === '/ProjectDetail') {
-            this.activeIndex = '10'
-        }
-        else if (this.path === '/ProjectsListNormalUser') {
-            this.activeIndex = '11'
-        }
     },
     watch: {
         $route(to, from) {
@@ -151,62 +86,32 @@ export default {
             else if (key === '1') {
                 this.$router.push('/NetworkingApply')
             }
-            else if (key === '2-1') {
-                this.$router.push('/ProjectsApply')
+            else if (key === '1-1') {
+                this.$router.push('/NetworkingModify')
             }
-            else if (key === '2-2') {
+            else if (key === '2') {
                 this.$router.push('/ProjectsList')
-            }
-            else if (key === '2-3') {
-                this.$router.push('/ProjectsApproval')
             }
             else if (key === '3') {
                 this.$router.push('/AccountManage')
             }
             else if (key === '4-1') {
-                this.$router.push('/TraceSystem')
-            }
-            else if (key === '4-2') {
-                this.$router.push('/RetraceSystem')
-            }
-            else if (key === '5') {
-                this.$router.push('/DigitalObjectApplyUser')
-            }
-            else if (key === '6-1') {
-                this.$router.push('/MetadataImport')
-            }
-            else if (key === '6-2') {
                 this.$router.push('/DigitalObjectAllocate')
             }
-            else if (key === '6-3') {
+            else if (key === '4-2') {
                 this.$router.push('/DigitalObjectApproval')
             }
-            else if (key === '6-4') {
-                this.$router.push('/DigitalObjectApplyInstitution')
+            else if (key === '5') {
+                this.$router.push("/ProjectsListNormalUser")
             }
-            else if (key === '6-5') {
-                this.$router.push('/ApprovalExport')
-            }
-            else if (key === '6-6') {
-                this.$router.push('/PrivateKeyExport')
-            }
-            else if (key === '7') {
-                this.$router.push('/DigitalObjectList')
-            }
-            else if (key === '8') {
-                this.$router.push('/BlocksChainQuery')
-            }
-            else if (key === '9-1') {
-                this.$router.push('/ProjectsApplyParticipate')
-            }
-            else if (key === '9-2') {
-                this.$router.push('/ProjectsListParticipate')
-            }
-            else if (key === '10') {
+            else if (key === '6') {
                 this.$router.push('/ProjectDetail')
             }
-            else if (key === '11') {
-                this.$router.push("/ProjectsListNormalUser")
+            else if (key === '7') {
+                this.$router.push('/DigitalObjectSearch')
+            }
+            else if (key === '8') {
+                this.$router.push('/DigitalObjectList')
             }
         },
     },

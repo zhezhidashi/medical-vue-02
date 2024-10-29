@@ -1,16 +1,19 @@
 <template>
     <div style="display: flex;">
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-            <div style="display: flex; align-items: center; justify-content: center; ">
-                <el-button type="primary" style="margin: 24px;">导入公钥</el-button>
-            </div>
-
+            <div style="margin-top: 24px;"></div>
             <el-form :model="networkingApplyForm" :rules="rules" label-width="auto" style="width: 65vw;">
-                <el-form-item prop="publicRootAddress" label="第三方平台地址">
+                <el-form-item prop="publicRootAddress" label="管理节点地址">
                     <el-input v-model="networkingApplyForm.publicRootAddress"></el-input>
                 </el-form-item>
                 <el-form-item prop="institutionName" label="机构名称">
                     <el-input v-model="networkingApplyForm.institutionName"></el-input>
+                </el-form-item>
+                <el-form-item prop="institutionCode" label="统一社会信用代码">
+                    <el-input v-model="networkingApplyForm.institutionCode"></el-input>
+                </el-form-item>
+                <el-form-item prop="publicKey" label="* 公钥">
+                    <el-button type="primary">点击上传</el-button>
                 </el-form-item>
                 <el-form-item prop="networkingDesc" label="机构描述">
                     <el-input v-model="networkingApplyForm.networkingDesc"></el-input>
@@ -41,6 +44,7 @@ export default {
                 networkingDesc: '',
                 // 申请人名称
                 userName: '',
+                institutionCode: "",
             },
             rules: {
                 publicRootAddress: [

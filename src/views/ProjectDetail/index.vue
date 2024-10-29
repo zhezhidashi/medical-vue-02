@@ -5,11 +5,12 @@
         <el-descriptions title="项目详情" :column="1" border>
             <el-descriptions-item label="项目名称">{{ projectForm.name }}</el-descriptions-item>
             <el-descriptions-item label="项目标识">{{ projectForm.projectDoi }}</el-descriptions-item>
-            <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
-            <el-descriptions-item label="联系方式">{{ projectForm.contactInfo }}</el-descriptions-item>
-            <el-descriptions-item label="项目描述">{{ projectForm.description }}</el-descriptions-item>
-            <el-descriptions-item label="所属机构名称">{{ projectForm.user }}</el-descriptions-item>
-            <el-descriptions-item label="所属机构标识">{{ projectForm.institutionDoi }}</el-descriptions-item>
+            <el-descriptions-item label="项目负责人">{{ projectForm.contactInfo }}</el-descriptions-item>
+            <el-descriptions-item label="联系方式">{{ projectForm.description }}</el-descriptions-item>
+            <el-descriptions-item label="项目描述">123</el-descriptions-item>
+            <el-descriptions-item label="牵头机构">正大天晴</el-descriptions-item>
+            <el-descriptions-item label="参与机构">{{ projectForm.user }}</el-descriptions-item>
+            <el-descriptions-item label="品种">123</el-descriptions-item>
         </el-descriptions>
     </div>
 

@@ -6,22 +6,19 @@
                     <el-form-item prop="name" label="项目名称" class="SearchFormItem">
                         <el-input v-model="searchForm.name"></el-input>
                     </el-form-item>
-                    <el-form-item prop="user" label="项目负责人" class="SearchFormItem">
+                    <el-form-item prop="user" label="项目标识" class="SearchFormItem">
                         <el-input v-model="searchForm.user"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="contactInfo" label="联系方式" class="SearchFormItem">
-                        <el-input v-model="searchForm.contactInfo"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="projectDoi" label="项目标识" class="SearchFormItem">
-                        <el-input v-model="searchForm.projectDoi"></el-input>
                     </el-form-item>
                     <el-form-item prop="description" label="项目描述" class="SearchFormItem">
                         <el-input v-model="searchForm.description"></el-input>
                     </el-form-item>
-                    <el-form-item prop="institutionDoi" label="所属机构名称" class="SearchFormItem">
+                    <el-form-item prop="institutionDoi" label="牵头机构" class="SearchFormItem">
                         <el-input v-model="searchForm.institutionDoi"></el-input>
                     </el-form-item>
-                    <el-form-item prop="institutionDoi" label="所属机构标识" class="SearchFormItem">
+                    <el-form-item prop="institutionDoi" label="参与机构" class="SearchFormItem">
+                        <el-input v-model="searchForm.institutionDoi"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="institutionDoi" label="品种" class="SearchFormItem">
                         <el-input v-model="searchForm.institutionDoi"></el-input>
                     </el-form-item>
                 </el-form>
@@ -37,8 +34,9 @@
             <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
             <el-table-column prop="contactInfo" label="联系方式" align="center"></el-table-column>
             <el-table-column prop="description" label="项目描述" align="center"></el-table-column>
-            <el-table-column prop="institutionName" label="所属机构名称" align="center"></el-table-column>
-            <el-table-column prop="institutionDoi" label="所属机构标识" align="center"></el-table-column>
+            <el-table-column prop="institutionName" label="牵头机构" align="center"></el-table-column>
+            <el-table-column prop="institutionDoi" label="参与机构" align="center"></el-table-column>
+            <el-table-column prop="institutionDoi" label="品种" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
                     <el-button @click="selectProject(props.row, props.$index)" type="primary"
@@ -106,7 +104,7 @@ export default {
                     // 所属机构
                     institutionName: "中日友好医院",
                     // 所属机构DOI
-                    institutionDoi: "86.259.5868980074/ins.8b390aec-c794-44bb-b4b1-6aa37aedbb7c",
+                    institutionDoi: "123",
                     // 项目联系方式
                     contactInfo: "72158345436",
                     // 项目描述

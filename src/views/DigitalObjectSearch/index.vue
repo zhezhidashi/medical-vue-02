@@ -17,6 +17,12 @@
                             <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value" :key="index"></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item prop="institutionDoi" label="* 所属项目" class="SearchFormItem">
+                        <el-input v-model="searchForm.institutionDoi"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="institutionName" label="* 所属机构" class="SearchFormItem">
+                        <el-input v-model="searchForm.institutionName"></el-input>
+                    </el-form-item>
                 </el-form>
 
                 <el-button type="primary" @click="searchData">搜索</el-button>
@@ -29,10 +35,11 @@
             <el-table-column prop="doiName" label="数字对象名称"></el-table-column>
             <el-table-column prop="doiDesc" label="数字对象描述"></el-table-column>
             <el-table-column prop="type" label="数字对象类型"></el-table-column>
+            <el-table-column prop="project" label="所属项目"></el-table-column>
+            <el-table-column prop="projectDoi" label="所属机构"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
-                    <el-button @click="apply(props.row, props.$index)" type="primary"
-                        size="small">分配项目</el-button>
+                    <el-button type="primary" size="small" @click="apply">申请</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -42,17 +49,13 @@
             </el-pagination>
         </div>
 
-        <el-dialog title="分配项目" :visible.sync="applyVisible" width="80%" :before-close="applyCancel" style="text-align: left;">
+        <el-dialog title="数字对象申请" :visible.sync="applyVisible" width="80%" :before-close="applyCancel" style="text-align: left;">
             <el-form :model="applyForm" label-width="auto">
-                <el-form-item label="已分配项目">
-                    <span>正大天晴、中国生物、中日友好医院</span>
+                <el-form-item label="* 申请文件" prop="applyFile">
+                    <el-button type="primary">点击上传</el-button>
                 </el-form-item>
-                <el-form-item label="* 添加分配项目" prop="applyFile">
-                    <el-select v-model="applyForm.project" placeholder="请选择">
-                        <el-option v-for="(item, index) in projectsList" :label="item.name" :value="item.projectDoi" :key="index">
-                            {{ item.name }}
-                        </el-option>
-                    </el-select>
+                <el-form-item label="申请人邮箱">
+                    <el-input v-model="apply.applyEmail"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -64,8 +67,9 @@
 </template>
 
 <script>
+import { postForm } from '@/api/data'
 export default {
-    name: "DigitalObjectAllocate",
+    name: "DigitalObjectList",
     data() {
         return {
             pages: 1,
@@ -84,29 +88,37 @@ export default {
                 status: '',
                 // 数字对象描述
                 description: '',
+                // 机构DOI
+                institutionDoi: '',
+                // 机构名称
+                institutionName: '',
                 // 页码
                 pageNo: 1,
             },
 
             resultTable: [
                 {
-                    doi: '123456',
-                    doiName: '名称1',
+                    doi: 'doi1',
+                    doiName: '加密',
                     doiDesc: '加密',
                     type: "EDC",
+                    project: '项目1',
+                    projectDoi: '456789',
                 },
-            ],
-
-            projectsList: [
                 {
-                    name: "项目1",
-                    projectDoi: "doi1",
+                    doi: 'doi2',
+                    doiName: '加密',
+                    doiDesc: '加密',
+                    type: "ADAM",
+                    project: '项目1',
+                    projectDoi: '123456',
                 }
             ],
 
             applyVisible: false,
             applyForm: {
-                project: ""
+                applyFile: "",
+                applyEmail: "",
             },
 
             doTypeList: [
@@ -122,13 +134,6 @@ export default {
     mounted() {
     },
     methods: {
-        collapseChange(activeNames) {
-            if (activeNames.length === 0) {
-                this.collapseTitle = "搜索栏（点击展开）";
-            } else {
-                this.collapseTitle = "搜索栏（点击收起）";
-            }
-        },
         clickPage(page) {
             this.currentPage = page;
             this.searchForm.pageNo = this.currentPage;

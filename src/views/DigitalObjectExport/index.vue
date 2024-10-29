@@ -133,6 +133,8 @@ export default {
                 { name: "SDTM",  value: 1 },
                 { name: "ADAM",  value: 2 },
                 { name: "代码",  value: 3 },
+                { name: "结构化数据", value: 4 },
+                { name: "非结构化数据", value: 5 }
             ],
         };
     },

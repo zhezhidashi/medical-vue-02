@@ -97,7 +97,7 @@ export default {
             approvalTable: [
                 {
                     doi: '123456',
-                    doName: "名称1",
+                    doName: "加密",
                     doDesc: "加密",
                     doType: 'EDC',
                     applyEmail: "12345@pku.edu.cn",
@@ -108,7 +108,7 @@ export default {
                 },
                 {
                     doi: '123457',
-                    doName: "名称2",
+                    doName: "加密",
                     doDesc: "加密",
                     doType: 'SDTM',
                     applyEmail: "12345@pku.edu.cn",
@@ -124,6 +124,8 @@ export default {
                 { name: "SDTM",  value: 1 },
                 { name: "ADAM",  value: 2 },
                 { name: "代码",  value: 3 },
+                { name: "结构化数据", value: 4 },
+                { name: "非结构化数据", value: 5 }
             ],
         };
     },
