@@ -19,7 +19,6 @@
                         <el-input v-model="searchForm.institutionDoi"></el-input>
                     </el-form-item>
                 </el-form>
-
                 <el-button type="primary" @click="searchData">搜索</el-button>
             </el-collapse-item>
         </el-collapse>
