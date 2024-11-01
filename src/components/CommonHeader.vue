@@ -4,7 +4,7 @@
             <img src="favicon.png" style="height: 50px; margin-right: 10px;" />
             <div style="font-size: 25px; line-height: 200%;">医学临床数据交换公网系统</div>
         </div>
-        <div class="r-content" v-show="path !== '/Login'">
+        <div class="r-content" v-if="path !== '/Login'">
             <el-dropdown style="display: flex; align-items: center;">
                 <div class="el-dropdown-link" style="display: flex; flex-direction: row; align-items: center;">
                     <div style="display: flex; flex-direction: column; font-weight: bold;">

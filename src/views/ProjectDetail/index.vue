@@ -2,12 +2,11 @@
     <div style="margin: 24px 40px 24px 40px;">
         <div style="margin-top: 24px;"></div>
 
-        <el-descriptions title="项目详情" :column="1" border>
+        <el-descriptions title="项目详情" :column="1" border style="">
             <el-descriptions-item label="项目名称">{{ projectForm.name }}</el-descriptions-item>
             <el-descriptions-item label="项目标识">{{ projectForm.projectDoi }}</el-descriptions-item>
             <el-descriptions-item label="项目负责人">{{ projectForm.contactInfo }}</el-descriptions-item>
             <el-descriptions-item label="联系方式">{{ projectForm.description }}</el-descriptions-item>
-            <el-descriptions-item label="项目描述">123</el-descriptions-item>
             <el-descriptions-item label="牵头机构">正大天晴</el-descriptions-item>
             <el-descriptions-item label="参与机构">{{ projectForm.user }}</el-descriptions-item>
             <el-descriptions-item label="品种">123</el-descriptions-item>
@@ -34,8 +33,6 @@ export default {
                 institutionDoi: "86.259.5868980074/ins.8b390aec-c794-44bb-b4b1-6aa37aedbb7c",
                 // 项目联系方式
                 contactInfo: "72158345436",
-                // 项目描述
-                description: "7b50c2e43ebf459996060ab50961f57c",
             }
         };
     },

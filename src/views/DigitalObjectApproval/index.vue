@@ -5,17 +5,17 @@
             <el-collapse-item :title="collapseTitle" name="1">
 
                 <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                    <el-form-item class="SearchFormItem" label="数字对象标识">
+                    <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
                         <el-input v-model="searchForm.doi"></el-input>
                     </el-form-item>
-                    <el-form-item class="SearchFormItem" label="数字对象名字">
-                        <el-input v-model="searchForm.name"></el-input>
+                    <el-form-item prop="appName" label="数字对象名字" class="SearchFormItem">
+                        <el-input v-model="searchForm.appName"></el-input>
                     </el-form-item>
-                    <el-form-item prop="description" label="数字对象描述" class="SearchFormItem">
-                        <el-input v-model="searchForm.description"></el-input>
+                    <el-form-item prop="appContent" label="数字对象描述" class="SearchFormItem">
+                        <el-input v-model="searchForm.appContent"></el-input>
                     </el-form-item>
-                    <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
-                        <el-select placeholder="请选择" v-model="searchForm.type">
+                    <el-form-item prop="appType" label="数字对象类型" class="SearchFormItem">
+                        <el-select placeholder="请选择" filterable v-model="searchForm.appType">
                             <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value" :key="index"></el-option>
                         </el-select>
                     </el-form-item>
@@ -28,17 +28,16 @@
         <div style="margin-top: 24px;"></div>
         
         <el-table :data="approvalTable" style="width: 100%;" stripe border>
-            <el-table-column prop="doi" label="数字对象标识"></el-table-column>
-            <el-table-column prop="doName" label="数字对象名称"></el-table-column>
-            <el-table-column prop="doDesc" label="数字对象描述"></el-table-column>
-            <el-table-column prop="doType" label="数字对象类型"></el-table-column>
-            <el-table-column prop="applyFile" label="申请文件" align="center">
+            <el-table-column prop="doi" label="数字对象标识" align="center"></el-table-column>
+            <el-table-column prop="appName" label="数字对象名称" align="center"></el-table-column>
+            <el-table-column prop="appContent" label="数字对象描述" align="center"></el-table-column>
+            <el-table-column prop="appType" label="数字对象类型" align="center"></el-table-column>
+            <el-table-column prop="appFile" label="申请文件" align="center">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini">下载</el-button>
                 </template>
             </el-table-column>
-            <el-table-column prop="applyEmail" label="申请人邮箱"></el-table-column>
-            <el-table-column prop="createTime" label="申请时间"></el-table-column>
+            <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
             <el-table-column prop="operation" label="操作" align="center">
                 <template slot-scope="scope">
                     <el-button type="primary" @click="conductApproval(scope.row, scope.$index)"
@@ -54,15 +53,15 @@
 
 
         <el-dialog title="审批" :visible.sync="approvalDialogVisible">
-            <el-form :model="approvalForm" label-width="80px" align="left">
-                <el-form-item label="* 审批结果">
-                    <el-select v-model="approvalForm.approvalStatus" placeholder="请选择">
+            <el-form :model="approvalForm" label-width="80px" align="left" :rules="approvalRules">
+                <el-form-item prop="status" label="审批结果">
+                    <el-select v-model="approvalForm.status" placeholder="请选择">
                         <el-option label="通过" :value="1"></el-option>
                         <el-option label="拒绝" :value="2"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="审批意见">
-                    <el-input v-model="approvalForm.approvalOpinion"></el-input>
+                <el-form-item prop="opinion" label="审批意见">
+                    <el-input v-model="approvalForm.opinion"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -95,44 +94,36 @@ export default {
             approvalTable: [
                 {
                     doi: 'DOI1',
-                    doName: "名字1",
-                    doDesc: "加密",
-                    doType: 'EDC',
-                    applyEmail: "12345@pku.edu.cn",
-                    applyFile: '申请文件',
+                    appName: "加密",
+                    appContent: "加密",
+                    appType: 'EDC',
+                    appFile: '申请文件',
                     createTime: '2024',
-                    updateTime: '更新时间',
-                    appStatus: 1,
                 },
-                {
-                    doi: 'DOI2',
-                    doName: "名字2",
-                    doDesc: "描述",
-                    doType: 'SDTM',
-                    applyEmail: "12345@pku.edu.cn",
-                    applyFile: '申请文件',
-                    createTime: '2024',
-                    updateTime: '更新时间',
-                    appStatus: 1,
-                }
             ],
 
             approvalForm: {
                 // 审批状态
-                approvalStatus: undefined,
+                status: undefined,
                 // 审批意见
-                approvalOpinion: undefined,
+                opinion: undefined,
             },
             approvalDialogVisible: false,
             approvalIndex: 0,
 
+            approvalRules: {
+                status: [
+                    { required: true, message: '请选择是否通过', trigger: 'change' }
+                ],
+            },
+
             doTypeList: [
-                { name: "EDC",  value: 0 },
-                { name: "SDTM",  value: 1 },
-                { name: "ADAM",  value: 2 },
-                { name: "代码",  value: 3 },
-                { name: "结构化数据", value: 4 },
-                { name: "非结构化数据", value: 5 }
+                { name: "EDC",  value: "EDC" },
+                { name: "SDTM",  value: "SDTM" },
+                { name: "ADAM",  value: "ADAM" },
+                { name: "代码",  value: "代码" },
+                { name: "结构化数据", value: "结构化数据" },
+                { name: "非结构化数据", value: "非结构化数据" }
             ],
         };
     },

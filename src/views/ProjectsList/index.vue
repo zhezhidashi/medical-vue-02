@@ -9,9 +9,6 @@
                     <el-form-item prop="projectDoi" label="项目标识" class="SearchFormItem">
                         <el-input v-model="searchForm.projectDoi"></el-input>
                     </el-form-item>
-                    <el-form-item prop="description" label="项目描述" class="SearchFormItem">
-                        <el-input v-model="searchForm.description"></el-input>
-                    </el-form-item>
                     <el-form-item prop="institutionDoi" label="牵头机构" class="SearchFormItem">
                         <el-input v-model="searchForm.institutionDoi"></el-input>
                     </el-form-item>
@@ -36,7 +33,6 @@
             <el-table-column prop="projectDoi" label="项目标识" align="center"></el-table-column>
             <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
             <el-table-column prop="contactInfo" label="联系方式" align="center"></el-table-column>
-            <el-table-column prop="description" label="项目描述" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="牵头机构" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="参与机构" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="品种" align="center"></el-table-column>
@@ -75,23 +71,20 @@
                 <el-form-item label="联系方式">
                     <el-input v-model="addProjectItem.projectContact"></el-input>
                 </el-form-item>
-                <el-form-item label="项目描述">
-                    <el-input v-model="addProjectItem.projectDescription"></el-input>
-                </el-form-item>
                 <el-form-item label="其他牵头机构" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
+                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="项目参与机构" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
+                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="品种" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
+                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
@@ -118,23 +111,20 @@
                 <el-form-item label="联系方式">
                     <el-input v-model="modifyProjectItem.contactInfo"></el-input>
                 </el-form-item>
-                <el-form-item label="项目描述">
-                    <el-input v-model="modifyProjectItem.description"></el-input>
-                </el-form-item>
                 <el-form-item label="其他牵头机构" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
+                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="项目参与机构" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
+                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="品种" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple collapse-tags placeholder="请选择">
+                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
@@ -156,7 +146,7 @@
                     <span>user001, user002</span>
                 </el-form-item>
                 <el-form-item label="* 添加用户" prop="institutionList">
-                    <el-select v-model="modifyUserForm.institutionList" multiple collapse-tags placeholder="请选择">
+                    <el-select v-model="modifyUserForm.institutionList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
@@ -173,7 +163,7 @@
                 <el-table-column prop="number" label="区块编号"></el-table-column>
                 <el-table-column prop="createTime" label="时间"></el-table-column>
                 <el-table-column prop="address" label="合约地址"></el-table-column>
-                <el-table-column prop="hash" label="哈希值"></el-table-column>
+                <el-table-column prop="hashingValue" label="哈希值"></el-table-column>
             </el-table>
 
             <div style="margin: 24px">
@@ -219,8 +209,6 @@ export default {
                 contactInfo: "",
                 // 负责人邮箱
                 contactEmail: "",
-                // 项目描述
-                description: "",
                 // 申请时间范围
                 createTimeRange: "",
                 // 更新时间范围
@@ -289,7 +277,7 @@ export default {
                     number: 0,
                     createTime: "2024",
                     address: "0x51fB57B6B7837D4064158BDFE2DDDF91A53D46e7",
-                    hash: "0x13c02bbdabd149a8ab7e745a9d03b2184ca20c4312eef07c69a3f27ad49833b6",
+                    hashingValue: "0x13c02bbdabd149a8ab7e745a9d03b2184ca20c4312eef07c69a3f27ad49833b6",
                 }
             ],
         };

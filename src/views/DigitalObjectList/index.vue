@@ -6,14 +6,14 @@
                     <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
                         <el-input v-model="searchForm.doi"></el-input>
                     </el-form-item>
-                    <el-form-item prop="name" label="数字对象名称" class="SearchFormItem">
-                        <el-input v-model="searchForm.name"></el-input>
+                    <el-form-item prop="appName" label="数字对象名称" class="SearchFormItem">
+                        <el-input v-model="searchForm.appName"></el-input>
                     </el-form-item>
-                    <el-form-item prop="description" label="数字对象描述" class="SearchFormItem">
-                        <el-input v-model="searchForm.description"></el-input>
+                    <el-form-item prop="appContent" label="数字对象描述" class="SearchFormItem">
+                        <el-input v-model="searchForm.appContent"></el-input>
                     </el-form-item>
-                    <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
-                        <el-select placeholder="请选择" v-model="searchForm.type">
+                    <el-form-item prop="appType" label="数字对象类型" class="SearchFormItem">
+                        <el-select placeholder="请选择" filterable v-model="searchForm.appType">
                             <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value"
                                 :key="index"></el-option>
                         </el-select>
@@ -27,17 +27,23 @@
 
         <el-table :data="resultTable" stripe border style="width: 100%;">
             <el-table-column prop="doi" label="数字对象标识"></el-table-column>
-            <el-table-column prop="doiName" label="数字对象名称"></el-table-column>
-            <el-table-column prop="doiDesc" label="数字对象描述"></el-table-column>
-            <el-table-column prop="type" label="数字对象类型"></el-table-column>
-            <el-table-column prop="type" label="来源"></el-table-column>
-            <el-table-column prop="status" label="申请状态"></el-table-column>
+            <el-table-column prop="appName" label="数字对象名称"></el-table-column>
+            <el-table-column prop="description" label="数字对象描述"></el-table-column>
+            <el-table-column prop="appContent" label="数字对象类型"></el-table-column>
+            <el-table-column prop="source" label="来源"></el-table-column>
+            <el-table-column prop="appStatus" label="申请状态">
+                <template slot-scope="props">
+                    <el-tag v-if="props.row.appStatus === 0" type="primary">待审批</el-tag>
+                    <el-tag v-if="props.row.appStatus === 1" type="success">已通过</el-tag>
+                    <el-tag v-if="props.row.appStatus === 2" type="danger">已拒绝</el-tag>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" align="center" width="150">
                 <template slot-scope="props">
-                    <el-button type="success" size="small" style="margin: 5px;">下载</el-button>
-                    <el-button type="primary" size="small" style="margin: 5px;" @click="retrace">流转追溯</el-button>
-                    <el-button type="primary" size="small" style="margin: 5px;" @click="trace">查看痕迹</el-button>
-                    <el-button @click="contractHistory(props.row, props.$index)" type="primary" size="small"
+                    <el-button v-if="props.row.appStatus === 1" type="primary" size="small" style="margin: 5px;">下载</el-button>
+                    <el-button v-if="props.row.appStatus === 1" type="primary" size="small" style="margin: 5px;" @click="retrace">流转追溯</el-button>
+                    <el-button v-if="props.row.appStatus === 1" type="primary" size="small" style="margin: 5px;" @click="trace">查看痕迹</el-button>
+                    <el-button v-if="props.row.appStatus === 1" @click="contractHistory(props.row, props.$index)" type="primary" size="small"
                         style="margin: 5px;">权限修改历史</el-button>
                 </template>
             </el-table-column>
@@ -49,16 +55,12 @@
         </div>
 
         <el-dialog title="流转追溯" :visible.sync="retraceVisible" width="80%" :before-close="cancelWithoutConfirm">
-            <img src="retrace.png" style="width: 100%" />
+            <div class="echarts" ref="GraphEcharts" style="height: 800px;"></div>
         </el-dialog>
 
         <el-dialog title="数字对象痕迹" :visible.sync="traceVisible" width="80%" :before-close="cancelWithoutConfirm">
             <el-table :data="traceTable" stripe border style="width: 95%;">
                 <el-table-column prop="createTime" label="时间"></el-table-column>
-                <el-table-column prop="projectName" label="项目名称"></el-table-column>
-                <el-table-column prop="projectDoi" label="项目标识"></el-table-column>
-                <el-table-column prop="user" label="机构名称"></el-table-column>
-                <el-table-column prop="userDoi" label="机构标识"></el-table-column>
                 <el-table-column prop="operation" label="操作内容"></el-table-column>
                 <el-table-column prop="operationDoi" label="操作标识"></el-table-column>
                 <el-table-column prop="hashValue" label="账本哈希值"></el-table-column>
@@ -76,7 +78,7 @@
                 <el-table-column prop="number" label="区块编号"></el-table-column>
                 <el-table-column prop="createTime" label="时间"></el-table-column>
                 <el-table-column prop="address" label="合约地址"></el-table-column>
-                <el-table-column prop="hash" label="哈希值"></el-table-column>
+                <el-table-column prop="hashValue" label="哈希值"></el-table-column>
             </el-table>
 
             <div style="margin: 24px">
@@ -121,29 +123,21 @@ export default {
             resultTable: [
                 {
                     doi: 'doi1',
-                    doiName: '加密',
-                    doiDesc: '加密',
-                    type: "EDC",
-                    project: '项目1',
-                    projectDoi: '456789',
+                    appName: '加密',
+                    appContent: '加密',
+                    appType: "EDC",
+                    source: '项目1',
+                    appStatus: 1,
                 },
-                {
-                    doi: 'doi2',
-                    doiName: '加密',
-                    doiDesc: '加密',
-                    type: "ADAM",
-                    project: '项目1',
-                    projectDoi: '123456',
-                }
             ],
 
             doTypeList: [
-                { name: "EDC", value: 0 },
-                { name: "SDTM", value: 1 },
-                { name: "ADAM", value: 2 },
-                { name: "代码", value: 3 },
-                { name: "结构化数据", value: 4 },
-                { name: "非结构化数据", value: 5 }
+                { name: "EDC", value: "EDC" },
+                { name: "SDTM", value: "SDTM" },
+                { name: "ADAM", value: "ADAM" },
+                { name: "代码", value: "代码" },
+                { name: "结构化数据", value: "结构化数据" },
+                { name: "非结构化数据", value: "非结构化数据" }
             ],
 
             retraceVisible: false,
@@ -153,14 +147,6 @@ export default {
                 {
                     // 时间
                     createTime: "2024",
-                    // 项目名称
-                    projectName: "围术期",
-                    // 项目标识
-                    projectDoi: "86.334.9807698985/pro.ae7465b8-35be-46e7-9fbe-b5979021de93",
-                    // 机构名
-                    user: "正大天晴",
-                    // 机构标识
-                    userDoi: "86.334.9807698985/user.ae7465b8-35be-46e7-9fbe-b5979021de93",
                     // 操作内容
                     operation: "数据流转",
                     // 操作标识
@@ -177,9 +163,84 @@ export default {
                     number: 0,
                     createTime: "2024",
                     address: "0x51fB57B6B7837D4064158BDFE2DDDF91A53D46e7",
-                    hash: "0x13c02bbdabd149a8ab7e745a9d03b2184ca20c4312eef07c69a3f27ad49833b6",
+                    hashValue: "0x13c02bbdabd149a8ab7e745a9d03b2184ca20c4312eef07c69a3f27ad49833b6",
                 }
             ],
+
+            graphEchartsOptions: {
+                title: {
+                    text: '流转追溯图',
+                    textStyle: {
+                        fontSize: 16 // 设置标题字体大小
+                    }
+                },
+                tooltip: {},
+                legend: [
+                    {
+                        // 定义图例
+                        data: ["EDC", 'SDTM', 'ADAM', '代码', '结构化数据', '非结构化数据']
+                    },
+                ],
+                series: {
+                    type: 'graph',
+                    layout: 'force',
+                    categories: [
+                        {
+                            name: 'EDC',
+                            itemStyle: { color: 'yellow' },
+                        },
+                        {
+                            name: 'SDTM',
+                            itemStyle: { color: 'red' },
+                        },
+                        {
+                            name: 'ADAM',
+                            itemStyle: { color: 'blue' },
+                        },
+                        {
+                            name: '代码',
+                            itemStyle: { color: 'lightgreen' },
+                        },
+                        {
+                            name: '结构化数据',
+                            itemStyle: { color: 'orange' },
+                        },
+                        {
+                            name: '非结构化数据',
+                            itemStyle: { color: 'grey' },
+                        },
+                    ],
+                    nodes: [],
+                    links: [],
+                    roam: true,
+                    label: {
+                        show: true,
+                        position: 'top', // 标签显示在节点上方
+                    },
+                    lineStyle: {
+                        normal: {
+                            width: 4,
+                            color: 'darkpurple',
+                            opacity: 0.9,
+                            width: 2,
+                            curveness: 0,
+                            arrow: true
+                        },
+                    },
+                    edgeSymbol: ['none', 'arrow'],
+                    emphasis: {
+                        focus: 'adjacency',
+                        lineStyle: {
+                            width: 5,
+                        }
+                    },
+                    force: {
+                        repulsion: 700,
+                    },
+                    draggable: true,
+                    animation: false,
+                }
+            },
         };
     },
     mounted() {

@@ -3,8 +3,7 @@
         <el-menu :default-active="activeIndex" class="el-menu-demo" @select="handleSelect" :unique-opened="false"
             text-color="#000080" active-text-color="#FF4040" background-color="#F0F8FF">
             <el-menu-item v-show="isAdmin" index="0">主页</el-menu-item>
-            <el-menu-item v-show="isAdmin" index="1">组网管理（未组网时显示）</el-menu-item>
-            <el-menu-item v-show="isAdmin" index="1-1">组网管理（已组网时显示）</el-menu-item>
+            <el-menu-item v-show="isAdmin" index="1">组网管理</el-menu-item>
             <el-menu-item v-show="isAdmin" index="2">项目管理</el-menu-item>
             <el-menu-item v-show="isAdmin" index="3">账号管理</el-menu-item>
             <el-submenu v-show="isAdmin" index="4">
@@ -12,32 +11,11 @@
                 <el-menu-item index="4-1">数字对象分配</el-menu-item>
                 <el-menu-item index="4-2">数字对象审批</el-menu-item>
             </el-submenu>
-            <!-- <el-submenu v-show="isAdmin" index="2">
-                <template slot="title">项目管理</template>
-                <el-menu-item index="2-1">创建项目</el-menu-item>
-                <el-menu-item index="2-2">牵头项目列表</el-menu-item>
-                <el-menu-item index="2-3">项目审批</el-menu-item>
-            </el-submenu> -->
-            <!-- <el-submenu v-show="isAdmin" index="9">
-                <template slot="title">参与项目</template>
-                <el-menu-item index="9-1">申请项目权限</el-menu-item>
-                <el-menu-item index="9-2">参与项目列表</el-menu-item>
-            </el-submenu> -->
             
-            <el-menu-item v-show="!isAdmin" index="5"> < 返回参与项目列表</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="5">返回参与项目列表</el-menu-item>
             <el-menu-item v-show="!isAdmin" index="6">项目详情</el-menu-item>
             <el-menu-item v-show="!isAdmin" index="7">数字对象检索</el-menu-item>
             <el-menu-item v-show="!isAdmin" index="8">数字对象列表</el-menu-item>
-            <!-- <el-menu-item v-show="!isAdmin" index="5">数字对象申请</el-menu-item> -->
-            
-            <!-- <el-submenu v-show="isAdmin" index="12">
-                <template slot="title">数字对象摆渡</template>
-                <el-menu-item index="6-1">元数据导入</el-menu-item>
-                <el-menu-item index="6-5">审批通过列表</el-menu-item>
-                <el-menu-item index="6-6">导出动态私钥</el-menu-item>
-            </el-submenu> -->
-
-            <!-- <el-menu-item v-show="isAdmin" index="8">智能合约权限管理</el-menu-item> -->
 
         </el-menu>
     </div>
@@ -56,6 +34,39 @@ export default {
     mounted() {
         this.isAdmin = this.$store.state.user.userType === 'admin';
         this.path = this.$router.history.current.path;
+        if (this.path === '/Login') {
+            this.activeIndex = '0';
+        }
+        else if (this.path === '/MainPage') {
+            this.activeIndex = '0';
+        }
+        else if (this.path === '/NetworkManage') {
+            this.activeIndex = '1';
+        }
+        else if (this.path === '/ProjectsList') {
+            this.activeIndex = '2';
+        }
+        else if (this.path === '/AccountManage') {
+            this.activeIndex = '3'
+        }
+        else if (this.path === '/DigitalObjectAllocate') {
+            this.activeIndex = '4-1'
+        }
+        else if (this.path === '/DigitalObjectApproval') {
+            this.activeIndex = '4-2'
+        }
+        else if (this.path === '/ProjectsListNormalUser') {
+            this.activeIndex = '5'
+        }
+        else if (this.path === '/ProjectDetail') {
+            this.activeIndex = '6'
+        }
+        else if (this.path === '/DigitalObjectSearch') {
+            this.activeIndex = '7'
+        }
+        else if (this.path === '/DigitalObjectList') {
+            this.activeIndex = '8'
+        }
     },
     watch: {
         $route(to, from) {
@@ -84,10 +95,7 @@ export default {
                 }
             }
             else if (key === '1') {
-                this.$router.push('/NetworkingApply')
-            }
-            else if (key === '1-1') {
-                this.$router.push('/NetworkingModify')
+                this.$router.push('/NetworkManage')
             }
             else if (key === '2') {
                 this.$router.push('/ProjectsList')

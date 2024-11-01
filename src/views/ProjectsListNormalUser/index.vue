@@ -9,9 +9,6 @@
                     <el-form-item prop="user" label="项目标识" class="SearchFormItem">
                         <el-input v-model="searchForm.user"></el-input>
                     </el-form-item>
-                    <el-form-item prop="description" label="项目描述" class="SearchFormItem">
-                        <el-input v-model="searchForm.description"></el-input>
-                    </el-form-item>
                     <el-form-item prop="institutionDoi" label="牵头机构" class="SearchFormItem">
                         <el-input v-model="searchForm.institutionDoi"></el-input>
                     </el-form-item>
@@ -33,7 +30,6 @@
             <el-table-column prop="projectDoi" label="项目标识" align="center"></el-table-column>
             <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
             <el-table-column prop="contactInfo" label="联系方式" align="center"></el-table-column>
-            <el-table-column prop="description" label="项目描述" align="center"></el-table-column>
             <el-table-column prop="institutionName" label="牵头机构" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="参与机构" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="品种" align="center"></el-table-column>
@@ -84,8 +80,6 @@ export default {
                 contactInfo: "",
                 // 负责人邮箱
                 contactEmail: "",
-                // 项目描述
-                description: "",
                 // 申请时间范围
                 createTimeRange: "",
                 // 更新时间范围
@@ -107,8 +101,6 @@ export default {
                     institutionDoi: "123",
                     // 项目联系方式
                     contactInfo: "72158345436",
-                    // 项目描述
-                    description: "7b50c2e43ebf459996060ab50961f57c",
                 }
             ],
         };

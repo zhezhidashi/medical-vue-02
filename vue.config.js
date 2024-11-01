@@ -13,14 +13,8 @@ module.exports = defineConfig({
     devServer: {
         proxy: {
             '/api': {
-                target: process.env.BACKEND_URL,
+                target: process.env.BACKEND_OUT_URL,
                 pathRewrite: {'^/api': ''},
-                ws: true,
-                changeOrigin: true
-            },
-            '/ganache': {
-                target: process.env.GANACHE_URL,
-                pathRewrite: {'^/ganache': ''},
                 ws: true,
                 changeOrigin: true
             },

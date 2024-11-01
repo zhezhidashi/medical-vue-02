@@ -13,7 +13,7 @@
                         <el-input v-model="searchForm.description"></el-input>
                     </el-form-item>
                     <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
-                        <el-select placeholder="请选择" v-model="searchForm.type">
+                        <el-select placeholder="请选择" filterable v-model="searchForm.type">
                             <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value" :key="index"></el-option>
                         </el-select>
                     </el-form-item>
@@ -26,12 +26,12 @@
 
         <el-table :data="resultTable" stripe border style="width: 100%;">
             <el-table-column prop="doi" label="数字对象标识"></el-table-column>
-            <el-table-column prop="doiName" label="数字对象名称"></el-table-column>
-            <el-table-column prop="doiDesc" label="数字对象描述"></el-table-column>
+            <el-table-column prop="name" label="数字对象名称"></el-table-column>
+            <el-table-column prop="description" label="数字对象描述"></el-table-column>
             <el-table-column prop="type" label="数字对象类型"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
-                    <el-button @click="apply(props.row, props.$index)" type="primary"
+                    <el-button @click="allocate(props.row, props.$index)" type="primary"
                         size="small">分配项目</el-button>
                 </template>
             </el-table-column>
@@ -42,13 +42,13 @@
             </el-pagination>
         </div>
 
-        <el-dialog title="分配项目" :visible.sync="applyVisible" width="80%" :before-close="applyCancel" style="text-align: left;">
-            <el-form :model="applyForm" label-width="auto">
+        <el-dialog title="分配项目" :visible.sync="allocateVisible" width="80%" :before-close="allocateCancel" style="text-align: left;">
+            <el-form :model="allocateForm" label-width="auto" :rules="allocateRules">
                 <el-form-item label="已分配项目">
                     <span>正大天晴、中国生物、中日友好医院</span>
                 </el-form-item>
-                <el-form-item label="* 添加分配项目" prop="applyFile">
-                    <el-select v-model="applyForm.project" placeholder="请选择">
+                <el-form-item label="添加分配项目" prop="projectDoiList">
+                    <el-select v-model="allocateForm.projectDoiList" multiple filterable placeholder="请选择">
                         <el-option v-for="(item, index) in projectsList" :label="item.name" :value="item.projectDoi" :key="index">
                             {{ item.name }}
                         </el-option>
@@ -56,8 +56,8 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="applyCancel">取 消</el-button>
-                <el-button type="primary" @click="applyConfirm">确 定</el-button>
+                <el-button @click="allocateCancel">取 消</el-button>
+                <el-button type="primary" @click="allocateConfirm">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -80,8 +80,6 @@ export default {
                 name: '',
                 // 数字对象类型
                 type: '',
-                // 数字对象状态
-                status: '',
                 // 数字对象描述
                 description: '',
                 // 页码
@@ -91,8 +89,8 @@ export default {
             resultTable: [
                 {
                     doi: '123456',
-                    doiName: '名称1',
-                    doiDesc: '加密',
+                    name: '加密',
+                    description: '加密',
                     type: "EDC",
                 },
             ],
@@ -101,21 +99,31 @@ export default {
                 {
                     name: "项目1",
                     projectDoi: "doi1",
+                },
+                {
+                    name: "项目2",
+                    projectDoi: "doi2",
                 }
             ],
 
-            applyVisible: false,
-            applyForm: {
-                project: ""
+            allocateVisible: false,
+            allocateForm: {
+                projectDoiList: []
+            },
+
+            allocateRules: {
+                projectDoiList: [
+                    { required: true, message: '请选择要关联的项目', trigger: 'change' }
+                ],
             },
 
             doTypeList: [
-                { name: "EDC",  value: 0 },
-                { name: "SDTM",  value: 1 },
-                { name: "ADAM",  value: 2 },
-                { name: "代码",  value: 3 },
-                { name: "结构化数据", value: 4 },
-                { name: "非结构化数据", value: 5 }
+                { name: "EDC",  value: "EDC" },
+                { name: "SDTM",  value: "SDTM" },
+                { name: "ADAM",  value: "ADAM" },
+                { name: "代码",  value: "代码" },
+                { name: "结构化数据", value: "结构化数据" },
+                { name: "非结构化数据", value: "非结构化数据" }
             ],
         };
     },
@@ -140,17 +148,17 @@ export default {
         getData(postData) {
         },
 
-        apply() {
-            this.applyVisible = true;
+        allocate() {
+            this.allocateVisible = true;
         },
 
-        applyCancel() {
+        allocateCancel() {
             this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.applyVisible = false;
+                this.allocateVisible = false;
             }).catch(() => {
                 this.$message({
                     type: 'info',
@@ -159,8 +167,8 @@ export default {
             });
         },
 
-        applyConfirm() {
-            this.applyVisible = false;
+        allocateConfirm() {
+            this.allocateVisible = false;
         },
     },
 }
