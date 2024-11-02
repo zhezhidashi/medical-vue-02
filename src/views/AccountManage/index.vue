@@ -151,7 +151,7 @@ export default {
 
         addUserCancel() {
             this.$confirm(
-                "不保存而直接关闭可能会丢失本次编辑的信息，是否继续?", "提示", {
+                "不保存而直接关闭可能会丢失本次编辑的信息，是否继续？", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning",

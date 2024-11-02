@@ -9,14 +9,20 @@
                     <el-form-item prop="projectDoi" label="项目标识" class="SearchFormItem">
                         <el-input v-model="searchForm.projectDoi"></el-input>
                     </el-form-item>
-                    <el-form-item prop="institutionDoi" label="牵头机构" class="SearchFormItem">
-                        <el-input v-model="searchForm.institutionDoi"></el-input>
+                    <el-form-item prop="leadingInstitution" label="牵头机构" class="SearchFormItem">
+                        <el-select v-model="searchForm.leadingInstitution" filterable placeholder="请选择">
+                            <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
+                                :value="item.doi"></el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item prop="institutionDoi" label="参与机构" class="SearchFormItem">
-                        <el-input v-model="searchForm.institutionDoi"></el-input>
+                    <el-form-item prop="involveInsDoi" label="参与机构" class="SearchFormItem">
+                        <el-select v-model="searchForm.involveInsDoi" filterable placeholder="请选择">
+                            <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
+                                :value="item.doi"></el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item prop="institutionDoi" label="品种" class="SearchFormItem">
-                        <el-input v-model="searchForm.institutionDoi"></el-input>
+                    <el-form-item prop="brand" label="品种" class="SearchFormItem">
+                        <el-input v-model="searchForm.brand"></el-input>
                     </el-form-item>
                 </el-form>
                 <el-button type="primary" @click="searchData">搜索</el-button>
@@ -93,13 +99,12 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="addProjectCancel">取 消</el-button>
+                <el-button @click="cancel">取 消</el-button>
                 <el-button type="primary" @click="addProjectConfirm">确 定</el-button>
             </span>
         </el-dialog>
 
-        <el-dialog title="修改项目信息" :visible.sync="modifyProjectDialogVisible" width="80%"
-            :before-close="cancel">
+        <el-dialog title="修改项目信息" :visible.sync="modifyProjectDialogVisible" width="80%" :before-close="cancel">
             <el-form :model="modifyProjectItem" label-width="auto" align="left">
                 <el-form-item label="* 项目名称">
                     <el-input v-model="modifyProjectItem.name"></el-input>
@@ -133,7 +138,7 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="modifyProjectCancel">取 消</el-button>
+                <el-button @click="cancel">取 消</el-button>
                 <el-button type="primary" @click="modifyProjectConfirm">确 定</el-button>
             </span>
         </el-dialog>
@@ -152,7 +157,7 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="modifyUserCancel">取 消</el-button>
+                <el-button @click="cancel">取 消</el-button>
                 <el-button type="primary" @click="modifyUserConfirm">确 定</el-button>
             </span>
         </el-dialog>
@@ -181,16 +186,16 @@ export default {
     name: "ProjectsList",
     data() {
         return {
-            // 机构 DOI 列表
+            pages: 1,
+            currentPage: 1,
+            userList: [],
             institutionDoiList: [
                 { name: "北医三院", doi: "123" }
             ],
-            // 页数
-            pages: 1,
-            // 当前页数
-            currentPage: 1,
-            // 用户列表
-            userList: [],
+            // 品种列表
+            brandList: [
+                "感冒灵", "诺氟沙星"
+            ],
             // 折叠
             activeNames: [],
             collapseTitle: "搜索栏（点击展开）",
@@ -198,20 +203,10 @@ export default {
             searchForm: {
                 // 项目名称
                 name: "",
-                // 项目负责人
-                user: "",
-                // 项目DOI
                 projectDoi: "",
-                // 所属机构DOI
-                institutionDoi: "",
-                // 项目联系方式
-                contactInfo: "",
-                // 负责人邮箱
-                contactEmail: "",
-                // 申请时间范围
-                createTimeRange: "",
-                // 更新时间范围
-                updateTimeRange: "",
+                involveInsDoi: "",
+                leadingInstitution: "",
+                brand: "",
             },
 
             // 项目列表

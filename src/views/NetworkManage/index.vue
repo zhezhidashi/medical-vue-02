@@ -14,7 +14,11 @@
                     <el-input v-model="applyNetworkForm.institutionCode"></el-input>
                 </el-form-item>
                 <el-form-item prop="publicKey" label="公钥">
-                    <el-button type="primary">点击上传</el-button>
+                    <el-upload action="/api/doApplication/submitPublicKey"
+                        :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }" :show-file-list="false"
+                        :on-success="importKey">
+                        <el-button type="primary" style="margin: 24px;">导入公钥</el-button>
+                    </el-upload>
                 </el-form-item>
                 <el-form-item prop="description" label="机构描述">
                     <el-input v-model="applyNetworkForm.description"></el-input>
@@ -31,16 +35,19 @@
                 <el-descriptions-item label="机构标识">{{ networkDescription.institutionDoi }}</el-descriptions-item>
                 <el-descriptions-item label="统一社会信用代码">{{ networkDescription.institutionCode }}</el-descriptions-item>
                 <el-descriptions-item label="机构描述">{{ networkDescription.description }}</el-descriptions-item>
-                <el-descriptions-item label="组网状态">已组网</el-descriptions-item>
-                <el-descriptions-item label="修改组网">
-                    <el-button type="primary" size="mini" @click="modifyNetwork">修改</el-button>
+                <el-descriptions-item label="组网状态">
+                    <el-tag v-if="hasNetwork === 1" type="primary">申请中</el-tag>
+                    <el-tag v-if="hasNetwork === 2" type="success">已通过</el-tag>
                 </el-descriptions-item>
+                <!-- <el-descriptions-item label="修改组网">
+                    <el-button type="primary" size="mini" @click="modifyNetwork">修改</el-button>
+                </el-descriptions-item> -->
             </el-descriptions>
 
 
             <el-dialog title="修改组网" :visible.sync="modifyNetworkDialogVisible" width="80%"
                 :before-close="modifyNetworkCancel">
-                <el-form :model="modifyNetworkForm" label-width="auto" align="left" :rules="modifyNetworkRules" >
+                <el-form :model="modifyNetworkForm" label-width="auto" align="left" :rules="modifyNetworkRules">
                     <el-form-item prop="publicRootAddress" label="管理平台地址">
                         <el-input v-model="modifyNetworkForm.publicRootAddress"></el-input>
                     </el-form-item>
@@ -67,7 +74,7 @@
 </template>
 
 <script>
-import { postForm } from '@/api/data'
+import { postForm, getForm, backend_out_ip, backend_out_port } from '@/api/data'
 export default {
     name: "NetworkManage",
     data() {
@@ -105,10 +112,9 @@ export default {
 
             modifyNetworkDialogVisible: false,
             modifyNetworkForm: {
+                publicRootAddress: "",
                 name: "",
-                user: "",
-                contactInfo: "",
-                contactEmail: "",
+                institutionCode: "",
                 description: "",
             },
 
@@ -123,9 +129,42 @@ export default {
         };
     },
     mounted() {
-        this.hasNetwork = 2;
+        let _this = this;
+        // 获取机构组网信息
+        getForm('/networkGroups/getInstitutionName', _this, function (res) {
+            postForm('/networkGroups/getInstitutionsByGid', { name: res.data }, _this, function (res) {
+                if(res.data.total === 0) {
+                    _this.hasNetwork = 1;
+                }
+                else {
+                    _this.hasNetwork = 2;
+                    let network = res.data.list[0];
+                    _this.networkDescription.publicRootAddress = network.ipWithPort;
+                    _this.networkDescription.name = network.name
+                    _this.networkDescription.institutionDoi = network.doi
+                    _this.networkDescription.institutionCode = network.institutionCode
+                    _this.networkDescription.description = network.description
+                }
+            })
+        })
     },
     methods: {
+        importKey(response, file, fileList) {
+            console.log(response);
+            if (response.code === 200) {
+                this.$message({
+                    message: '导入公钥成功',
+                    type: 'success'
+                });
+            }
+            else {
+                this.$message({
+                    message: response.message,
+                    type: 'error'
+                });
+            }
+        },
+
         modifyNetwork() {
             this.modifyNetworkDialogVisible = true;
         },

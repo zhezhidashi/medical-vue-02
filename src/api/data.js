@@ -8,6 +8,10 @@ export const backendUrl = '/api'
 export const mockUrl = "https://mock.apifox.com/m1/3980705-3616153-default"
 export const ganacheUrl = '/ganache'
 
+// 外网的 IP 和 PORT
+export const backend_out_ip = "8.130.160.66"
+export const backend_out_port = 8080
+
 // post请求
 export const postForm = (requestUrl, params, This, callback) => {
     nprogress.start();

@@ -16,12 +16,12 @@
                         :key="index"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item prop="projectDoi" label="所属项目" class="SearchFormItem">
+            <!-- <el-form-item prop="projectDoi" label="所属项目" class="SearchFormItem">
                 <el-select placeholder="请选择" filterable v-model="searchForm.projectDoi">
                     <el-option v-for="(item, index) in projectList" :label="item.projectName" :value="item.projectDoi"
                         :key="index"></el-option>
                 </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item prop="institutionDoi" label="所属机构" class="SearchFormItem">
                 <el-select placeholder="请选择" filterable v-model="searchForm.institutionDoi">
                     <el-option v-for="(item, index) in institutionList" :label="item.institutionName"
@@ -38,7 +38,7 @@
             <el-table-column prop="name" label="数字对象名称"></el-table-column>
             <el-table-column prop="description" label="数字对象描述"></el-table-column>
             <el-table-column prop="type" label="数字对象类型"></el-table-column>
-            <el-table-column prop="projectName" label="所属项目"></el-table-column>
+            <!-- <el-table-column prop="projectName" label="所属项目"></el-table-column> -->
             <el-table-column prop="institutionName" label="所属机构"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
@@ -55,11 +55,14 @@
         <el-dialog title="数字对象申请" :visible.sync="applyVisible" width="80%" :before-close="applyCancel"
             style="text-align: left;">
             <el-form :model="applyForm" label-width="auto" :rules="applyRules">
+                <el-form-item label="申请类型" prop="appType">
+                    <el-select placeholder="请选择" filterable v-model="applyForm.appType">
+                        <el-option label="实体型" :value="0" :key="0"></el-option>
+                        <el-option label="指针型" :value="1" :key="1"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="申请文件" prop="appFile">
                     <el-button type="primary">点击上传</el-button>
-                </el-form-item>
-                <el-form-item label="申请人邮箱">
-                    <el-input v-model="applyForm.email"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -114,10 +117,13 @@ export default {
             applyVisible: false,
             applyForm: {
                 appFile: "",
-                email: "",
+                appType: undefined,
             },
 
             applyRules: {
+                appType: [
+                    { required: true, message: '请选择申请类型', trigger: 'change' }
+                ],
                 appFile: [
                     { required: true, message: '请选择数字对象所属项目', trigger: 'change' }
                 ],
