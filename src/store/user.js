@@ -4,6 +4,7 @@ export default {
         token: "",
         username: "",
         userType: "",
+        projectDoi: "",
     },
     mutations: {
         setToken(state, val) {
@@ -38,6 +39,17 @@ export default {
         },
         getUserType(state) {
             state.userType = state.userType || Cookie.get("userType")
+        },
+        setProjectDoi(state, val) {
+            state.projectDoi = val
+            Cookie.set('projectDoi', val)
+        },
+        clearProjectDoi(state) {
+            state.projectDoi = ''
+            Cookie.remove('projectDoi')
+        },
+        getProjectDoi(state) {
+            state.projectDoi = state.projectDoi || Cookie.get("projectDoi")
         },
     }
 }

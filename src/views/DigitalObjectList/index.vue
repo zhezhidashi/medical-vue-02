@@ -1,49 +1,45 @@
 <template>
     <div style="text-align: center; margin: 24px 40px 24px 40px;">
-        <el-collapse v-model="activeNames" @change="collapseChange">
-            <el-collapse-item :title="collapseTitle" name="1">
-                <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                    <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
-                        <el-input v-model="searchForm.doi"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="appName" label="数字对象名称" class="SearchFormItem">
-                        <el-input v-model="searchForm.appName"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="appContent" label="数字对象描述" class="SearchFormItem">
-                        <el-input v-model="searchForm.appContent"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="appType" label="数字对象类型" class="SearchFormItem">
-                        <el-select placeholder="请选择" filterable v-model="searchForm.appType">
-                            <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value"
-                                :key="index"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-form>
+        <el-form :model="searchForm" label-width="auto" class="SearchForm">
+            <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
+                <el-input v-model="searchForm.doi"></el-input>
+            </el-form-item>
+            <el-form-item prop="appName" label="数字对象名称" class="SearchFormItem">
+                <el-input v-model="searchForm.appName"></el-input>
+            </el-form-item>
+            <el-form-item prop="appContent" label="数字对象描述" class="SearchFormItem">
+                <el-input v-model="searchForm.appContent"></el-input>
+            </el-form-item>
+            <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
+                <el-select placeholder="请选择" filterable v-model="searchForm.type">
+                    <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value"
+                        :key="index"></el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
 
-                <el-button type="primary" @click="searchData">搜索</el-button>
-            </el-collapse-item>
-        </el-collapse>
+        <el-button type="primary" @click="searchData">搜索</el-button>
         <el-divider></el-divider>
 
         <el-table :data="resultTable" stripe border style="width: 100%;">
             <el-table-column prop="doi" label="数字对象标识"></el-table-column>
             <el-table-column prop="appName" label="数字对象名称"></el-table-column>
-            <el-table-column prop="description" label="数字对象描述"></el-table-column>
-            <el-table-column prop="appContent" label="数字对象类型"></el-table-column>
+            <el-table-column prop="appContent" label="数字对象描述"></el-table-column>
+            <el-table-column prop="type" label="数字对象类型"></el-table-column>
             <el-table-column prop="source" label="来源"></el-table-column>
-            <el-table-column prop="appStatus" label="申请状态">
+            <el-table-column prop="appType" label="申请类型">
                 <template slot-scope="props">
-                    <el-tag v-if="props.row.appStatus === 0" type="primary">待审批</el-tag>
-                    <el-tag v-if="props.row.appStatus === 1" type="success">已通过</el-tag>
-                    <el-tag v-if="props.row.appStatus === 2" type="danger">已拒绝</el-tag>
+                    <el-tag v-if="props.row.appType === 1" type="primary">指针型</el-tag>
+                    <el-tag v-if="props.row.appType === 2" type="success">实体型</el-tag>
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center" width="150">
                 <template slot-scope="props">
-                    <el-button v-if="props.row.appStatus === 1" type="primary" size="small" style="margin: 5px;">下载</el-button>
-                    <el-button v-if="props.row.appStatus === 1" type="primary" size="small" style="margin: 5px;" @click="retrace">流转追溯</el-button>
-                    <el-button v-if="props.row.appStatus === 1" type="primary" size="small" style="margin: 5px;" @click="trace">查看痕迹</el-button>
-                    <el-button v-if="props.row.appStatus === 1" @click="contractHistory(props.row, props.$index)" type="primary" size="small"
+                    <el-button v-if="props.row.appType === 2" type="primary" size="small"
+                        style="margin: 5px;">下载</el-button>
+                    <el-button type="primary" size="small" style="margin: 5px;" @click="retrace">流转追溯</el-button>
+                    <el-button type="primary" size="small" style="margin: 5px;" @click="trace">查看痕迹</el-button>
+                    <el-button @click="contractHistory(props.row, props.$index)" type="primary" size="small"
                         style="margin: 5px;">权限修改历史</el-button>
                 </template>
             </el-table-column>
@@ -98,9 +94,6 @@ export default {
         return {
             pages: 1,
             currentPage: 1,
-            // 折叠
-            activeNames: [],
-            collapseTitle: "搜索栏（点击展开）",
             searchForm: {
                 // DOI
                 doi: '',
@@ -125,9 +118,17 @@ export default {
                     doi: 'doi1',
                     appName: '加密',
                     appContent: '加密',
-                    appType: "EDC",
+                    type: "EDC",
                     source: '项目1',
-                    appStatus: 1,
+                    appType: 1,
+                },
+                {
+                    doi: 'doi1',
+                    appName: '加密',
+                    appContent: '加密',
+                    type: "EDC",
+                    source: '项目1',
+                    appType: 2,
                 },
             ],
 

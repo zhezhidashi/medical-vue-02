@@ -11,13 +11,13 @@
                     </el-form-item>
                     <el-form-item prop="leadingInstitution" label="牵头机构" class="SearchFormItem">
                         <el-select v-model="searchForm.leadingInstitution" filterable placeholder="请选择">
-                            <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
+                            <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                                 :value="item.doi"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item prop="involveInsDoi" label="参与机构" class="SearchFormItem">
-                        <el-select v-model="searchForm.involveInsDoi" filterable placeholder="请选择">
-                            <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
+                    <el-form-item prop="involvedInstitutionDoi" label="参与机构" class="SearchFormItem">
+                        <el-select v-model="searchForm.involvedInstitutionDoi" filterable placeholder="请选择">
+                            <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                                 :value="item.doi"></el-option>
                         </el-select>
                     </el-form-item>
@@ -37,14 +37,14 @@
             <el-table-column prop="name" label="项目名称" align="center"></el-table-column>
             <el-table-column prop="projectDoi" label="项目标识" align="center"></el-table-column>
             <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
-            <el-table-column prop="contactInfo" label="联系方式" align="center"></el-table-column>
-            <el-table-column prop="institutionDoi" label="牵头机构" align="center"></el-table-column>
-            <el-table-column prop="institutionDoi" label="参与机构" align="center"></el-table-column>
-            <el-table-column prop="institutionDoi" label="品种" align="center"></el-table-column>
+            <el-table-column prop="contactEmail" label="联系方式" align="center"></el-table-column>
+            <el-table-column prop="leadingInstitution" label="牵头机构" align="center"></el-table-column>
+            <el-table-column prop="involveInsDoi" label="参与机构" align="center"></el-table-column>
+            <el-table-column prop="brand" label="品种" align="center"></el-table-column>
             <el-table-column prop="status" label="申请状态" align="center"></el-table-column>
-            <el-table-column prop="userBoList" label="用户列表" align="center">
+            <el-table-column prop="uidList" label="用户列表" align="center">
                 <template slot-scope="scope">
-                    <div v-for="item in scope.row.userNameList" :key="item">{{ item }}</div>
+                    <div v-for="item in scope.row.uidList" :key="item">{{ uidToUsername[item] }}</div>
                 </template>
             </el-table-column>
 
@@ -66,35 +66,34 @@
         </div>
 
         <el-dialog title="申请项目" :visible.sync="addProjectDialogVisible" width="80%" :before-close="cancel">
-            <el-form :model="addProjectItem" label-width="auto" align="left">
-                <el-form-item label="* 项目名称">
-                    <el-input v-model="addProjectItem.projectName"></el-input>
+            <el-form :model="addProjectForm" label-width="auto" align="left" :rules="addProjectRules">
+                <el-form-item prop="name" label="项目名称">
+                    <el-input v-model="addProjectForm.name"></el-input>
                 </el-form-item>
-                <el-form-item label="项目负责人">
-                    <el-input v-model="addProjectItem.projectLeader"></el-input>
+                <el-form-item prop="user" label="项目负责人">
+                    <el-input v-model="addProjectForm.user"></el-input>
                 </el-form-item>
-                <el-form-item label="联系方式">
-                    <el-input v-model="addProjectItem.projectContact"></el-input>
+                <el-form-item prop="contactEmail" label="联系方式">
+                    <el-input v-model="addProjectForm.contactEmail"></el-input>
                 </el-form-item>
-                <el-form-item label="其他牵头机构" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
-                        <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
+                <el-form-item label="其他牵头机构" prop="leadingInstitution">
+                    <el-select v-model="addProjectForm.leadingInstitution" multiple filterable placeholder="请选择">
+                        <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="项目参与机构" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
-                        <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
+                <el-form-item label="项目参与机构" prop="involvedInstitutionDoi">
+                    <el-select v-model="addProjectForm.involvedInstitutionDoi" multiple filterable placeholder="请选择">
+                        <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="品种" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
-                        <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
-                            :value="item.doi"></el-option>
+                <el-form-item label="品种" prop="brand">
+                    <el-select v-model="addProjectForm.brand" multiple filterable placeholder="请选择">
+                        <el-option v-for="item in brandList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="* 项目申请文件" prop="projectApplyFile">
+                <el-form-item label="项目申请文件" prop="applyDocumentAddress">
                     <el-button type="primary">点击上传</el-button>
                 </el-form-item>
             </el-form>
@@ -105,35 +104,34 @@
         </el-dialog>
 
         <el-dialog title="修改项目信息" :visible.sync="modifyProjectDialogVisible" width="80%" :before-close="cancel">
-            <el-form :model="modifyProjectItem" label-width="auto" align="left">
-                <el-form-item label="* 项目名称">
-                    <el-input v-model="modifyProjectItem.name"></el-input>
+            <el-form :model="modifyProjectForm" label-width="auto" align="left" :rules="modifyProjectRules">
+                <el-form-item prop="name" label="项目名称">
+                    <el-input v-model="modifyProjectForm.name"></el-input>
                 </el-form-item>
                 <el-form-item label="项目负责人">
-                    <el-input v-model="modifyProjectItem.user"></el-input>
+                    <el-input v-model="modifyProjectForm.user"></el-input>
                 </el-form-item>
                 <el-form-item label="联系方式">
-                    <el-input v-model="modifyProjectItem.contactInfo"></el-input>
+                    <el-input v-model="modifyProjectForm.contactInfo"></el-input>
                 </el-form-item>
                 <el-form-item label="其他牵头机构" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
-                        <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
+                    <el-select v-model="addProjectForm.institutionList" multiple filterable placeholder="请选择">
+                        <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="项目参与机构" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
-                        <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
+                <el-form-item label="项目参与机构" prop="involvedInstitutionDoi">
+                    <el-select v-model="addProjectForm.involvedInstitutionDoi" multiple filterable placeholder="请选择">
+                        <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="品种" prop="institutionList">
-                    <el-select v-model="addProjectItem.institutionList" multiple filterable placeholder="请选择">
-                        <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
-                            :value="item.doi"></el-option>
+                <el-form-item label="品种" prop="brand">
+                    <el-select v-model="addProjectForm.brand" multiple filterable placeholder="请选择">
+                        <el-option v-for="item in brandList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="* 项目申请文件" prop="projectApplyFile">
+                <el-form-item label="项目申请文件" prop="applyDocumentAddress">
                     <el-button type="primary">点击上传</el-button>
                 </el-form-item>
             </el-form>
@@ -145,14 +143,14 @@
 
 
         <el-dialog title="添加权限用户" :visible.sync="modifyUserDialogVisible" width="80%" :before-close="cancel">
-            <el-form :model="modifyUserForm" label-width="auto" align="left">
+            <el-form :model="modifyUserForm" label-width="auto" align="left" :rules="userRules">
                 <el-form-item label="已授权用户">
                     <span>user001, user002</span>
                 </el-form-item>
-                <el-form-item label="* 添加用户" prop="institutionList">
-                    <el-select v-model="modifyUserForm.institutionList" multiple filterable placeholder="请选择">
-                        <el-option v-for="item in institutionDoiList" :key="item.doi" :label="item.name"
-                            :value="item.doi"></el-option>
+                <el-form-item label="添加用户" prop="user">
+                    <el-select v-model="modifyUserForm.uidList" multiple filterable placeholder="请选择">
+                        <el-option v-for="item in userList" :key="item.uid" :label="item.username"
+                            :value="item.uid"></el-option>
                     </el-select>
                 </el-form-item>
             </el-form>
@@ -188,8 +186,13 @@ export default {
         return {
             pages: 1,
             currentPage: 1,
-            userList: [],
-            institutionDoiList: [
+            userList: [
+                { username: "user001", uid: 1 }
+            ],
+            uidToUsername: {
+                1: "user001",
+            },
+            institutionList: [
                 { name: "北医三院", doi: "123" }
             ],
             // 品种列表
@@ -208,48 +211,43 @@ export default {
                 leadingInstitution: "",
                 brand: "",
             },
-
             // 项目列表
             projectTable: [
                 {
-                    // 项目名称
-                    name: "",
-                    // 项目负责人
-                    user: "",
-                    // 项目DOI
-                    projectDoi: "",
-                    // 所属机构DOI
-                    institutionDoi: "",
-                    // 参与机构DOI
-                    involvedInstitutionDoi: "",
-                    // 机构列表
-                    institutionList: [],
-                    // 项目联系方式
-                    contactInfo: "",
-                    // 负责人邮箱
-                    contactEmail: "",
-                    // 项目描述
-                    description: "",
-                    // 申请时间
-                    createTime: "",
-                    // 修改时间
-                    updateTime: "",
+                    pid: 1,
+                    name: "111",
+                    projectDoi: "111",
+                    user: "111",
+                    contactEmail: "111",
+                    leadingInstitution: "111",
+                    involveInsDoi: "111",
+                    brand: "111",
+                    status: "111",
                     // 用户列表
-                    userBoList: [],
+                    uidList: [1],
                 }
             ],
 
             // 增加项目弹窗是否显示
             addProjectDialogVisible: false,
             // 项目item的拷贝
-            addProjectItem: {
-                projectName: "",
-                projectLeader: "",
-                projectContact: "",
-                projectDescription: "",
-                projectApplyFile: "",
-                projectApplyEmail: "",
-                involvedInstitutionDoi: [],
+            addProjectForm: {
+                name: "",
+                user: "",
+                contactEmail: "",
+                leadingInstitution: "",
+                involveInsDoi: "",
+                brand: "",
+                applyDocumentAddress: "",
+            },
+
+            addProjectRules: {
+                name: [
+                    { required: true, message: '请输入项目名字', trigger: 'blur' }
+                ],
+                applyDocumentAddress: [
+                    { required: true, message: '请上传申请文件', trigger: 'blur' }
+                ]
             },
 
             // 修改项目弹窗是否显示
@@ -257,15 +255,39 @@ export default {
             // 修改项目的 index
             modifyProjectIndex: 0,
             // 项目item的拷贝
-            modifyProjectItem: {},
+            modifyProjectForm: {
+                pid: undefined,
+                name: "",
+                user: "",
+                contactEmail: "",
+                leadingInstitution: "",
+                involveInsDoi: "",
+                brand: "",
+                applyDocumentAddress: "",
+            },
+            modifyProjectRules: {
+                applyDocumentAddress: [
+                    { required: true, message: '请上传申请文件', trigger: 'blur' }
+                ]
+            },
+
+
+            // 修改用户弹窗是否显示
+            modifyUserDialogVisible: false,
+            // 修改用户对应项目的 index
+            modifyUserIndex: 0,
             modifyUserForm: {
-                institutionList: [],
+                uidList: [],
+            },
+            userRules: {
+                applyDocumentAddress: [
+                    { required: true, message: '请上传申请文件', trigger: 'blur' }
+                ]
             },
 
             modifyUserDialogVisible: false,
 
             contractVisible: false,
-
             contractTable: [
                 {
                     number: 0,
@@ -302,7 +324,7 @@ export default {
 
         addProject() {
             this.addProjectDialogVisible = true;
-            this.addProjectItem = {
+            this.addProjectForm = {
                 projectName: "",
                 projectLeader: "",
                 projectContact: "",
@@ -332,40 +354,38 @@ export default {
         },
         addProjectConfirm() {
             let _this = this;
-
             // 将 selected = true 的机构 DOI 添加到 involvedInstitutionDoi 中，以逗号分隔
-            for (let item of this.addProjectItem.institutionList) {
-                this.addProjectItem.involvedInstitutionDoi += item + ",";
+            for (let item of this.addProjectForm.institutionList) {
+                this.addProjectForm.involvedInstitutionDoi += item + ",";
             }
 
             // 检查有没有空值
-            if (this.addProjectItem.projectName === "" || this.addProjectItem.projectLeader === "" || this.addProjectItem.projectContact === "" || this.addProjectItem.projectDescription === "" || this.addProjectItem.projectApplyFile === "" || this.addProjectItem.projectApplyEmail === "") {
+            if (this.addProjectForm.projectName === "" || this.addProjectForm.projectLeader === "" || this.addProjectForm.projectContact === "" || this.addProjectForm.projectDescription === "" || this.addProjectForm.projectApplyFile === "" || this.addProjectForm.projectApplyEmail === "") {
                 this.$message({
                     type: 'warning',
                     message: '请填写完整信息'
                 });
                 return;
             }
-
             _this.addProjectDialogVisible = false;
         },
 
         modifyProject(row, index) {
             this.modifyProjectDialogVisible = true;
             this.modifyProjectIndex = index;
-            this.modifyProjectItem = JSON.parse(JSON.stringify(row));
-            console.log(this.modifyProjectItem)
-            // 拷贝用户列表
-            this.modifyProjectItem.userBoListCopy = this.modifyProjectItem.userBoList.slice(0);
+            this.modifyProjectForm = JSON.parse(JSON.stringify(row));
+            console.log(this.modifyProjectForm)
         },
 
         modifyProjectConfirm() {
-
             _this.modifyProjectDialogVisible = false;
         },
 
         modifyUser(row, index) {
             this.modifyUserDialogVisible = true;
+            this.modifyUserIndex = index;
+            this.modifyUserForm.uidList = row.uidList;
+            console.log(this.modifyUserForm)
         },
 
         modifyUserConfirm() {
