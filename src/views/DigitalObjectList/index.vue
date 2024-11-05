@@ -22,12 +22,12 @@
         <el-divider></el-divider>
 
         <el-table :data="resultTable" stripe border style="width: 100%;">
-            <el-table-column prop="doi" label="数字对象标识"></el-table-column>
-            <el-table-column prop="appName" label="数字对象名称"></el-table-column>
-            <el-table-column prop="appContent" label="数字对象描述"></el-table-column>
-            <el-table-column prop="type" label="数字对象类型"></el-table-column>
-            <el-table-column prop="source" label="来源"></el-table-column>
-            <el-table-column prop="appType" label="申请类型">
+            <el-table-column prop="doi" label="数字对象标识" align="center"></el-table-column>
+            <el-table-column prop="appName" label="数字对象名称" align="center"></el-table-column>
+            <el-table-column prop="appContent" label="数字对象描述" align="center"></el-table-column>
+            <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
+            <el-table-column prop="source" label="来源" align="center"></el-table-column>
+            <el-table-column prop="appType" label="申请类型" align="center">
                 <template slot-scope="props">
                     <el-tag v-if="props.row.appType === 1" type="primary">指针型</el-tag>
                     <el-tag v-if="props.row.appType === 2" type="success">实体型</el-tag>
@@ -37,8 +37,8 @@
                 <template slot-scope="props">
                     <el-button v-if="props.row.appType === 2" type="primary" size="small"
                         style="margin: 5px;">下载</el-button>
-                    <el-button type="primary" size="small" style="margin: 5px;" @click="retrace">流转追溯</el-button>
-                    <el-button type="primary" size="small" style="margin: 5px;" @click="trace">查看痕迹</el-button>
+                    <el-button type="primary" size="small" style="margin: 5px;" @click="retrace(props.row, props.$index)">流转追溯</el-button>
+                    <el-button type="primary" size="small" style="margin: 5px;" @click="trace(props.row, props.$index)">查看痕迹</el-button>
                     <el-button @click="contractHistory(props.row, props.$index)" type="primary" size="small"
                         style="margin: 5px;">权限修改历史</el-button>
                 </template>
@@ -50,16 +50,12 @@
             </el-pagination>
         </div>
 
-        <el-dialog title="流转追溯" :visible.sync="retraceVisible" width="80%" :before-close="cancelWithoutConfirm">
-            <div class="echarts" ref="GraphEcharts" style="height: 800px;"></div>
-        </el-dialog>
-
         <el-dialog title="数字对象痕迹" :visible.sync="traceVisible" width="80%" :before-close="cancelWithoutConfirm">
             <el-table :data="traceTable" stripe border style="width: 95%;">
-                <el-table-column prop="createTime" label="时间"></el-table-column>
-                <el-table-column prop="operation" label="操作内容"></el-table-column>
-                <el-table-column prop="operationDoi" label="操作标识"></el-table-column>
-                <el-table-column prop="hashValue" label="账本哈希值"></el-table-column>
+                <el-table-column prop="createTime" label="时间" align="center"></el-table-column>
+                <el-table-column prop="operation" label="操作内容" align="center"></el-table-column>
+                <el-table-column prop="operationDoi" label="操作标识" align="center"></el-table-column>
+                <el-table-column prop="hashValue" label="账本哈希值" align="center"></el-table-column>
             </el-table>
 
             <div style="margin: 24px">
@@ -71,10 +67,10 @@
 
         <el-dialog title="权限修改历史" :visible.sync="contractVisible" width="80%" :before-close="cancelWithoutConfirm">
             <el-table :data="contractTable" stripe border style="width: 95%;">
-                <el-table-column prop="number" label="区块编号"></el-table-column>
-                <el-table-column prop="createTime" label="时间"></el-table-column>
-                <el-table-column prop="address" label="合约地址"></el-table-column>
-                <el-table-column prop="hashValue" label="哈希值"></el-table-column>
+                <el-table-column prop="number" label="区块编号" align="center"></el-table-column>
+                <el-table-column prop="createTime" label="时间" align="center"></el-table-column>
+                <el-table-column prop="address" label="合约地址" align="center"></el-table-column>
+                <el-table-column prop="hashValue" label="哈希值" align="center"></el-table-column>
             </el-table>
 
             <div style="margin: 24px">
@@ -88,6 +84,7 @@
 
 <script>
 import { postForm } from '@/api/data'
+import * as echarts from "echarts";
 export default {
     name: "DigitalObjectList",
     data() {
@@ -121,6 +118,11 @@ export default {
                     type: "EDC",
                     source: '项目1',
                     appType: 1,
+                    retraceList: [
+                        { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "name": "DO1", "description": "", "source": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671,86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "type": "SDTM" },
+                        { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
+                        { "doi": "86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "name": "DO3", "description": "", "source": null, "type": "EDC" },
+                    ],
                 },
                 {
                     doi: 'doi1',
@@ -129,6 +131,9 @@ export default {
                     type: "EDC",
                     source: '项目1',
                     appType: 2,
+                    retraceList: [
+                        { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
+                    ]
                 },
             ],
 
@@ -141,7 +146,6 @@ export default {
                 { name: "非结构化数据", value: "非结构化数据" }
             ],
 
-            retraceVisible: false,
             traceVisible: false,
 
             traceTable: [
@@ -258,10 +262,15 @@ export default {
         getData(postData) {
         },
 
-        retrace() {
-            this.retraceVisible = true;
+        retrace(row, index) {
+            this.$router.push({
+                path: "/RetraceSystem",
+                name: "RetraceSystem",
+                params: {
+                    retraceList: row.retraceList
+                }
+            })
         },
-
         trace() {
             this.traceVisible = true;
         },
@@ -279,7 +288,7 @@ export default {
             this.retraceVisible = false;
             this.traceVisible = false;
             this.contractVisible = false;
-        }
+        },
     },
 }
 </script>

@@ -1,38 +1,31 @@
 <template>
-    <div style="text-align: center; margin: 24px 40px 24px 40px;">
-        <el-collapse v-model="activeNames" @change="collapseChange">
-            <el-collapse-item :title="collapseTitle" name="1">
-                <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                    <el-form-item prop="username" label="用户名" class="SearchFormItem">
-                        <el-input v-model="searchForm.username" style="width: 200px"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="email" label="邮箱" class="SearchFormItem">
-                        <el-input v-model="searchForm.email" style="width: 200px"></el-input>
-                    </el-form-item>
-                </el-form>
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <el-form :model="searchForm" label-width="auto" class="SearchForm">
+            <el-form-item prop="username" label="用户名" class="SearchFormItem">
+                <el-input v-model="searchForm.username" style="width: 200px"></el-input>
+            </el-form-item>
+            <el-form-item prop="email" label="邮箱" class="SearchFormItem">
+                <el-input v-model="searchForm.email" style="width: 200px"></el-input>
+            </el-form-item>
+        </el-form>
 
-                <el-button type="primary" @click="searchData">搜索</el-button>
-            </el-collapse-item>
-        </el-collapse>
-        <div style="
-					display: flex;
-					align-items: center;
-					justify-content: center;
-                    margin-top: 24px;
-				">
-            <el-button @click="addUser" type="primary" style="margin-bottom: 24px; margin-right: 24px">增加用户</el-button>
-        </div>
 
-        <el-table :data="userTable" style="width: 100%" stripe border>
-            <el-table-column prop="username" label="用户名"></el-table-column>
-            <el-table-column prop="type" label="用户类型">
+        <el-button type="primary" @click="searchData">搜索</el-button>
+
+        <el-divider></el-divider>
+
+        <el-button @click="addUser" type="primary" style="margin-bottom: 24px;">增加用户</el-button>
+
+        <el-table :data="userTable" style="width: 90%" stripe border>
+            <el-table-column prop="username" label="用户名" align="center"></el-table-column>
+            <el-table-column prop="type" label="用户类型" align="center">
                 <template slot-scope="props">
                     <el-tag v-if="props.row.type === 2" type="success">管理员</el-tag>
                     <el-tag v-else>普通用户</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column prop="email" label="邮箱"></el-table-column>
-            <el-table-column prop="lastLoginTime" label="最近登录时间"></el-table-column>
+            <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
+            <el-table-column prop="lastLoginTime" label="最近登录时间" align="center"></el-table-column>
         </el-table>
 
         <div style="margin: 24px">
@@ -67,9 +60,6 @@ export default {
         return {
             pages: 1,
             currentPage: 1,
-            // 折叠
-            activeNames: [],
-            collapseTitle: "搜索栏（点击展开）",
 
             searchForm: {
                 username: "",
@@ -107,13 +97,6 @@ export default {
         this.getData({});
     },
     methods: {
-        collapseChange(activeNames) {
-            if (activeNames.length === 0) {
-                this.collapseTitle = "搜索栏（点击展开）";
-            } else {
-                this.collapseTitle = "搜索栏（点击收起）";
-            }
-        },
 
         searchData() {
             let postData = {

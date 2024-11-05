@@ -25,10 +25,10 @@
         <el-divider></el-divider>
 
         <el-table :data="resultTable" stripe border style="width: 100%;">
-            <el-table-column prop="doi" label="数字对象标识"></el-table-column>
-            <el-table-column prop="name" label="数字对象名称"></el-table-column>
-            <el-table-column prop="description" label="数字对象描述"></el-table-column>
-            <el-table-column prop="type" label="数字对象类型"></el-table-column>
+            <el-table-column prop="doi" label="数字对象标识" align="center"></el-table-column>
+            <el-table-column prop="name" label="数字对象名称" align="center"></el-table-column>
+            <el-table-column prop="description" label="数字对象描述" align="center"></el-table-column>
+            <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
                     <el-button @click="allocate(props.row, props.$index)" type="primary"

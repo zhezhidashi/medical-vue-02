@@ -52,7 +52,7 @@
         </div>
 
 
-        <el-dialog title="审批" :visible.sync="approvalDialogVisible">
+        <el-dialog title="审批" :visible.sync="approvalDialogVisible" width="80%">
             <el-form :model="approvalForm" label-width="80px" align="left" :rules="approvalRules">
                 <el-form-item prop="status" label="审批结果">
                     <el-select v-model="approvalForm.status" placeholder="请选择">

@@ -112,16 +112,16 @@
                     <el-input v-model="modifyProjectForm.user"></el-input>
                 </el-form-item>
                 <el-form-item label="联系方式">
-                    <el-input v-model="modifyProjectForm.contactInfo"></el-input>
+                    <el-input v-model="modifyProjectForm.contactEmail"></el-input>
                 </el-form-item>
                 <el-form-item label="其他牵头机构" prop="institutionList">
-                    <el-select v-model="addProjectForm.institutionList" multiple filterable placeholder="请选择">
+                    <el-select v-model="addProjectForm.leadingInstitution" multiple filterable placeholder="请选择">
                         <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="项目参与机构" prop="involvedInstitutionDoi">
-                    <el-select v-model="addProjectForm.involvedInstitutionDoi" multiple filterable placeholder="请选择">
+                <el-form-item label="项目参与机构" prop="involveInsDoi">
+                    <el-select v-model="addProjectForm.involveInsDoi" multiple filterable placeholder="请选择">
                         <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
@@ -162,10 +162,10 @@
 
         <el-dialog title="权限修改历史" :visible.sync="contractVisible" width="80%" :before-close="cancelWithoutConfirm">
             <el-table :data="contractTable" stripe border style="width: 95%;">
-                <el-table-column prop="number" label="区块编号"></el-table-column>
-                <el-table-column prop="createTime" label="时间"></el-table-column>
-                <el-table-column prop="address" label="合约地址"></el-table-column>
-                <el-table-column prop="hashingValue" label="哈希值"></el-table-column>
+                <el-table-column prop="number" label="区块编号" align="center"></el-table-column>
+                <el-table-column prop="createTime" label="时间" align="center"></el-table-column>
+                <el-table-column prop="address" label="合约地址" align="center"></el-table-column>
+                <el-table-column prop="hashingValue" label="哈希值" align="center"></el-table-column>
             </el-table>
 
             <div style="margin: 24px">
