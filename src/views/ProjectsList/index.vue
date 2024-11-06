@@ -22,7 +22,9 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item prop="brand" label="品种" class="SearchFormItem">
-                        <el-input v-model="searchForm.brand"></el-input>
+                        <el-select v-model="searchForm.brand" filterable placeholder="请选择">
+                            <el-option v-for="item in brandList" :key="item" :label="item" :value="item"></el-option>
+                        </el-select>
                     </el-form-item>
                 </el-form>
                 <el-button type="primary" @click="searchData">搜索</el-button>
@@ -38,10 +40,28 @@
             <el-table-column prop="projectDoi" label="项目标识" align="center"></el-table-column>
             <el-table-column prop="user" label="项目负责人" align="center"></el-table-column>
             <el-table-column prop="contactEmail" label="联系方式" align="center"></el-table-column>
-            <el-table-column prop="leadingInstitution" label="牵头机构" align="center"></el-table-column>
-            <el-table-column prop="involveInsDoi" label="参与机构" align="center"></el-table-column>
-            <el-table-column prop="brand" label="品种" align="center"></el-table-column>
-            <el-table-column prop="status" label="申请状态" align="center"></el-table-column>
+            <el-table-column prop="leadingInstitutionDoiList" label="牵头机构" align="center">
+                <template slot-scope="scope">
+                    <div v-for="item in scope.row.leadingInstitutionDoiList" :key="item">{{ item }}</div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="involvedInstitutionDoiList" label="参与机构" align="center">
+                <template slot-scope="scope">
+                    <div v-for="item in scope.row.involvedInstitutionDoiList" :key="item">{{ item }}</div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="brandList" label="品种" align="center">
+                <template slot-scope="scope">
+                    <div v-for="item in scope.row.brandList" :key="item">{{ item }}</div>
+                </template>
+            </el-table-column>
+            <el-table-column prop="status" label="申请状态" align="center">
+                <template slot-scope="scope">
+                    <el-tag v-if="scope.row.status === 1">待审批</el-tag>
+                    <el-tag v-if="scope.row.status === 2" type="success">已通过</el-tag>
+                    <el-tag v-if="scope.row.status === 3" type="danger">已拒绝</el-tag>
+                </template>
+            </el-table-column>
             <el-table-column prop="uidList" label="用户列表" align="center">
                 <template slot-scope="scope">
                     <div v-for="item in scope.row.uidList" :key="item">{{ uidToUsername[item] }}</div>
@@ -76,25 +96,31 @@
                 <el-form-item prop="contactEmail" label="联系方式">
                     <el-input v-model="addProjectForm.contactEmail"></el-input>
                 </el-form-item>
-                <el-form-item label="其他牵头机构" prop="leadingInstitution">
-                    <el-select v-model="addProjectForm.leadingInstitution" multiple filterable placeholder="请选择">
+                <el-form-item label="其他牵头机构" prop="leadingInstitutionDoiList">
+                    <el-select v-model="addProjectForm.leadingInstitutionDoiList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="项目参与机构" prop="involvedInstitutionDoi">
-                    <el-select v-model="addProjectForm.involvedInstitutionDoi" multiple filterable placeholder="请选择">
+                <el-form-item label="项目参与机构" prop="involvedInstitutionDoiList">
+                    <el-select v-model="addProjectForm.involvedInstitutionDoiList" multiple filterable
+                        placeholder="请选择">
                         <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="品种" prop="brand">
-                    <el-select v-model="addProjectForm.brand" multiple filterable placeholder="请选择">
+                <el-form-item label="品种" prop="brandList">
+                    <el-select v-model="addProjectForm.brandList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in brandList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="项目申请文件" prop="applyDocumentAddress">
-                    <el-button type="primary">点击上传</el-button>
+                    <el-upload drag action="/api/file/upload"
+                        :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }"
+                        :on-success="uploadSuccessAdd">
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    </el-upload>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -114,25 +140,31 @@
                 <el-form-item label="联系方式">
                     <el-input v-model="modifyProjectForm.contactEmail"></el-input>
                 </el-form-item>
-                <el-form-item label="其他牵头机构" prop="institutionList">
-                    <el-select v-model="addProjectForm.leadingInstitution" multiple filterable placeholder="请选择">
+                <el-form-item label="其他牵头机构" prop="leadingInstitutionDoiList">
+                    <el-select v-model="modifyProjectForm.leadingInstitutionDoiList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="项目参与机构" prop="involveInsDoi">
-                    <el-select v-model="addProjectForm.involveInsDoi" multiple filterable placeholder="请选择">
+                <el-form-item label="项目参与机构" prop="involvedInstitutionDoiList">
+                    <el-select v-model="modifyProjectForm.involvedInstitutionDoiList" multiple filterable
+                        placeholder="请选择">
                         <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="品种" prop="brand">
-                    <el-select v-model="addProjectForm.brand" multiple filterable placeholder="请选择">
+                <el-form-item label="品种" prop="brandList">
+                    <el-select v-model="modifyProjectForm.brandList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in brandList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="项目申请文件" prop="applyDocumentAddress">
-                    <el-button type="primary">点击上传</el-button>
+                    <el-upload drag action="/api/file/upload"
+                        :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }"
+                        :on-success="uploadSuccessModify">
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    </el-upload>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -165,7 +197,7 @@
                 <el-table-column prop="number" label="区块编号" align="center"></el-table-column>
                 <el-table-column prop="createTime" label="时间" align="center"></el-table-column>
                 <el-table-column prop="address" label="合约地址" align="center"></el-table-column>
-                <el-table-column prop="hashingValue" label="哈希值" align="center"></el-table-column>
+                <el-table-column prop="hashValue" label="哈希值" align="center"></el-table-column>
             </el-table>
 
             <div style="margin: 24px">
@@ -179,22 +211,23 @@
 </template>
 
 <script>
-import { postForm } from '@/api/data';
+import { postForm, getForm, postFormPublic, getFormPublic } from '@/api/data';
 export default {
     name: "ProjectsList",
     data() {
         return {
             pages: 1,
             currentPage: 1,
+            institutionList: [
+                { name: "北医三院", doi: "123" },
+                { name: "北医四院", doi: "1234" }
+            ],
             userList: [
                 { username: "user001", uid: 1 }
             ],
             uidToUsername: {
                 1: "user001",
             },
-            institutionList: [
-                { name: "北医三院", doi: "123" }
-            ],
             // 品种列表
             brandList: [
                 "感冒灵", "诺氟沙星"
@@ -219,10 +252,10 @@ export default {
                     projectDoi: "111",
                     user: "111",
                     contactEmail: "111",
-                    leadingInstitution: "111",
-                    involveInsDoi: "111",
-                    brand: "111",
-                    status: "111",
+                    leadingInstitutionDoiList: ["123"],
+                    involvedInstitutionDoiList: ["1234"],
+                    brandList: ["感冒灵"],
+                    status: 2,
                     // 用户列表
                     uidList: [1],
                 }
@@ -235,9 +268,9 @@ export default {
                 name: "",
                 user: "",
                 contactEmail: "",
-                leadingInstitution: "",
-                involveInsDoi: "",
-                brand: "",
+                leadingInstitutionDoiList: [],
+                involvedInstitutionDoiList: [],
+                brandList: [],
                 applyDocumentAddress: "",
             },
 
@@ -260,9 +293,9 @@ export default {
                 name: "",
                 user: "",
                 contactEmail: "",
-                leadingInstitution: "",
-                involveInsDoi: "",
-                brand: "",
+                leadingInstitutionDoiList: [],
+                involvedInstitutionDoiList: [],
+                brandList: [],
                 applyDocumentAddress: "",
             },
             modifyProjectRules: {
@@ -293,21 +326,57 @@ export default {
                     number: 0,
                     createTime: "2024",
                     address: "0x51fB57B6B7837D4064158BDFE2DDDF91A53D46e7",
-                    hashingValue: "0x13c02bbdabd149a8ab7e745a9d03b2184ca20c4312eef07c69a3f27ad49833b6",
+                    hashValue: "0x13c02bbdabd149a8ab7e745a9d03b2184ca20c4312eef07c69a3f27ad49833b6",
                 }
             ],
         };
     },
     mounted() {
-
+        // 获取基础数据
+        // this.getBasicData();
     },
     methods: {
+        // 获取基础数据
+        getBasicData() {
+            let _this = this;
+
+            this.institutionList = []
+            this.userList = []
+            this.uidToUsername = {}
+            this.brandList = []
+            // 获取所有机构
+            postFormPublic("/institution/insList/list", { pageNo: 1, pageSize: 10000 }, _this, function (res) {
+                for (let item of res.data.list) {
+                    _this.institutionList.push({
+                        name: item.name,
+                        doi: item.doi
+                    })
+                }
+                // 获取所有用户 
+                postForm("/users/getUsers", { page: 1, size: 10000 }, _this, function (res) {
+                    for (let item of res.data.records) {
+                        _this.userList.push({
+                            uid: item.uid,
+                            username: item.username,
+                        });
+                        _this.uidToUsername[item.uid] = item.username
+                    }
+                    // 获取所有品种
+                    getForm("/brand/getAll", _this, function (res) {
+                        for (let item of res.data) {
+                            _this.brandList.push(item)
+                        }
+                        // 获取所有数据
+                        _this.getData({})
+                    })
+                });
+            })
+        },
+
         clickPage(page) {
             this.currentPage = page;
             this.searchForm.page = this.currentPage;
             this.getData(this.searchForm);
-        },
-        getData(postData) {
         },
 
         collapseChange(activeNames) {
@@ -319,22 +388,181 @@ export default {
         },
 
         searchData() {
+            let postData = {
+                name: this.searchForm.name,
+                projectDoi: this.searchForm.projectDoi,
+                leadingInstitution: this.searchForm.leadingInstitution,
+                involvedInstitutionDoi: this.searchForm.involvedInstitutionDoi,
+                brand: this.searchForm.brand,
+            }
+            this.getData(postData);
         },
 
+        getData(postData) {
+            let _this = this;
+            _this.projectTable = [];
+            postForm('/projectInfos/getProjectInfo', postData, _this, function (res) {
+                _this.pages = res.data.pages;
+                for (let item of res.data.records) {
+                    let dataItem = {
+                        pid: item.pid,
+                        name: item.name,
+                        projectDoi: item.projectDoi,
+                        user: item.user,
+                        contactEmail: item.contactEmail,
+                        status: item.status,
+                        uidList: [],
+                    }
+                    if (item.leadingInstitution !== undefined && item.leadingInstitution !== null) {
+                        dataItem.leadingInstitutionDoiList = item.leadingInstitution.split(",");
+                    } else {
+                        dataItem.leadingInstitutionDoiList = [];
+                    }
+                    if (item.involveInsDoi !== undefined && item.involveInsDoi !== null) {
+                        dataItem.involvedInstitutionDoiList = item.involveInsDoi.split(",");
+                    } else {
+                        dataItem.involvedInstitutionDoiList = [];
+                    }
+                    if (item.brand !== undefined && item.brand !== null) {
+                        dataItem.brandList = item.brand.split(",");
+                    } else {
+                        dataItem.brandList = [];
+                    }
+
+                    for (let item of item.userBoList) {
+                        dataItem.uidList.push(item.uid)
+                    }
+                    _this.projectTable.push(dataItem);
+                }
+            })
+        },
+
+        // 处理建项的上传文件
+        uploadSuccessAdd(response, file, fileList) {
+            if (response.code === 200) {
+                this.$message({
+                    message: '上传成功',
+                    type: 'success'
+                });
+                this.addProjectForm.applyDocumentAddress = response.data;
+            } else {
+                this.$message({
+                    message: response.message,
+                    type: 'error'
+                });
+            }
+        },
 
         addProject() {
             this.addProjectDialogVisible = true;
             this.addProjectForm = {
-                projectName: "",
-                projectLeader: "",
-                projectContact: "",
-                projectDescription: "",
-                projectApplyFile: "",
-                projectApplyEmail: "",
-                institutionList: [],
-                involvedInstitutionDoi: "",
+                name: "",
+                user: "",
+                contactEmail: "",
+                leadingInstitutionDoiList: [],
+                involvedInstitutionDoiList: [],
+                brandList: [],
+                applyDocumentAddress: "",
             }
         },
+
+        addProjectConfirm() {
+            let _this = this;
+
+            let postData = {
+                name: this.addProjectForm.name,
+                user: this.addProjectForm.user,
+                contactEmail: this.addProjectForm.contactEmail,
+                leadingInstitution: this.addProjectForm.leadingInstitutionDoiList.toString(),
+                involvedInstitutionDoi: this.addProjectForm.involvedInstitutionDoiList.toString(),
+                brand: this.addProjectForm.brandList.toString(),
+                applyDocumentAddress: this.addProjectForm.applyDocumentAddress,
+            }
+
+            postForm('/projectOrder/create', postData, this, function (res) {
+                if (res.code === 200) {
+                    _this.$message({
+                        type: 'success',
+                        message: '添加成功'
+                    });
+                    _this.getData({});
+                    _this.addProjectDialogVisible = false;
+                }
+            })
+        },
+
+        // 处理修改项目的上传文件
+        uploadSuccessModify(response, file, fileList) {
+            if (response.code === 200) {
+                this.$message({
+                    message: '上传成功',
+                    type: 'success'
+                });
+                this.modifyProjectForm.applyDocumentAddress = response.data;
+            } else {
+                this.$message({
+                    message: response.message,
+                    type: 'error'
+                });
+            }
+        },
+        modifyProject(row, index) {
+            this.modifyProjectDialogVisible = true;
+            this.modifyProjectIndex = index;
+            this.modifyProjectForm = JSON.parse(JSON.stringify(row));
+            console.log(this.modifyProjectForm)
+        },
+
+        modifyProjectConfirm() {
+            let postData = {
+                pid: this.projectTable[this.modifyProjectIndex].pid,
+                name: this.modifyProjectForm.name,
+                user: this.modifyProjectForm.user,
+                contactEmail: this.modifyProjectForm.contactEmail,
+                leadingInstitution: this.modifyProjectForm.leadingInstitutionDoiList.toString(),
+                involvedInstitutionDoi: this.modifyProjectForm.involvedInstitutionDoiList.toString(),
+                brand: this.modifyProjectForm.brandList.toString(),
+                applyDocumentAddress: this.modifyProjectForm.applyDocumentAddress,
+            }
+
+            let _this = this;
+            postForm("/projectOrder/modify", postData, _this, function (res) {
+                if (res.code === 200) {
+                    _this.$message({
+                        type: 'success',
+                        message: '修改成功'
+                    });
+                    _this.getData({});
+                    _this.modifyProjectDialogVisible = false;
+                }
+            })
+        },
+
+        modifyUser(row, index) {
+            this.modifyUserDialogVisible = true;
+            this.modifyUserIndex = index;
+            this.modifyUserForm.uidList = row.uidList;
+            console.log(this.modifyUserForm)
+        },
+
+        modifyUserConfirm() {
+            postData = {
+                pid: this.projectTable[this.modifyUserIndex].pid,
+                uidList: this.modifyUserForm.uidList,
+            }
+            let _this = this;
+            postForm('/projectInfos/batchAddUsers', postData, _this, function (res) {
+                if (res.code === 200) {
+                    _this.$message({
+                        type: 'success',
+                        message: '添加用户成功'
+                    });
+                }
+                _this.getData(_this.searchForm);
+                _this.modifyUserDialogVisible = false;
+            })
+        },
+
         cancel() {
             this.$confirm('不保存而直接关闭可能会丢失本次编辑的信息，是否继续?', '提示', {
                 confirmButtonText: '确定',
@@ -352,48 +580,16 @@ export default {
                 });
             });
         },
-        addProjectConfirm() {
-            let _this = this;
-            // 将 selected = true 的机构 DOI 添加到 involvedInstitutionDoi 中，以逗号分隔
-            for (let item of this.addProjectForm.institutionList) {
-                this.addProjectForm.involvedInstitutionDoi += item + ",";
-            }
 
-            // 检查有没有空值
-            if (this.addProjectForm.projectName === "" || this.addProjectForm.projectLeader === "" || this.addProjectForm.projectContact === "" || this.addProjectForm.projectDescription === "" || this.addProjectForm.projectApplyFile === "" || this.addProjectForm.projectApplyEmail === "") {
-                this.$message({
-                    type: 'warning',
-                    message: '请填写完整信息'
-                });
-                return;
-            }
-            _this.addProjectDialogVisible = false;
-        },
-
-        modifyProject(row, index) {
-            this.modifyProjectDialogVisible = true;
-            this.modifyProjectIndex = index;
-            this.modifyProjectForm = JSON.parse(JSON.stringify(row));
-            console.log(this.modifyProjectForm)
-        },
-
-        modifyProjectConfirm() {
-            _this.modifyProjectDialogVisible = false;
-        },
-
-        modifyUser(row, index) {
-            this.modifyUserDialogVisible = true;
-            this.modifyUserIndex = index;
-            this.modifyUserForm.uidList = row.uidList;
-            console.log(this.modifyUserForm)
-        },
-
-        modifyUserConfirm() {
-            this.modifyUserDialogVisible = false;
-        },
-
-        contractHistory() {
+        contractHistory(row, index) {
             this.contractVisible = true;
+            this.contractTable = [];
+            let _this = this;
+            getForm(`/getContractListByPid/${row.pid}`, _this, function(res) {
+                for(let item of res.data) {
+                    _this.contractTable.push(item)
+                }
+            })
         },
         cancelWithoutConfirm() {
             this.contractVisible = false;

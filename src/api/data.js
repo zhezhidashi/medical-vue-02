@@ -4,9 +4,8 @@ import nprogress from 'nprogress';
 import "nprogress/nprogress.css";
 
 // 注：第一个页面里面两个上传文件的部分也有baseUrl，如果要改的话，一起改
-export const backendUrl = '/api'
-export const mockUrl = "https://mock.apifox.com/m1/3980705-3616153-default"
-export const ganacheUrl = '/ganache'
+export const backendUrl = '/backendOut'
+export const publicUrl = '/public'
 
 // 外网的 IP 和 PORT
 export const backend_out_ip = "8.130.160.66"
@@ -64,10 +63,10 @@ export const getForm = (requestUrl, This, callback) => {
             callback(res) 
         }
         else {
-            // This.$message({
-            //     message: res.message,
-            //     type: 'error'
-            // });
+            This.$message({
+                message: res.message,
+                type: 'error'
+            });
             callback(res)
         }
     })
@@ -142,17 +141,17 @@ export const exportData = (requestUrl, params, This, callback) => {
     })
 }
 
-// Ganache-post请求
-export const postFormGanache = (requestUrl, params, This, callback) => {
+// 第三方平台post请求
+export const postFormPublic = (requestUrl, params, This, callback) => {
     nprogress.start();
-    console.log('postFormGanache 的表单', requestUrl, params)
+    console.log('postFormPublic 的表单', requestUrl, params)
     axios.request({
-        url: ganacheUrl + requestUrl,
+        url: publicUrl + requestUrl,
         method: 'post',
         data: params,
     }).then(({ data: res }) => {
         nprogress.done()
-        console.log('postFormGanache 的 response: ', requestUrl, res);
+        console.log('postFormPublic 的 response: ', publicUrl + requestUrl, res);
         if (res.code === 200) { 
             callback(res) 
         }
@@ -166,99 +165,19 @@ export const postFormGanache = (requestUrl, params, This, callback) => {
     })
     .catch((err) => {
         nprogress.done()
-        console.log('postFormGanache 的 error: ', ganacheUrl + requestUrl, err);
+        console.log('postFormPublic 的 error: ', publicUrl + requestUrl, err);
     })
 }
 
-// 登陆模拟
-export const loginRequestMock = (requestUrl, params, This, callback) => {
+// 第三方平台的get请求
+export const getFormPublic = (requestUrl, This, callback) => {
     nprogress.start();
-    console.log('postFormMock 的表单', requestUrl, params)
     axios.request({
-        url: "https://mock.apipark.cn/m1/3980705-3616153-default/login?apifoxApiId=149513755&apifoxToken=FWfuxvo9z3Zb1yuOsKEfh",
-        method: 'post',
-        data: params,
-    }).then(({ data: res }) => {
-        nprogress.done()
-        console.log('postForm 的 response: ', requestUrl, res);
-        if (res.code === 200) { 
-            if(res.data.userType === 1) {
-                // store.commit('setToken', res.data.accessToken)
-                store.commit('setToken', res.data.accessToken)
-                store.commit('setUsername', params.username)
-                store.commit('setUserType', 'user')
-                callback({code: 200, message: '登录成功'})
-            }
-            else {
-                // store.commit('setToken', res.data.accessToken)
-                store.commit('setToken', res.data.accessToken)
-                store.commit('setUsername', params.username)
-                store.commit('setUserType', 'admin')
-                callback({code: 200, message: '登录成功'})
-            }
-            callback(res) 
-        }
-        else {
-            This.$message({
-                message: res.message,
-                type: 'error'
-            });
-        }
-    })
-    .catch((err) => {
-        nprogress.done()
-        console.log('loginRequestMock 的 error: ', requestUrl, err);
-    })
-}
-
-// post mock
-export const postFormMock = (requestUrl, params, This, callback) => {
-    nprogress.start();
-    console.log('postForm 的表单', requestUrl, params)
-    store.commit('getToken')
-    const TokenValue = store.state.user.token;
-    axios.request({
-        url: mockUrl + requestUrl + "?apifoxToken=FWfuxvo9z3Zb1yuOsKEfh",
-        method: 'post',
-        data: params,
-        headers: {
-            Authorization: "Bearer " + TokenValue
-        }
-    }).then(({ data: res }) => {
-        nprogress.done()
-        console.log('postForm 的 response: ', requestUrl, res);
-        if (res.code === 200) { 
-            callback(res) 
-        }
-        else {
-            This.$message({
-                message: res.message,
-                type: 'error'
-            });
-            callback(res)
-        }
-    })
-    .catch((err) => {
-        nprogress.done()
-        console.log('postFormMock 的 error: ', requestUrl, err);
-    })
-}
-
-// get mock
-export const getFormMock = (requestUrl, This, callback) => {
-    nprogress.start();
-    console.log('getForm 的表单', requestUrl)
-    store.commit('getToken')
-    const TokenValue = store.state.user.token;
-    axios.request({
-        url: mockUrl + requestUrl + "?apifoxApiId=149513755&apifoxToken=FWfuxvo9z3Zb1yuOsKEfh",
+        url: publicUrl + requestUrl,
         method: 'get',
-        headers: {
-            Authorization: "Bearer " + TokenValue
-        }
     }).then(({ data: res }) => {
         nprogress.done()
-        console.log('getForm 的 response: ', requestUrl, res);
+        console.log('getFormPublic 的 response: ', publicUrl + requestUrl, res);
         if (res.code === 200) { 
             callback(res) 
         }
@@ -272,6 +191,6 @@ export const getFormMock = (requestUrl, This, callback) => {
     })
     .catch((err) => {
         nprogress.done()
-        console.log('getFormMock 的 error: ', requestUrl, err);
+        console.log('getFormPublic 的 error: ', publicUrl + requestUrl, err);
     })
 }

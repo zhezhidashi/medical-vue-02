@@ -11,7 +11,7 @@
                 <el-menu-item index="4-1">数字对象分配</el-menu-item>
                 <el-menu-item index="4-2">数字对象审批</el-menu-item>
             </el-submenu>
-            
+
             <el-menu-item v-show="!isAdmin" index="5">返回参与项目列表</el-menu-item>
             <el-menu-item v-show="!isAdmin" index="6">项目详情</el-menu-item>
             <el-menu-item v-show="!isAdmin" index="7">数字对象检索</el-menu-item>
@@ -34,43 +34,14 @@ export default {
     mounted() {
         this.isAdmin = this.$store.state.user.userType === 'admin';
         this.path = this.$router.history.current.path;
-        if (this.path === '/Login') {
-            this.activeIndex = '0';
-        }
-        else if (this.path === '/MainPage') {
-            this.activeIndex = '0';
-        }
-        else if (this.path === '/NetworkManage') {
-            this.activeIndex = '1';
-        }
-        else if (this.path === '/ProjectsList') {
-            this.activeIndex = '2';
-        }
-        else if (this.path === '/AccountManage') {
-            this.activeIndex = '3'
-        }
-        else if (this.path === '/DigitalObjectAllocate') {
-            this.activeIndex = '4-1'
-        }
-        else if (this.path === '/DigitalObjectApproval') {
-            this.activeIndex = '4-2'
-        }
-        else if (this.path === '/ProjectsListNormalUser') {
-            this.activeIndex = '5'
-        }
-        else if (this.path === '/ProjectDetail') {
-            this.activeIndex = '6'
-        }
-        else if (this.path === '/DigitalObjectSearch') {
-            this.activeIndex = '7'
-        }
-        else if (this.path === '/DigitalObjectList') {
-            this.activeIndex = '8'
-        }
+        // 刷新的时候，更新左侧高亮的侧边栏选项
+        this.updateActiveKey()
     },
     watch: {
         $route(to, from) {
             this.path = to.path;
+            // 跳转的时候，更新左侧高亮的侧边栏选项
+            this.updateActiveKey()
         },
         // 由于有 admin 和 user 的切换，为了切换时重新加载页面，所以监听 userType
         // 直接修改 activeIndex 没用，只能重新加载页面
@@ -84,6 +55,42 @@ export default {
         }
     },
     methods: {
+        // 在刷新和跳转的时候，更新左侧高亮的侧边栏选项
+        updateActiveKey() {
+            if (this.path === '/Login') {
+                this.activeIndex = '0';
+            }
+            else if (this.path === '/MainPage') {
+                this.activeIndex = '0';
+            }
+            else if (this.path === '/NetworkManage') {
+                this.activeIndex = '1';
+            }
+            else if (this.path === '/ProjectsList') {
+                this.activeIndex = '2';
+            }
+            else if (this.path === '/AccountManage') {
+                this.activeIndex = '3'
+            }
+            else if (this.path === '/DigitalObjectAllocate') {
+                this.activeIndex = '4-1'
+            }
+            else if (this.path === '/DigitalObjectApproval') {
+                this.activeIndex = '4-2'
+            }
+            else if (this.path === '/ProjectsListNormalUser') {
+                this.activeIndex = '5'
+            }
+            else if (this.path === '/ProjectDetail') {
+                this.activeIndex = '6'
+            }
+            else if (this.path === '/DigitalObjectSearch') {
+                this.activeIndex = '7'
+            }
+            else if (this.path === '/DigitalObjectList') {
+                this.activeIndex = '8'
+            }
+        },
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
             if (key === '0') {

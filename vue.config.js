@@ -12,9 +12,9 @@ module.exports = defineConfig({
     lintOnSave: false,
     devServer: {
         proxy: {
-            '/api': {
+            '/backendOut': {
                 target: process.env.BACKEND_OUT_URL,
-                pathRewrite: {'^/api': ''},
+                pathRewrite: {'^/backendOut': ''},
                 ws: true,
                 changeOrigin: true
             },

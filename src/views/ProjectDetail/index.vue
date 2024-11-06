@@ -7,9 +7,21 @@
             <el-descriptions-item label="项目标识">{{ projectForm.projectDoi }}</el-descriptions-item>
             <el-descriptions-item label="项目负责人">{{ projectForm.user }}</el-descriptions-item>
             <el-descriptions-item label="联系方式">{{ projectForm.contactEmail }}</el-descriptions-item>
-            <el-descriptions-item label="牵头机构">{{ projectForm.leadingInstitution }}</el-descriptions-item>
-            <el-descriptions-item label="参与机构">{{ projectForm.involveInsDoi }}</el-descriptions-item>
-            <el-descriptions-item label="品种">{{ projectForm.brand }}</el-descriptions-item>
+            <el-descriptions-item label="牵头机构">
+                <div v-for="item in projectForm.leadingInstitutionDoiList" :key="item">
+                    <span>{{ item }}</span>
+                </div>
+            </el-descriptions-item>
+            <el-descriptions-item label="参与机构">
+                <div v-for="item in projectForm.involvedInstitutionDoiList" :key="item">
+                    <span>{{ item }}</span>
+                </div>
+            </el-descriptions-item>
+            <el-descriptions-item label="品种">
+                <div v-for="item in projectForm.brandList" :key="item">
+                    <span>{{ item }}</span>
+                </div>
+            </el-descriptions-item>
         </el-descriptions>
     </div>
 
@@ -23,19 +35,53 @@ export default {
         return {
             // 项目列表
             projectForm: {
-                name: "围术期抗栓药物管理临床路径研究",
-                projectDoi: "86.771.6049046735/pro.5f60449b-32b5-4042-9d2f-1c6ceae60050",
-                user: "中日友好医院",
-                contactEmail: "72158345436",
-                leadingInstitution: "86.259.5868980074/ins.8b390aec-c794-44bb-b4b1-6aa37aedbb7c",
-                involveInsDoi: "111",
-                brand: "111"
+                pid: 1,
+                name: "111",
+                projectDoi: "111",
+                user: "111",
+                contactEmail: "111",
+                leadingInstitutionDoiList: ["123", "1234"],
+                involvedInstitutionDoiList: ["123", "1234"],
+                brandList: ["感冒灵", "板蓝根"],
             }
         };
     },
     mounted() {
+        // this.getData()
     },
     methods: {
+        getData() {
+            let _this = this;
+            this.$store.commit('getProjectDoi');
+            let postData = {
+                page: 1,
+                size: 1,
+                projectDoi: this.$store.state.user.projectDoi
+            }
+            postForm('/users/getProjects', postData, _this, function (res) {
+                let item = res.data.records[0];
+                projectForm.pid = item.pid
+                projectForm.name = item.name
+                projectForm.projectDoi = item.projectDoi
+                projectForm.user = item.user
+                projectForm.contactEmail = item.contactEmail
+                if (item.leadingInstitution !== undefined && item.leadingInstitution !== null) {
+                    projectForm.leadingInstitutionDoiList = item.leadingInstitution.split(",");
+                } else {
+                    projectForm.leadingInstitutionDoiList = [];
+                }
+                if (item.involveInsDoi !== undefined && item.involveInsDoi !== null) {
+                    projectForm.involvedInstitutionDoiList = item.involveInsDoi.split(",");
+                } else {
+                    projectForm.involvedInstitutionDoiList = [];
+                }
+                if (item.brand !== undefined && item.brand !== null) {
+                    projectForm.brandList = item.brand.split(",");
+                } else {
+                    projectForm.brandList = [];
+                }
+            })
+        },
     },
 }
 </script>

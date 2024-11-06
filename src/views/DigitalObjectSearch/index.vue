@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { postForm } from '@/api/data'
+import { postForm, getForm, postFormPublic, getFormPublic } from '@/api/data'
 export default {
     name: "DigitalObjectList",
     data() {
@@ -95,9 +95,6 @@ export default {
             },
 
             doSearchRules: {
-                projectDoi: [
-                    { required: true, message: '请选择数字对象所属项目', trigger: 'change' }
-                ],
                 institutionDoi: [
                     { required: true, message: '请选择数字对象所属机构', trigger: 'change' }
                 ],

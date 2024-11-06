@@ -14,7 +14,8 @@
                     </el-form-item>
                     <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
                         <el-select placeholder="请选择" filterable v-model="searchForm.type">
-                            <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value" :key="index"></el-option>
+                            <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value"
+                                :key="index"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -31,8 +32,7 @@
             <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
-                    <el-button @click="allocate(props.row, props.$index)" type="primary"
-                        size="small">分配项目</el-button>
+                    <el-button @click="allocate(props.row, props.$index)" type="primary" size="small">分配项目</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -42,14 +42,18 @@
             </el-pagination>
         </div>
 
-        <el-dialog title="分配项目" :visible.sync="allocateVisible" width="80%" :before-close="allocateCancel" style="text-align: left;">
+        <el-dialog title="分配项目" :visible.sync="allocateVisible" width="80%" :before-close="allocateCancel"
+            style="text-align: left;">
             <el-form :model="allocateForm" label-width="auto" :rules="allocateRules">
                 <el-form-item label="已分配项目">
-                    <span>正大天晴、中国生物、中日友好医院</span>
+                    <div v-for="item in allocateForm.projectNameList" :key="item">
+                        <span>{{ item }}</span>
+                    </div>
                 </el-form-item>
                 <el-form-item label="添加分配项目" prop="projectDoiList">
                     <el-select v-model="allocateForm.projectDoiList" multiple filterable placeholder="请选择">
-                        <el-option v-for="(item, index) in projectsList" :label="item.name" :value="item.projectDoi" :key="index">
+                        <el-option v-for="(item, index) in projectsList" :label="item.name" :value="item.projectDoi"
+                            :key="index">
                             {{ item.name }}
                         </el-option>
                     </el-select>
@@ -64,6 +68,7 @@
 </template>
 
 <script>
+import { postForm, getForm, postFormPublic, getFormPublic } from '@/api/data';
 export default {
     name: "DigitalObjectAllocate",
     data() {
@@ -82,8 +87,6 @@ export default {
                 type: '',
                 // 数字对象描述
                 description: '',
-                // 页码
-                pageNo: 1,
             },
 
             resultTable: [
@@ -92,6 +95,8 @@ export default {
                     name: '加密',
                     description: '加密',
                     type: "EDC",
+                    projectDoiList: ["doi1"],
+                    projectNameList: ["项目1"]
                 },
             ],
 
@@ -118,18 +123,36 @@ export default {
             },
 
             doTypeList: [
-                { name: "EDC",  value: "EDC" },
-                { name: "SDTM",  value: "SDTM" },
-                { name: "ADAM",  value: "ADAM" },
-                { name: "代码",  value: "代码" },
+                { name: "EDC", value: "EDC" },
+                { name: "SDTM", value: "SDTM" },
+                { name: "ADAM", value: "ADAM" },
+                { name: "代码", value: "代码" },
                 { name: "结构化数据", value: "结构化数据" },
                 { name: "非结构化数据", value: "非结构化数据" }
             ],
         };
     },
     mounted() {
+        // 获取基本数据
+        this.getBasicData()
     },
     methods: {
+        // 获取基本数据
+        getBasicData() {
+            let _this = this;
+            this.projectsList = [];
+            postForm('/projectInfos/getProjectInfo', { page: 1, size: 10000 }, _this, function (res) {
+                for (let item of res.data.records) {
+                    _this.projectsList.push({
+                        pid: item.pid,
+                        name: item.name,
+                        projectDoi: item.projectDoi
+                    })
+                }
+                _this.getData({})
+            })
+        },
+
         collapseChange(activeNames) {
             if (activeNames.length === 0) {
                 this.collapseTitle = "搜索栏（点击展开）";
@@ -143,12 +166,47 @@ export default {
             this.getData(this.searchForm);
         },
         searchData() {
+            let postData = {
+                doi: this.searchForm.doi,
+                name: this.searchForm.name,
+                description: this.searchForm.description,
+                type: this.searchForm.type
+            }
+            this.getData(postData)
         },
 
+        // 获取元数据信息
         getData(postData) {
+            let _this = this;
+            this.resultTable = [];
+            postForm('/registry/query', postData, _this, function (res) {
+                for (let item of res.data.records) {
+                    let doItem = {
+                        doi: item.doi,
+                        name: item.name,
+                        description: item.description,
+                        type: item.type
+                    }
+                    postFormPublic("/relationship/api/search", { doi: item.doi, pageNo: 1, pageSize: 1 }, _this, function (res) {
+                        if (res.data.list.length !== 0) {
+                            let doDetail = res.data.list[0];
+                            if (doDetail.projectDoi === null || doDetail.projectDoi === undefined) {
+                                doDetail.projectDoi = ""
+                            }
+                            if (doDetail.projectName === null || doDetail.projectName === undefined) {
+                                doDetail.projectName = ""
+                            }
+                            doItem.projectDoiList = doDetail.projectDoi.split(',')
+                            doItem.projectNameList = doDetail.projectName.split(',')
+                            _this.resultTable.push(doItem);
+                        }
+                    })
+                }
+            })
         },
 
-        allocate() {
+        allocate(row, index) {
+            this.allocateForm = JSON.parse(JSON.stringify(row));
             this.allocateVisible = true;
         },
 
@@ -168,7 +226,20 @@ export default {
         },
 
         allocateConfirm() {
-            this.allocateVisible = false;
+            let _this = this;
+            let postData = {
+                doi: this.allocateForm.doi,
+                projectDoiList: this.allocateForm.projectDoiList,
+            }
+            postForm('/projectDo/allocateProject', postData, _this, function (res) {
+                if (res.code === 200) {
+                    _this.$message({
+                        message: '分配成功',
+                        type: 'success'
+                    });
+                }
+                _this.allocateVisible = false;
+            })
         },
     },
 }
