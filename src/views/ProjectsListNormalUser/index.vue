@@ -56,7 +56,7 @@ export default {
             {
                     pid: 1,
                     name: "111",
-                    projectDoi: "111",
+                    projectDoi: "",
                     user: "111",
                     contactEmail: "111",
                     leadingInstitutionDoiList: ["123"],
@@ -67,7 +67,7 @@ export default {
         };
     },
     mounted() {
-        // this.getData({})
+        this.getData({})
     },
     methods: {
         clickPage(page) {

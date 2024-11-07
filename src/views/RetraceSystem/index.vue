@@ -9,7 +9,6 @@
                         <el-descriptions-item label="数字对象标识">{{ retraceList[doIndex].doi }}</el-descriptions-item>
                         <el-descriptions-item label="数字对象名称">{{ retraceList[doIndex].name }}</el-descriptions-item>
                         <el-descriptions-item label="数字对象描述">{{ retraceList[doIndex].description }}</el-descriptions-item>
-                        <el-descriptions-item label="数字对象来源">{{ retraceList[doIndex].source }}</el-descriptions-item>
                         <el-descriptions-item label="数字对象类型">{{ retraceList[doIndex].type }}</el-descriptions-item>
                     </el-descriptions>
                 </el-card>
@@ -33,7 +32,7 @@ export default {
                     doi: "",
                     name: "",
                     description: "",
-                    source: "",
+                    source: [],
                     type: ""
                 }
             ],
@@ -141,7 +140,7 @@ export default {
 
             for (let idx = 0; idx < retraceList.length; idx++) {
                 if (retraceList[idx].source != null) {
-                    let edges = retraceList[idx].source.split(',')
+                    let edges = retraceList[idx].source
                     for (let item of edges) {
                         this.createEdge(idx, item, retraceList)
                     }

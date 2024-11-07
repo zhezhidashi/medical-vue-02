@@ -26,7 +26,13 @@
             <el-table-column prop="appName" label="数字对象名称" align="center"></el-table-column>
             <el-table-column prop="appContent" label="数字对象描述" align="center"></el-table-column>
             <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
-            <el-table-column prop="source" label="来源" align="center"></el-table-column>
+            <el-table-column prop="sourceList" label="来源" align="center">
+                <template slot-scope="props">
+                    <div v-for="item in sourceList" :key="item">
+                        <span>{{ item }}</span>
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column prop="appType" label="申请类型" align="center">
                 <template slot-scope="props">
                     <el-tag v-if="props.row.appType === 1" type="primary">指针型</el-tag>
@@ -83,8 +89,7 @@
 </template>
 
 <script>
-import { postForm } from '@/api/data'
-import * as echarts from "echarts";
+import { postForm, getForm, postFormPublic, getFormPublic } from '@/api/data'
 export default {
     name: "DigitalObjectList",
     data() {
@@ -92,22 +97,10 @@ export default {
             pages: 1,
             currentPage: 1,
             searchForm: {
-                // DOI
                 doi: '',
-                // 数字对象名称
-                name: '',
-                // 数字对象类型
+                appName: '',
+                appContent: '',
                 type: '',
-                // 数字对象状态
-                status: '',
-                // 数字对象描述
-                description: '',
-                // 机构DOI
-                institutionDoi: '',
-                // 机构名称
-                institutionName: '',
-                // 页码
-                pageNo: 1,
             },
 
             resultTable: [
@@ -116,7 +109,7 @@ export default {
                     appName: '加密',
                     appContent: '加密',
                     type: "EDC",
-                    source: '项目1',
+                    sourceList: '项目1',
                     appType: 1,
                     retraceList: [
                         { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "name": "DO1", "description": "", "source": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671,86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "type": "SDTM" },
@@ -129,7 +122,7 @@ export default {
                     appName: '加密',
                     appContent: '加密',
                     type: "EDC",
-                    source: '项目1',
+                    sourceList: '项目1',
                     appType: 2,
                     retraceList: [
                         { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
@@ -171,84 +164,10 @@ export default {
                     hashValue: "0x13c02bbdabd149a8ab7e745a9d03b2184ca20c4312eef07c69a3f27ad49833b6",
                 }
             ],
-
-            graphEchartsOptions: {
-                title: {
-                    text: '流转追溯图',
-                    textStyle: {
-                        fontSize: 16 // 设置标题字体大小
-                    }
-                },
-                tooltip: {},
-                legend: [
-                    {
-                        // 定义图例
-                        data: ["EDC", 'SDTM', 'ADAM', '代码', '结构化数据', '非结构化数据']
-                    },
-                ],
-                series: {
-                    type: 'graph',
-                    layout: 'force',
-                    categories: [
-                        {
-                            name: 'EDC',
-                            itemStyle: { color: 'yellow' },
-                        },
-                        {
-                            name: 'SDTM',
-                            itemStyle: { color: 'red' },
-                        },
-                        {
-                            name: 'ADAM',
-                            itemStyle: { color: 'blue' },
-                        },
-                        {
-                            name: '代码',
-                            itemStyle: { color: 'lightgreen' },
-                        },
-                        {
-                            name: '结构化数据',
-                            itemStyle: { color: 'orange' },
-                        },
-                        {
-                            name: '非结构化数据',
-                            itemStyle: { color: 'grey' },
-                        },
-                    ],
-                    nodes: [],
-                    links: [],
-                    roam: true,
-                    label: {
-                        show: true,
-                        position: 'top', // 标签显示在节点上方
-                    },
-                    lineStyle: {
-                        normal: {
-                            width: 4,
-                            color: 'darkpurple',
-                            opacity: 0.9,
-                            width: 2,
-                            curveness: 0,
-                            arrow: true
-                        },
-                    },
-                    edgeSymbol: ['none', 'arrow'],
-                    emphasis: {
-                        focus: 'adjacency',
-                        lineStyle: {
-                            width: 5,
-                        }
-                    },
-                    force: {
-                        repulsion: 700,
-                    },
-                    draggable: true,
-                    animation: false,
-                }
-            },
         };
     },
     mounted() {
+        this.getData({})
     },
     methods: {
         clickPage(page) {
@@ -257,9 +176,55 @@ export default {
             this.getData(this.searchForm);
         },
         searchData() {
+            let postData = {
+                doi: this.searchForm.doi,
+                appName: this.searchForm.appName,
+                appContent: this.searchForm.appContent,
+                type: this.searchForm.type,
+            }
+            this.getData(this.searchForm)
         },
 
         getData(postData) {
+            let _this = this;
+            this.applyTable = [];
+            postForm('/doApplication/getUserApplication', postData, _this, function (res) {
+                _this.pages = res.data.pages;
+                for (let doIndex = 0; doIndex < res.data.records.length; doIndex++) {
+                    let item = res.data.records[doIndex]
+                    _this.applyTable.push({
+                        appId: item.appId,
+                        doi: item.doi,
+                        appName: item.appName,
+                        appContent: item.appContent,
+                        sourceList: JSON.parse(item.source),
+                        type: item.type,
+                        appType: item.appType,
+                        retraceList: [],
+                    })
+                    _this.getDoSource(item.doi, _this.applyTable[doIndex].retraceList);
+                    doIndex++;
+                }
+            })
+        },
+
+        // 递归获取source
+        getDoSource(doi, retraceList) {
+            let _this = this;
+            postFormPublic("/relationship/api/search", {pageNo: 1, pageSize: 1}, _this, function (res) {
+                let item = res.data.list[0];
+                retraceList.push({
+                    doi: item.doi,
+                    name: item.name,
+                    description: item.description,
+                    source: JSON.parse(item.source),
+                    type: item.type
+                })
+                let sourceList = JSON.parse(item.source)
+                for(let doi of sourceList) {
+                    _this.getDoSource(doi, retraceList)
+                }
+            })
         },
 
         retrace(row, index) {
@@ -275,17 +240,11 @@ export default {
             this.traceVisible = true;
         },
 
-        applyConfirm() {
-            this.retraceVisible = false;
-            this.traceVisible = false;
-        },
-
         contractHistory() {
             this.contractVisible = true;
         },
 
         cancelWithoutConfirm() {
-            this.retraceVisible = false;
             this.traceVisible = false;
             this.contractVisible = false;
         },
