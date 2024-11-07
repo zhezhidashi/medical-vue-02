@@ -14,9 +14,10 @@
                     <el-form-item prop="appContent" label="数字对象描述" class="SearchFormItem">
                         <el-input v-model="searchForm.appContent"></el-input>
                     </el-form-item>
-                    <el-form-item prop="appType" label="数字对象类型" class="SearchFormItem">
-                        <el-select placeholder="请选择" filterable v-model="searchForm.appType">
-                            <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value" :key="index"></el-option>
+                    <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
+                        <el-select placeholder="请选择" filterable v-model="searchForm.type">
+                            <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value"
+                                :key="index"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -26,11 +27,12 @@
         </el-collapse>
 
         <div style="margin-top: 24px;"></div>
-        
+
         <el-table :data="approvalTable" style="width: 100%;" stripe border>
             <el-table-column prop="doi" label="数字对象标识" align="center"></el-table-column>
             <el-table-column prop="appName" label="数字对象名称" align="center"></el-table-column>
             <el-table-column prop="appContent" label="数字对象描述" align="center"></el-table-column>
+            <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
             <el-table-column prop="appType" label="申请类型" align="center">
                 <template slot-scope="props">
                     <el-tag v-if="props.row.appType === 1" type="primary">指针型</el-tag>
@@ -38,8 +40,8 @@
                 </template>
             </el-table-column>
             <el-table-column prop="appFile" label="申请文件" align="center">
-                <template slot-scope="scope">
-                    <el-button type="primary" size="mini">下载</el-button>
+                <template slot-scope="props">
+                    <el-button type="primary" size="mini" @click="downloadFile(props.row, props.$index)">下载</el-button>
                 </template>
             </el-table-column>
             <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
@@ -64,9 +66,6 @@
                         <el-option label="通过" :value="1"></el-option>
                         <el-option label="拒绝" :value="2"></el-option>
                     </el-select>
-                </el-form-item>
-                <el-form-item prop="opinion" label="审批意见">
-                    <el-input v-model="approvalForm.opinion"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -93,6 +92,10 @@ export default {
             collapseTitle: "搜索栏（点击展开）",
 
             searchForm: {
+                doi: "",
+                appName: "",
+                appContent: "",
+                type: "",
             },
 
             // 表格数据
@@ -102,19 +105,17 @@ export default {
                     appName: "加密",
                     appContent: "加密",
                     appType: 1,
+                    type: "EDC",
                     appFile: '申请文件',
                     createTime: '2024',
                 },
             ],
 
             approvalForm: {
-                // 审批状态
+                appId: undefined,
                 status: undefined,
-                // 审批意见
-                opinion: undefined,
             },
             approvalDialogVisible: false,
-            approvalIndex: 0,
 
             approvalRules: {
                 status: [
@@ -123,16 +124,17 @@ export default {
             },
 
             doTypeList: [
-                { name: "EDC",  value: "EDC" },
-                { name: "SDTM",  value: "SDTM" },
-                { name: "ADAM",  value: "ADAM" },
-                { name: "代码",  value: "代码" },
+                { name: "EDC", value: "EDC" },
+                { name: "SDTM", value: "SDTM" },
+                { name: "ADAM", value: "ADAM" },
+                { name: "代码", value: "代码" },
                 { name: "结构化数据", value: "结构化数据" },
                 { name: "非结构化数据", value: "非结构化数据" }
             ],
         };
     },
     mounted() {
+        this.getData({})
     },
     methods: {
         clickPage(page) {
@@ -141,7 +143,7 @@ export default {
             this.getData(this.searchForm);
         },
         searchData() {
-            this.getData(postData);
+            this.getData(this.searchForm);
         },
         collapseChange(activeNames) {
             if (activeNames.length === 0) {
@@ -151,12 +153,33 @@ export default {
             }
         },
         getData(postData) {
+            let _this = this;
+            this.approvalTable = [];
+            postForm('/doApplication/getApprovalList', postData, _this, function (res) {
+                _this.pages = res.data.pages;
+                for (let item of res.data.records) {
+                    _this.approvalTable.push({
+                        appId: item.appId,
+                        doi: item.doi,
+                        appName: item.appName,
+                        appContent: item.appContent,
+                        type: item.type,
+                        appType: item.appType,
+                        appFile: item.appFile,
+                        createTime: new Date(item.createTime).toLocaleDateString(),
+                    })
+                }
+            })
+        },
+
+        // 下载文件
+        downloadFile(row, index) {
+            window.open(row.appFile);
         },
         // 进行审批
         conductApproval(row, index) {
             console.log(row, index);
             this.approvalDialogVisible = true;
-            this.approvalIndex = index;
         },
         // 取消审批
         approvalCancel() {
@@ -175,7 +198,22 @@ export default {
         },
         // 确定审批
         approvalConfirm() {
-           this.approvalDialogVisible = false;
+            this.approvalDialogVisible = false;
+            let postData = {
+                id: this.approvalForm.appId,
+                status: this.approvalForm.status,
+            }
+            let _this = this;
+            postForm('/doApplication/submitApproval', postData, _this, function (res) {
+                if (res.code === 200) {
+                    _this.$message({
+                        message: '审批完成',
+                        type: 'success'
+                    });
+                    _this.approvalDialogVisible = false;
+                    _this.getData(_this.searchForm);
+                }
+            })
         }
     },
 }

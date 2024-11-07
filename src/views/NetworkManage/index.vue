@@ -133,10 +133,7 @@ export default {
         // 获取机构组网信息
         getForm('/networkGroups/getInstitutionName', _this, function (res) {
             postForm('/networkGroups/getInstitutionsByGid', { name: res.data }, _this, function (res) {
-                if(res.data.total === 0) {
-                    _this.hasNetwork = 1;
-                }
-                else {
+                if(res.code === 200) {
                     _this.hasNetwork = 2;
                     let network = res.data.list[0];
                     _this.networkDescription.publicRootAddress = network.ipWithPort;
@@ -144,6 +141,9 @@ export default {
                     _this.networkDescription.institutionDoi = network.doi
                     _this.networkDescription.institutionCode = network.institutionCode
                     _this.networkDescription.description = network.description
+                }
+                else {
+                    _this.hasNetwork = 1;
                 }
             })
         })
