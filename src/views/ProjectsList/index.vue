@@ -333,7 +333,7 @@ export default {
     },
     mounted() {
         // 获取基础数据
-        // this.getBasicData();
+        this.getBasicData();
     },
     methods: {
         // 获取基础数据
