@@ -57,9 +57,9 @@
             </el-table-column>
             <el-table-column prop="status" label="申请状态" align="center">
                 <template slot-scope="scope">
-                    <el-tag v-if="scope.row.status === 1">待审批</el-tag>
-                    <el-tag v-if="scope.row.status === 2" type="success">已通过</el-tag>
-                    <el-tag v-if="scope.row.status === 3" type="danger">已拒绝</el-tag>
+                    <el-tag v-if="scope.row.status === 0">待审批</el-tag>
+                    <el-tag v-if="scope.row.status === 1" type="success">已通过</el-tag>
+                    <el-tag v-if="scope.row.status === 2" type="danger">已拒绝</el-tag>
                 </template>
             </el-table-column>
             <el-table-column prop="uidList" label="用户列表" align="center">
@@ -479,7 +479,7 @@ export default {
                 applyDocumentAddress: this.addProjectForm.applyDocumentAddress,
             }
 
-            postForm('/projectOrder/create', postData, this, function (res) {
+            postForm('/projectOrder/create', postData, _this, function (res) {
                 if (res.code === 200) {
                     _this.$message({
                         type: 'success',

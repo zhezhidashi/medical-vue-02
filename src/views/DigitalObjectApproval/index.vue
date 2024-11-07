@@ -31,7 +31,12 @@
             <el-table-column prop="doi" label="数字对象标识" align="center"></el-table-column>
             <el-table-column prop="appName" label="数字对象名称" align="center"></el-table-column>
             <el-table-column prop="appContent" label="数字对象描述" align="center"></el-table-column>
-            <el-table-column prop="appType" label="数字对象类型" align="center"></el-table-column>
+            <el-table-column prop="appType" label="申请类型" align="center">
+                <template slot-scope="props">
+                    <el-tag v-if="props.row.appType === 1" type="primary">指针型</el-tag>
+                    <el-tag v-if="props.row.appType === 2" type="success">实体型</el-tag>
+                </template>
+            </el-table-column>
             <el-table-column prop="appFile" label="申请文件" align="center">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini">下载</el-button>
@@ -39,8 +44,8 @@
             </el-table-column>
             <el-table-column prop="createTime" label="申请时间" align="center"></el-table-column>
             <el-table-column prop="operation" label="操作" align="center">
-                <template slot-scope="scope">
-                    <el-button type="primary" @click="conductApproval(scope.row, scope.$index)"
+                <template slot-scope="props">
+                    <el-button type="primary" @click="conductApproval(props.row, props.$index)"
                         size="mini">审批</el-button>
                 </template>
             </el-table-column>
@@ -96,7 +101,7 @@ export default {
                     doi: 'DOI1',
                     appName: "加密",
                     appContent: "加密",
-                    appType: 'EDC',
+                    appType: 1,
                     appFile: '申请文件',
                     createTime: '2024',
                 },

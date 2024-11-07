@@ -16,12 +16,6 @@
                         :key="index"></el-option>
                 </el-select>
             </el-form-item>
-            <!-- <el-form-item prop="projectDoi" label="所属项目" class="SearchFormItem">
-                <el-select placeholder="请选择" filterable v-model="searchForm.projectDoi">
-                    <el-option v-for="(item, index) in projectList" :label="item.projectName" :value="item.projectDoi"
-                        :key="index"></el-option>
-                </el-select>
-            </el-form-item> -->
             <el-form-item prop="institutionDoi" label="所属机构" class="SearchFormItem">
                 <el-select placeholder="请选择" filterable v-model="searchForm.institutionDoi">
                     <el-option v-for="(item, index) in institutionList" :label="item.institutionName"
@@ -38,11 +32,11 @@
             <el-table-column prop="name" label="数字对象名称" align="center"></el-table-column>
             <el-table-column prop="description" label="数字对象描述" align="center"></el-table-column>
             <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
-            <!-- <el-table-column prop="projectName" label="所属项目"></el-table-column> -->
             <el-table-column prop="institutionName" label="所属机构" align="center"></el-table-column>
+            <el-table-column prop="institutionDoi" label="所属机构标识" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
-                    <el-button type="primary" size="small" @click="apply">申请</el-button>
+                    <el-button type="primary" size="small" @click="apply(props.row, props.$index)">申请</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -62,7 +56,12 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="申请文件" prop="appFile">
-                    <el-button type="primary">点击上传</el-button>
+                    <el-upload drag action="/api/file/upload"
+                        :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }"
+                        :on-success="uploadSuccess">
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    </el-upload>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -89,10 +88,25 @@ export default {
                 name: '',
                 type: '',
                 description: '',
-                projectDoi: '',
+                // 项目DOI，这个从 $store 中获取
+                projectDoi: "",
                 institutionDoi: '',
                 pageNo: 1,
+                pageSize: 10,
             },
+            doTypeList: [
+                { name: "EDC", value: "EDC" },
+                { name: "SDTM", value: "SDTM" },
+                { name: "ADAM", value: "ADAM" },
+                { name: "代码", value: "代码" },
+                { name: "结构化数据", value: "结构化数据" },
+                { name: "非结构化数据", value: "非结构化数据" }
+            ],
+
+            institutionList: [
+                { institutionName: "机构1", institutionDoi: "123" },
+                { institutionName: "机构2", institutionDoi: "124" }
+            ],
 
             doSearchRules: {
                 institutionDoi: [
@@ -106,15 +120,22 @@ export default {
                     name: '加密',
                     description: '加密',
                     type: "EDC",
-                    projectName: '项目1',
                     institutionName: '456789',
+                    institutionDoi: "123",
+                    source: "",
                 },
             ],
 
             applyVisible: false,
             applyForm: {
-                appFile: "",
+                doi: '',
+                appName: "",
+                appContent: "",
                 appType: undefined,
+                appFile: '',
+                recipientInstitutionDoi: "",
+                type: "",
+                source: "",
             },
 
             applyRules: {
@@ -125,28 +146,11 @@ export default {
                     { required: true, message: '请选择数字对象所属项目', trigger: 'change' }
                 ],
             },
-
-            doTypeList: [
-                { name: "EDC", value: "EDC" },
-                { name: "SDTM", value: "SDTM" },
-                { name: "ADAM", value: "ADAM" },
-                { name: "代码", value: "代码" },
-                { name: "结构化数据", value: "结构化数据" },
-                { name: "非结构化数据", value: "非结构化数据" }
-            ],
-
-            projectList: [
-                { projectName: "项目1", projectDoi: "123" },
-                { projectName: "项目2", projectDoi: "124" }
-            ],
-
-            institutionList: [
-                { institutionName: "机构1", institutionDoi: "123" },
-                { institutionName: "机构2", institutionDoi: "124" }
-            ],
         };
     },
     mounted() {
+        // 获取基础数据
+        this.getBasicData();
     },
     methods: {
         clickPage(page) {
@@ -155,13 +159,81 @@ export default {
             this.getData(this.searchForm);
         },
         searchData() {
+            let postData = {
+                name: this.searchForm.name,
+                doi: this.searchForm.doi,
+                description: this.searchForm.description,
+                type: this.searchForm.type,
+                institutionDoi: this.searchForm.institutionDoi,
+                pageSize: 10,
+                pageNo: this.currentPage
+            }
+            this.getData(postData);
+        },
+
+        getBasicData() {
+            let _this = this;
+            // 获取项目DOI
+            this.$store.commit('getProjectDoi');
+            this.searchForm.projectDoi = this.$store.state.user.projectDoi
+            this.institutionList = [],
+            // 获取机构信息
+            postFormPublic("/institution/insList/list", { pageNo: 1, pageSize: 10000 }, _this, function (res) {
+                for (let item of res.data.list) {
+                    _this.institutionList.push({
+                        name: item.name,
+                        doi: item.doi
+                    })
+                }
+                _this.getData(_this.searchForm)
+            })
         },
 
         getData(postData) {
+            let _this = this;
+            this.resultTable = []
+            postFormPublic("/relationship/api/search", postData, _this, function (res) {
+                for(let item of res.data.list) {
+                    _this.resultTable.push({
+                        doi: item.doi,
+                        name: item.name,
+                        description: item.description,
+                        type: item.type,
+                        institutionName: item.institutionName,
+                        institutionDoi: item.institutionDoi,
+                        source: item.source,
+                    })
+                }
+            })
         },
 
-        apply() {
+        apply(row, index) {
             this.applyVisible = true;
+
+            this.applyForm.doi = row.doi;
+            this.applyForm.appName = row.name;
+            this.applyForm.appContent = row.description
+            this.applyForm.appType = undefined
+            this.applyForm.appFile = undefined
+            this.applyForm.recipientInstitutionDoi = row.institutionDoi
+            this.applyForm.type = row.type
+            this.applyForm.source = row.source
+        },
+
+        // 处理建项的上传文件
+        uploadSuccess(response, file, fileList) {
+            if (response.code === 200) {
+                this.$message({
+                    message: '上传成功',
+                    type: 'success'
+                });
+                this.applyForm.appFile = response.data;
+            } else {
+                this.$message({
+                    message: response.message,
+                    type: 'error'
+                });
+            }
         },
 
         applyCancel() {
@@ -181,6 +253,26 @@ export default {
 
         applyConfirm() {
             this.applyVisible = false;
+
+            let _this = this;
+
+            if(this.applyForm.appFile === "" || this.applyForm.appType === "") {
+                this.$message({
+                    type: 'warning',
+                    message: '请填写完整信息'
+                });
+                return;
+            }
+
+            postForm('/doApplication/submitDoApplication', _this.applyForm, _this, function (res) {
+                if (res.code === 200) {
+                    _this.$message({
+                        message: '提交申请成功',
+                        type: 'success'
+                    });
+                    _this.applyVisible = false;
+                }
+            })
         },
     },
 }
