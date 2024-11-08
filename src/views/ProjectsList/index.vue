@@ -55,13 +55,13 @@
                     <div v-for="item in scope.row.brandList" :key="item">{{ item }}</div>
                 </template>
             </el-table-column>
-            <el-table-column prop="status" label="申请状态" align="center">
+            <!-- <el-table-column prop="status" label="申请状态" align="center">
                 <template slot-scope="scope">
                     <el-tag v-if="scope.row.status === 0">待审批</el-tag>
                     <el-tag v-if="scope.row.status === 1" type="success">已通过</el-tag>
                     <el-tag v-if="scope.row.status === 2" type="danger">已拒绝</el-tag>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop="uidList" label="用户列表" align="center">
                 <template slot-scope="scope">
                     <div v-for="item in scope.row.uidList" :key="item">{{ uidToUsername[item] }}</div>

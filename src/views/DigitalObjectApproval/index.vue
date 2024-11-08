@@ -206,14 +206,21 @@ export default {
                 status: this.approvalForm.status,
             }
             let _this = this;
+
+            // 提交审批结果
             postForm('/doApplication/submitApproval', postData, _this, function (res) {
                 if (res.code === 200) {
                     _this.$message({
                         message: '审批完成',
                         type: 'success'
                     });
-                    _this.approvalDialogVisible = false;
-                    _this.getData(_this.searchForm);
+                    
+                    // 审批通过的数字对象流转【打通】
+                    postForm("/doApplication/exportApproveDoiOnline", {idList: [postData.id]}, _this, function(res) {
+                        _this.approvalDialogVisible = false;
+                        _this.getData(_this.searchForm);
+                    })
+                    
                 }
             })
         }
