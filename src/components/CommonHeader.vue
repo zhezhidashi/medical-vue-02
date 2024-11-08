@@ -22,17 +22,17 @@
 
         <el-dialog title="修改用户信息" :visible.sync="modifyPasswordDialogVisible" width="50%"
             :before-close="modifyUserInfoCancel">
-            <el-form :model="userInfoForm" label-width="auto" >
-                <el-form-item prop="username" label="* 用户名">
+            <el-form :model="userInfoForm" label-width="auto" :rules="userRules">
+                <el-form-item prop="username" label="用户名">
                     <el-input v-model="userInfoForm.username"></el-input>
                 </el-form-item>
-                <el-form-item prop="newPassword" label="* 新密码">
+                <el-form-item prop="newPassword" label="新密码">
                     <el-input v-model="userInfoForm.newPassword" type="password"></el-input>
                 </el-form-item>
-                <el-form-item prop="confirmPassword" label="* 确认密码">
+                <el-form-item prop="confirmPassword" label="确认密码">
                     <el-input v-model="userInfoForm.confirmPassword" type="password"></el-input>
                 </el-form-item>
-                <el-form-item prop="email" label="* 邮箱">
+                <el-form-item prop="email" label="邮箱">
                     <el-input v-model="userInfoForm.email"></el-input>
                 </el-form-item>
             </el-form>
@@ -58,10 +58,21 @@ export default {
                 confirmPassword: '',
                 email: '',
             },
+            userRules: {
+                username: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' }
+                ],
+                newPassword: [
+                    { required: true, message: '请输入密码', trigger: 'blur' }
+                ],
+                confirmPassword: [
+                    { required: true, message: '请再次输入密码', trigger: 'blur' }
+                ],
+            },
             modifyPasswordDialogVisible: false,
             userType: '',
             username: '',
-        }  
+        }
     },
     mounted() {
         this.path = this.$router.currentRoute.path;
@@ -112,13 +123,14 @@ export default {
                 return;
             }
 
-
             let _this = this;
            
             let postData = {
                 username: this.userInfoForm.username,
                 password: this.userInfoForm.newPassword,
-                email: this.userInfoForm.email,
+            }
+            if(this.userInfoForm.email !== undefined && this.userInfoForm.email !== "") {
+                postData.email = this.userInfoForm.email
             }
             postForm('/users/update', postData, _this, function(res){
                 if (res.code === 200) {

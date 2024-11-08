@@ -65,8 +65,8 @@
             </el-table>
 
             <div style="margin: 24px">
-                <el-pagination background layout="pager" :page-size="10" :page-count="pages"
-                    @current-change="clickPage">
+                <el-pagination background layout="pager" :page-size="10" :page-count="pagesTrace"
+                    @current-change="clickPageTrace">
                 </el-pagination>
             </div>
         </el-dialog>
@@ -80,8 +80,8 @@
             </el-table>
 
             <div style="margin: 24px">
-                <el-pagination background layout="pager" :page-size="10" :page-count="pages"
-                    @current-change="clickPage">
+                <el-pagination background layout="pager" :page-size="10" :page-count="pagesContract"
+                    @current-change="clickPageContract">
                 </el-pagination>
             </div>
         </el-dialog>
@@ -96,6 +96,13 @@ export default {
         return {
             pages: 1,
             currentPage: 1,
+
+            pagesTrace: 1,
+            currentPageTrace: 1,
+
+            pagesContract: 1,
+            currentPageContract: 1,
+
             searchForm: {
                 doi: '',
                 appName: '',
@@ -141,6 +148,12 @@ export default {
 
             traceVisible: false,
 
+            tracePostData: {
+                doi: "",
+                pageSize: 10,
+                pageNo: 1,
+            },
+
             traceTable: [
                 {
                     // 时间
@@ -155,6 +168,12 @@ export default {
             ],
 
             contractVisible: false,
+
+            contractPostData: {
+                doi: "",
+                pageSize: 10,
+                pageNo: 1,
+            },
 
             contractTable: [
                 {
@@ -175,6 +194,19 @@ export default {
             this.searchForm.pageNo = this.currentPage;
             this.getData(this.searchForm);
         },
+
+        clickPageTrace(page) {
+            this.currentPageTrace = page;
+            this.tracePostData.pageNo = this.currentPageTrace;
+            this.traceGetData(this.tracePostData);
+        },
+
+        clickPageContract(page) {
+            this.currentPageContract = page;
+            this.contractPostData.pageNo = this.currentPageContract;
+            this.contractGetData(this.contractPostData);
+        },
+
         searchData() {
             let postData = {
                 doi: this.searchForm.doi,
@@ -236,12 +268,49 @@ export default {
                 }
             })
         },
-        trace() {
+
+        trace(row, index) {
             this.traceVisible = true;
+            this.tracePostData = {
+                doi: row.doi,
+                pageSize: 10,
+                pageNo: 1,
+            }
+            this.traceGetData(this.tracePostData);
         },
 
-        contractHistory() {
+        traceGetData(postData) {
+            let _this = this;
+            postFormPublic(`/traceV2/getTraceInfoByDoi`, postData, _this, function(res) {
+                for(let item of res.data) {
+                    _this.contractTable.push({
+                        createTime: item.createTime,
+                        operation: item.operation,
+                        operationDoi: item.operationDoi,
+                        hashValue: item.hashValue,
+                    })
+                }
+            })
+        },
+
+        contractHistory(row, index) {
             this.contractVisible = true;
+            this.contractTable = [];
+            this.contractPostData = {
+                doi: row.doi,
+                pageSize: 10,
+                pageNo: 1,
+            }
+            this.contractGetData(this.contractPostData)
+        },
+
+        contractGetData(postData) {
+            let _this = this;
+            postFormPublic(`/smartContract/list`, postData, _this, function(res) {
+                for(let item of res.data) {
+                    _this.contractTable.push(item)
+                }
+            })
         },
 
         cancelWithoutConfirm() {

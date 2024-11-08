@@ -26,7 +26,7 @@
             </el-form>
 
             <div v-if="hasNetwork === 1" style="display: flex; align-items: center; justify-content: center; ">
-                <el-button type="primary">提交申请</el-button>
+                <el-button type="primary" @click="networkApply">提交申请</el-button>
             </div>
 
             <el-descriptions v-if="hasNetwork === 2" title="组网详情" :column="1" border style="width: 65vw;" size="medium">
@@ -81,7 +81,8 @@ export default {
         return {
             // 是否组网，0是查询中，1是未组网，2是已组网
             hasNetwork: 0,
-
+            loading: false,
+            
             // 未组网
             applyNetworkForm: {
                 publicRootAddress: "",
@@ -133,7 +134,7 @@ export default {
         // 获取机构组网信息
         getForm('/networkGroups/getInstitutionName', _this, function (res) {
             postForm('/networkGroups/getInstitutionsByGid', { name: res.data }, _this, function (res) {
-                if(res.code === 200) {
+                if (res.code === 200) {
                     _this.hasNetwork = 2;
                     let network = res.data.list[0];
                     _this.networkDescription.publicRootAddress = network.ipWithPort;
@@ -163,6 +164,30 @@ export default {
                     type: 'error'
                 });
             }
+        },
+
+        networkApply() {
+            this.loading = true;
+
+            let _this = this;
+            let postData = {
+                "publicRootAddress": this.applyNetworkForm.publicRootAddress,
+                "ip": backend_out_ip,
+                "port": backend_out_port,
+                "name": this.applyNetworkForm.name,
+                "description": this.applyNetworkForm.description,
+                "institutionCode": this.applyNetworkForm.institutionCode
+            }
+
+            postForm("/networkGroups/apply", postData, _this, function (res) {
+                if (res.code === 200) {
+                    _this.$message({
+                        message: '提交成功',
+                        type: 'success'
+                    });
+                }
+                _this.loading = false;
+            })
         },
 
         modifyNetwork() {

@@ -90,14 +90,14 @@ export default {
             },
 
             resultTable: [
-                {
-                    doi: '123456',
-                    name: '加密',
-                    description: '加密',
-                    type: "EDC",
-                    projectDoiList: ["doi1"],
-                    projectNameList: ["项目1"]
-                },
+                // {
+                //     doi: '123456',
+                //     name: '加密',
+                //     description: '加密',
+                //     type: "EDC",
+                //     projectDoiList: ["doi1"],
+                //     projectNameList: ["项目1"]
+                // },
             ],
 
             projectsList: [
@@ -166,13 +166,7 @@ export default {
             this.getData(this.searchForm);
         },
         searchData() {
-            let postData = {
-                doi: this.searchForm.doi,
-                name: this.searchForm.name,
-                description: this.searchForm.description,
-                type: this.searchForm.type
-            }
-            this.getData(postData)
+            this.getData(this.searchForm)
         },
 
         // 获取元数据信息
@@ -190,14 +184,18 @@ export default {
                     postFormPublic("/relationship/api/search", { doi: item.doi, pageNo: 1, pageSize: 1 }, _this, function (res) {
                         if (res.data.list.length !== 0) {
                             let doDetail = res.data.list[0];
-                            if (doDetail.projectDoi === null || doDetail.projectDoi === undefined) {
-                                doDetail.projectDoi = ""
+                            if (doDetail.projectDoi === null || doDetail.projectDoi === undefined || doDetail.projectDoi === "") {
+                                doItem.projectDoiList = []
                             }
-                            if (doDetail.projectName === null || doDetail.projectName === undefined) {
-                                doDetail.projectName = ""
+                            else {
+                                doItem.projectDoiList = doDetail.projectDoi.split(',')
                             }
-                            doItem.projectDoiList = doDetail.projectDoi.split(',')
-                            doItem.projectNameList = doDetail.projectName.split(',')
+                            if (doDetail.projectName === null || doDetail.projectName === undefined || doDetail.projectName === "") {
+                                doItem.projectNameList = []
+                            }
+                            else {
+                                doItem.projectNameList = doDetail.projectName.split(',')
+                            }
                             _this.resultTable.push(doItem);
                         }
                     })
@@ -239,6 +237,7 @@ export default {
                     });
                 }
                 _this.allocateVisible = false;
+                _this.getData(_this.searchForm)
             })
         },
     },

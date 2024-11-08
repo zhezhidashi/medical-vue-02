@@ -60,25 +60,26 @@ export default {
             }
             postForm('/users/getProjects', postData, _this, function (res) {
                 let item = res.data.records[0];
-                projectForm.pid = item.pid
-                projectForm.name = item.name
-                projectForm.projectDoi = item.projectDoi
-                projectForm.user = item.user
-                projectForm.contactEmail = item.contactEmail
-                if (item.leadingInstitution !== undefined && item.leadingInstitution !== null) {
-                    projectForm.leadingInstitutionDoiList = item.leadingInstitution.split(",");
+                _this.projectForm.pid = item.pid
+                _this.projectForm.name = item.name
+                _this.projectForm.projectDoi = item.projectDoi
+                _this.projectForm.user = item.user
+                _this.projectForm.contactEmail = item.contactEmail
+                if (item.leadingInstitution === undefined || item.leadingInstitution === null || item.leadingInstitution === null) {
+                    _this.projectForm.leadingInstitutionDoiList = [];
+
                 } else {
-                    projectForm.leadingInstitutionDoiList = [];
+                    _this.projectForm.leadingInstitutionDoiList = item.leadingInstitution.split(",");
                 }
-                if (item.involveInsDoi !== undefined && item.involveInsDoi !== null) {
-                    projectForm.involvedInstitutionDoiList = item.involveInsDoi.split(",");
+                if (item.involveInsDoi === undefined || item.involveInsDoi === null || item.involveInsDoi === "") {
+                    _this.projectForm.involvedInstitutionDoiList = [];
                 } else {
-                    projectForm.involvedInstitutionDoiList = [];
+                    _this.projectForm.involvedInstitutionDoiList = item.involveInsDoi.split(",");
                 }
-                if (item.brand !== undefined && item.brand !== null) {
-                    projectForm.brandList = item.brand.split(",");
+                if (item.brand === undefined || item.brand === null || item.brand === "") {
+                    _this.projectForm.brandList = [];
                 } else {
-                    projectForm.brandList = [];
+                    _this.projectForm.brandList = item.brand.split(",");
                 }
             })
         },

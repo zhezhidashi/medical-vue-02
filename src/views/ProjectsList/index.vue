@@ -176,9 +176,6 @@
 
         <el-dialog title="添加权限用户" :visible.sync="modifyUserDialogVisible" width="80%" :before-close="cancel">
             <el-form :model="modifyUserForm" label-width="auto" align="left" :rules="userRules">
-                <el-form-item label="已授权用户">
-                    <span>user001, user002</span>
-                </el-form-item>
                 <el-form-item label="添加用户" prop="user">
                     <el-select v-model="modifyUserForm.uidList" multiple filterable placeholder="请选择">
                         <el-option v-for="item in userList" :key="item.uid" :label="item.username"
@@ -199,12 +196,6 @@
                 <el-table-column prop="address" label="合约地址" align="center"></el-table-column>
                 <el-table-column prop="hashValue" label="哈希值" align="center"></el-table-column>
             </el-table>
-
-            <div style="margin: 24px">
-                <el-pagination background layout="pager" :page-size="10" :page-count="pages"
-                    @current-change="clickPage">
-                </el-pagination>
-            </div>
         </el-dialog>
     </div>
 
@@ -246,19 +237,19 @@ export default {
             },
             // 项目列表
             projectTable: [
-                {
-                    pid: 1,
-                    name: "111",
-                    projectDoi: "111",
-                    user: "111",
-                    contactEmail: "111",
-                    leadingInstitutionDoiList: ["123"],
-                    involvedInstitutionDoiList: ["1234"],
-                    brandList: ["感冒灵"],
-                    status: 2,
-                    // 用户列表
-                    uidList: [1],
-                }
+                // {
+                //     pid: 1,
+                //     name: "111",
+                //     projectDoi: "111",
+                //     user: "111",
+                //     contactEmail: "111",
+                //     leadingInstitutionDoiList: ["123"],
+                //     involvedInstitutionDoiList: ["1234"],
+                //     brandList: ["感冒灵"],
+                //     status: 2,
+                //     // 用户列表
+                //     uidList: [1],
+                // }
             ],
 
             // 增加项目弹窗是否显示
@@ -542,11 +533,10 @@ export default {
             this.modifyUserDialogVisible = true;
             this.modifyUserIndex = index;
             this.modifyUserForm.uidList = row.uidList;
-            console.log(this.modifyUserForm)
         },
 
         modifyUserConfirm() {
-            postData = {
+            let postData = {
                 pid: this.projectTable[this.modifyUserIndex].pid,
                 uidList: this.modifyUserForm.uidList,
             }

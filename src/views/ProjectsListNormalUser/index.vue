@@ -87,20 +87,20 @@ export default {
                         user: item.user,
                         contactEmail: item.contactEmail,
                     }
-                    if (item.leadingInstitution !== undefined && item.leadingInstitution !== null) {
-                        dataItem.leadingInstitutionDoiList = item.leadingInstitution.split(",");
-                    } else {
+                    if (item.leadingInstitution === undefined || item.leadingInstitution === null || item.leadingInstitution === "") {
                         dataItem.leadingInstitutionDoiList = [];
-                    }
-                    if (item.involveInsDoi !== undefined && item.involveInsDoi !== null) {
-                        dataItem.involvedInstitutionDoiList = item.involveInsDoi.split(",");
                     } else {
+                        dataItem.leadingInstitutionDoiList = item.leadingInstitution.split(",");
+                    }
+                    if (item.involveInsDoi === undefined || item.involveInsDoi === null || item.involveInsDoi === "") {
                         dataItem.involvedInstitutionDoiList = [];
-                    }
-                    if (item.brand !== undefined && item.brand !== null) {
-                        dataItem.brandList = item.brand.split(",");
                     } else {
+                        dataItem.involvedInstitutionDoiList = item.involveInsDoi.split(",");
+                    }
+                    if (item.brand === undefined || item.brand === null || item.brand === "") {
                         dataItem.brandList = [];
+                    } else {
+                        dataItem.brandList = item.brand.split(",");
                     }
                     _this.projectTable.push(dataItem);
                 }
