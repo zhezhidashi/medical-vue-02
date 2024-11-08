@@ -115,7 +115,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="项目申请文件" prop="applyDocumentAddress">
-                    <el-upload drag action="/api/file/upload"
+                    <el-upload drag action="/backendOut/file/upload"
                         :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }"
                         :on-success="uploadSuccessAdd">
                         <i class="el-icon-upload"></i>
@@ -159,7 +159,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="项目申请文件" prop="applyDocumentAddress">
-                    <el-upload drag action="/api/file/upload"
+                    <el-upload drag action="/backendOut/file/upload"
                         :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }"
                         :on-success="uploadSuccessModify">
                         <i class="el-icon-upload"></i>

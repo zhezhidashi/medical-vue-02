@@ -4,8 +4,8 @@
             text-color="#000080" active-text-color="#FF4040" background-color="#F0F8FF">
             <el-menu-item v-show="isAdmin" index="0">主页</el-menu-item>
             <el-menu-item v-show="isAdmin" index="1">组网管理</el-menu-item>
-            <el-menu-item v-show="isAdmin" index="2">项目管理</el-menu-item>
-            <el-menu-item v-show="isAdmin" index="3">账号管理</el-menu-item>
+            <el-menu-item v-show="isAdmin" index="2">账号管理</el-menu-item>
+            <el-menu-item v-show="isAdmin" index="3">项目管理</el-menu-item>
             <el-submenu v-show="isAdmin" index="4">
                 <template slot="title">数字对象管理</template>
                 <el-menu-item index="4-1">数字对象分配</el-menu-item>
@@ -66,11 +66,11 @@ export default {
             else if (this.path === '/NetworkManage') {
                 this.activeIndex = '1';
             }
-            else if (this.path === '/ProjectsList') {
-                this.activeIndex = '2';
-            }
             else if (this.path === '/AccountManage') {
-                this.activeIndex = '3'
+                this.activeIndex = '2'
+            }
+            else if (this.path === '/ProjectsList') {
+                this.activeIndex = '3';
             }
             else if (this.path === '/DigitalObjectAllocate') {
                 this.activeIndex = '4-1'
@@ -105,10 +105,10 @@ export default {
                 this.$router.push('/NetworkManage')
             }
             else if (key === '2') {
-                this.$router.push('/ProjectsList')
+                this.$router.push('/AccountManage')
             }
             else if (key === '3') {
-                this.$router.push('/AccountManage')
+                this.$router.push('/ProjectsList')
             }
             else if (key === '4-1') {
                 this.$router.push('/DigitalObjectAllocate')

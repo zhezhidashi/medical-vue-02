@@ -8,7 +8,7 @@
             <el-dropdown style="display: flex; align-items: center;">
                 <div class="el-dropdown-link" style="display: flex; flex-direction: row; align-items: center;">
                     <div style="display: flex; flex-direction: column; font-weight: bold;">
-                        <div>机构：正大天晴</div>
+                        <div>机构：{{ institutionName }}</div>
                         <div>用户：{{ username }}</div>
                     </div> 
                     <i class="el-icon-arrow-down el-icon--right"></i>
@@ -52,6 +52,7 @@ export default {
     data() {
         return {
             path: '',
+            institutionName: "",
             userInfoForm: {
                 username: '',
                 newPassword: '',
@@ -78,6 +79,7 @@ export default {
         this.path = this.$router.currentRoute.path;
         this.userType = this.$store.state.user.userType;
         this.username = this.$store.state.user.username;
+        this.getInstitutionName();
     },
     watch: {
         $route(to, from) {
@@ -92,6 +94,14 @@ export default {
             this.$store.commit('clearInstitutionName')
             getForm('/logout', this, function(res) {})
             window.location.reload();
+        },
+        getInstitutionName() {
+            let _this = this;
+            getForm('/networkGroups/getInstitutionName', _this, function(res) {
+                if(res.code === 200) {
+                    _this.institutionName = res.data;
+                }
+            })
         },
         modifyUserInfo() {
             this.modifyPasswordDialogVisible = true;

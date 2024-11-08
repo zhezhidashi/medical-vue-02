@@ -11,6 +11,11 @@ export const publicUrl = '/public'
 export const backend_out_ip = "8.130.160.66"
 export const backend_out_port = 8080
 
+
+// export const backend_out_ip = "47.93.215.112"
+// export const backend_out_port = 8090
+
+
 // post请求
 export const postForm = (requestUrl, params, This, callback) => {
     nprogress.start();

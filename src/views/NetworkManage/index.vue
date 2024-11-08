@@ -13,13 +13,13 @@
                 <el-form-item prop="institutionCode" label="统一社会信用代码">
                     <el-input v-model="applyNetworkForm.institutionCode"></el-input>
                 </el-form-item>
-                <el-form-item prop="publicKey" label="公钥">
-                    <el-upload action="/api/doApplication/submitPublicKey"
+                <!-- <el-form-item prop="publicKey" label="公钥">
+                    <el-upload action="/backendOutdoApplication/submitPublicKey"
                         :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }" :show-file-list="false"
                         :on-success="importKey">
                         <el-button type="primary" style="margin: 24px;">导入公钥</el-button>
                     </el-upload>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item prop="description" label="机构描述">
                     <el-input v-model="applyNetworkForm.description"></el-input>
                 </el-form-item>
@@ -56,9 +56,6 @@
                     </el-form-item>
                     <el-form-item prop="institutionCode" label="统一社会信用代码">
                         <el-input v-model="modifyNetworkForm.institutionCode"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="publicKey" label="公钥">
-                        <el-button type="primary">点击上传</el-button>
                     </el-form-item>
                     <el-form-item prop="description" label="机构描述">
                         <el-input v-model="modifyNetworkForm.description"></el-input>
@@ -97,9 +94,6 @@ export default {
                 name: [
                     { required: true, message: '请输入机构名称', trigger: 'blur' }
                 ],
-                publicKey: [
-                    { required: true, message: '请上传公钥', trigger: 'blur' }
-                ]
             },
 
             // 已组网
@@ -171,6 +165,7 @@ export default {
 
             let _this = this;
             let postData = {
+                "publicRootName": "123",
                 "publicRootAddress": this.applyNetworkForm.publicRootAddress,
                 "ip": backend_out_ip,
                 "port": backend_out_port,

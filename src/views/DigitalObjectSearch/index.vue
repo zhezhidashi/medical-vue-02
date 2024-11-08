@@ -56,7 +56,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="申请文件" prop="appFile">
-                    <el-upload drag action="/api/file/upload"
+                    <el-upload drag action="/backendOut/file/upload"
                         :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }"
                         :on-success="uploadSuccess">
                         <i class="el-icon-upload"></i>
