@@ -51,8 +51,8 @@
             <el-form :model="applyForm" label-width="auto" :rules="applyRules">
                 <el-form-item label="申请类型" prop="appType">
                     <el-select placeholder="请选择" filterable v-model="applyForm.appType">
-                        <el-option label="实体型" :value="1" :key="1"></el-option>
-                        <el-option label="指针型" :value="2" :key="2"></el-option>
+                        <el-option label="指针型" :value="1" :key="1"></el-option>
+                        <el-option label="实体型" :value="2" :key="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="申请文件" prop="appFile">

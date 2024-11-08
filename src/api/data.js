@@ -7,13 +7,15 @@ import "nprogress/nprogress.css";
 export const backendUrl = '/backendOut'
 export const publicUrl = '/public'
 
+
 // 外网的 IP 和 PORT
-export const backend_out_ip = "8.130.160.66"
-export const backend_out_port = 8080
+// export const backend_out_ip = "8.130.160.66"
+// export const backend_out_port = 8080
 
+import { backendOutIp, backendOutPort } from '@/../public/backend-out-env.js'
 
-// export const backend_out_ip = "47.93.215.112"
-// export const backend_out_port = 8090
+export const backend_out_ip = backendOutIp
+export const backend_out_port = backendOutPort
 
 
 // post请求

@@ -28,7 +28,7 @@
             <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
             <el-table-column prop="sourceList" label="来源" align="center">
                 <template slot-scope="props">
-                    <div v-for="item in sourceList" :key="item">
+                    <div v-for="item in props.row.sourceList" :key="item">
                         <span>{{ item }}</span>
                     </div>
                 </template>
@@ -111,30 +111,30 @@ export default {
             },
 
             resultTable: [
-                {
-                    doi: 'doi1',
-                    appName: '加密',
-                    appContent: '加密',
-                    type: "EDC",
-                    sourceList: '项目1',
-                    appType: 1,
-                    retraceList: [
-                        { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "name": "DO1", "description": "", "source": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671,86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "type": "SDTM" },
-                        { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
-                        { "doi": "86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "name": "DO3", "description": "", "source": null, "type": "EDC" },
-                    ],
-                },
-                {
-                    doi: 'doi1',
-                    appName: '加密',
-                    appContent: '加密',
-                    type: "EDC",
-                    sourceList: '项目1',
-                    appType: 2,
-                    retraceList: [
-                        { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
-                    ]
-                },
+                // {
+                //     doi: 'doi1',
+                //     appName: '加密',
+                //     appContent: '加密',
+                //     type: "EDC",
+                //     sourceList: '项目1',
+                //     appType: 1,
+                //     retraceList: [
+                //         { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "name": "DO1", "description": "", "source": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671,86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "type": "SDTM" },
+                //         { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
+                //         { "doi": "86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "name": "DO3", "description": "", "source": null, "type": "EDC" },
+                //     ],
+                // },
+                // {
+                //     doi: 'doi1',
+                //     appName: '加密',
+                //     appContent: '加密',
+                //     type: "EDC",
+                //     sourceList: '项目1',
+                //     appType: 2,
+                //     retraceList: [
+                //         { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
+                //     ]
+                // },
             ],
 
             doTypeList: [
@@ -155,16 +155,16 @@ export default {
             },
 
             traceTable: [
-                {
-                    // 时间
-                    createTime: "2024",
-                    // 操作内容
-                    operation: "数据流转",
-                    // 操作标识
-                    operationDoi: "86.228.0956386869/op.41bebd18-10b8-418b-b066-a7acd2a47356",
-                    // 账本哈希值
-                    hashValue: "0x8408631c62a85ea415fbc19f028f86094b9bf5bbfbe85c9a80310a854b380f28",
-                }
+                // {
+                //     // 时间
+                //     createTime: "2024",
+                //     // 操作内容
+                //     operation: "数据流转",
+                //     // 操作标识
+                //     operationDoi: "86.228.0956386869/op.41bebd18-10b8-418b-b066-a7acd2a47356",
+                //     // 账本哈希值
+                //     hashValue: "0x8408631c62a85ea415fbc19f028f86094b9bf5bbfbe85c9a80310a854b380f28",
+                // }
             ],
 
             contractVisible: false,
@@ -176,12 +176,12 @@ export default {
             },
 
             contractTable: [
-                {
-                    number: 0,
-                    createTime: "2024",
-                    address: "0x51fB57B6B7837D4064158BDFE2DDDF91A53D46e7",
-                    hashValue: "0x13c02bbdabd149a8ab7e745a9d03b2184ca20c4312eef07c69a3f27ad49833b6",
-                }
+                // {
+                //     number: 0,
+                //     createTime: "2024",
+                //     address: "0x51fB57B6B7837D4064158BDFE2DDDF91A53D46e7",
+                //     hashValue: "0x13c02bbdabd149a8ab7e745a9d03b2184ca20c4312eef07c69a3f27ad49833b6",
+                // }
             ],
         };
     },
@@ -208,25 +208,19 @@ export default {
         },
 
         searchData() {
-            let postData = {
-                doi: this.searchForm.doi,
-                appName: this.searchForm.appName,
-                appContent: this.searchForm.appContent,
-                type: this.searchForm.type,
-            }
             this.getData(this.searchForm)
         },
 
         getData(postData) {
             let _this = this;
-            this.applyTable = [];
+            this.resultTable = [];
             postForm('/doApplication/getUserApplication', postData, _this, function (res) {
                 _this.pages = res.data.pages;
                 for (let doIndex = 0; doIndex < res.data.records.length; doIndex++) {
                     let item = res.data.records[doIndex]
-                    _this.applyTable.push({
+                    _this.resultTable.push({
                         appId: item.appId,
-                        doi: item.doi,
+                        doi: item.appType === 1 ? item.doi : item.newDoi,
                         appName: item.appName,
                         appContent: item.appContent,
                         sourceList: JSON.parse(item.source),
@@ -234,8 +228,7 @@ export default {
                         appType: item.appType,
                         retraceList: [],
                     })
-                    _this.getDoSource(item.doi, _this.applyTable[doIndex].retraceList);
-                    doIndex++;
+                    _this.getDoSource(item.doi, _this.resultTable[doIndex].retraceList);
                 }
             })
         },
@@ -243,7 +236,7 @@ export default {
         // 递归获取source
         getDoSource(doi, retraceList) {
             let _this = this;
-            postFormPublic("/relationship/api/search", {pageNo: 1, pageSize: 1}, _this, function (res) {
+            postFormPublic("/relationship/api/search", {doi, pageNo: 1, pageSize: 1}, _this, function (res) {
                 let item = res.data.list[0];
                 retraceList.push({
                     doi: item.doi,
@@ -280,10 +273,11 @@ export default {
         },
 
         traceGetData(postData) {
+            this.traceTable = []
             let _this = this;
             postFormPublic(`/traceV2/getTraceInfoByDoi`, postData, _this, function(res) {
-                for(let item of res.data) {
-                    _this.contractTable.push({
+                for(let item of res.data.list) {
+                    _this.traceTable.push({
                         createTime: item.createTime,
                         operation: item.operation,
                         operationDoi: item.operationDoi,
@@ -295,7 +289,6 @@ export default {
 
         contractHistory(row, index) {
             this.contractVisible = true;
-            this.contractTable = [];
             this.contractPostData = {
                 doi: row.doi,
                 pageSize: 10,
@@ -305,9 +298,10 @@ export default {
         },
 
         contractGetData(postData) {
+            this.contractTable = []
             let _this = this;
             postFormPublic(`/smartContract/list`, postData, _this, function(res) {
-                for(let item of res.data) {
+                for(let item of res.data.list) {
                     _this.contractTable.push(item)
                 }
             })

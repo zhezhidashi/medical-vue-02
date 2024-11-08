@@ -79,7 +79,9 @@ export default {
         this.path = this.$router.currentRoute.path;
         this.userType = this.$store.state.user.userType;
         this.username = this.$store.state.user.username;
-        this.getInstitutionName();
+        if(this.path !== '/Login') {
+            this.getInstitutionName();
+        }
     },
     watch: {
         $route(to, from) {

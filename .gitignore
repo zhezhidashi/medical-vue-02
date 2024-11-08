@@ -5,6 +5,8 @@ node_modules
 *.zip
 .env
 
+backend-out-env.js
+
 # local env files
 .env.local
 .env.*.local
