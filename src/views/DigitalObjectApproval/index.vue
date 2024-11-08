@@ -180,6 +180,8 @@ export default {
         conductApproval(row, index) {
             console.log(row, index);
             this.approvalDialogVisible = true;
+            this.approvalForm.appId = row.appId;
+            this.approvalForm.status = undefined;
         },
         // 取消审批
         approvalCancel() {

@@ -192,9 +192,9 @@
         <el-dialog title="权限修改历史" :visible.sync="contractVisible" width="80%" :before-close="cancelWithoutConfirm">
             <el-table :data="contractTable" stripe border style="width: 95%;">
                 <el-table-column prop="number" label="区块编号" align="center"></el-table-column>
-                <el-table-column prop="createTime" label="时间" align="center"></el-table-column>
+                <el-table-column prop="time" label="时间" align="center"></el-table-column>
                 <el-table-column prop="address" label="合约地址" align="center"></el-table-column>
-                <el-table-column prop="hashValue" label="哈希值" align="center"></el-table-column>
+                <el-table-column prop="hash" label="哈希值" align="center"></el-table-column>
             </el-table>
         </el-dialog>
     </div>
@@ -313,12 +313,12 @@ export default {
 
             contractVisible: false,
             contractTable: [
-                {
-                    number: 0,
-                    createTime: "2024",
-                    address: "0x51fB57B6B7837D4064158BDFE2DDDF91A53D46e7",
-                    hashValue: "0x13c02bbdabd149a8ab7e745a9d03b2184ca20c4312eef07c69a3f27ad49833b6",
-                }
+                // {
+                //     number: 0,
+                //     time: "2024",
+                //     address: "0x51fB57B6B7837D4064158BDFE2DDDF91A53D46e7",
+                //     hash: "0x13c02bbdabd149a8ab7e745a9d03b2184ca20c4312eef07c69a3f27ad49833b6",
+                // }
             ],
         };
     },
@@ -404,20 +404,20 @@ export default {
                         status: item.status,
                         uidList: [],
                     }
-                    if (item.leadingInstitution !== undefined && item.leadingInstitution !== null) {
-                        dataItem.leadingInstitutionDoiList = item.leadingInstitution.split(",");
-                    } else {
+                    if (item.leadingInstitution === undefined || item.leadingInstitution === null || item.leadingInstitution === "") {
                         dataItem.leadingInstitutionDoiList = [];
-                    }
-                    if (item.involveInsDoi !== undefined && item.involveInsDoi !== null) {
-                        dataItem.involvedInstitutionDoiList = item.involveInsDoi.split(",");
                     } else {
+                        dataItem.leadingInstitutionDoiList = item.leadingInstitution.split(",");
+                    }
+                    if (item.involvedInstitutionDoi === undefined || item.involvedInstitutionDoi === null || item.involvedInstitutionDoi === "") {
                         dataItem.involvedInstitutionDoiList = [];
-                    }
-                    if (item.brand !== undefined && item.brand !== null) {
-                        dataItem.brandList = item.brand.split(",");
                     } else {
+                        dataItem.involvedInstitutionDoiList = item.involvedInstitutionDoi.split(",");
+                    }
+                    if (item.brand === undefined || item.brand === null || item.brand === "") {
                         dataItem.brandList = [];
+                    } else {
+                        dataItem.brandList = item.brand.split(",");
                     }
 
                     for (let item of item.userBoList) {
@@ -577,7 +577,12 @@ export default {
             let _this = this;
             getForm(`/getContractListByPid/${row.pid}`, _this, function(res) {
                 for(let item of res.data) {
-                    _this.contractTable.push(item)
+                    _this.contractTable.push({
+                        number: item.number,
+                        time: new Date(item.time).toLocaleString(),
+                        address: item.address,
+                        hash: item.hash
+                    })
                 }
             })
         },

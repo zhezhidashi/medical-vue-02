@@ -123,7 +123,7 @@ export default {
              });
         },
         modifyUserInfoConfirm() {
-            if (this.userInfoForm.username === '' || this.userInfoForm.newPassword === '' || this.userInfoForm.email === '') {
+            if (this.userInfoForm.username === '' || this.userInfoForm.newPassword === '') {
                 this.$message.error('请填写完整信息');
                 return;
             }

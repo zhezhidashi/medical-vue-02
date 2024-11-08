@@ -18,8 +18,8 @@
             </el-form-item>
             <el-form-item prop="institutionDoi" label="所属机构" class="SearchFormItem">
                 <el-select placeholder="请选择" filterable v-model="searchForm.institutionDoi">
-                    <el-option v-for="(item, index) in institutionList" :label="item.institutionName"
-                        :value="item.institutionDoi" :key="index"></el-option>
+                    <el-option v-for="(item, index) in institutionList" :label="item.name"
+                        :value="item.doi" :key="index"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -51,8 +51,8 @@
             <el-form :model="applyForm" label-width="auto" :rules="applyRules">
                 <el-form-item label="申请类型" prop="appType">
                     <el-select placeholder="请选择" filterable v-model="applyForm.appType">
-                        <el-option label="实体型" :value="0" :key="0"></el-option>
-                        <el-option label="指针型" :value="1" :key="1"></el-option>
+                        <el-option label="实体型" :value="1" :key="1"></el-option>
+                        <el-option label="指针型" :value="2" :key="2"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="申请文件" prop="appFile">
@@ -104,14 +104,14 @@ export default {
             ],
 
             institutionList: [
-                { institutionName: "机构1", institutionDoi: "123" },
-                { institutionName: "机构2", institutionDoi: "124" }
+                // { name: "机构1", doi: "123" },
+                // { name: "机构2", doi: "124" }
             ],
 
             doSearchRules: {
-                institutionDoi: [
-                    { required: true, message: '请选择数字对象所属机构', trigger: 'change' }
-                ],
+                // institutionDoi: [
+                //     { required: true, message: '请选择数字对象所属机构', trigger: 'change' }
+                // ],
             },
 
             resultTable: [
