@@ -42,7 +42,7 @@
             <el-table-column label="操作" align="center" width="150">
                 <template slot-scope="props">
                     <el-button v-if="props.row.appType === 2" type="primary" size="small"
-                        style="margin: 5px;">下载</el-button>
+                        style="margin: 5px;" @click="downloadDo(props.row, props.$index)">下载</el-button>
                     <el-button type="primary" size="small" style="margin: 5px;" @click="retrace(props.row, props.$index)">流转追溯</el-button>
                     <el-button type="primary" size="small" style="margin: 5px;" @click="trace(props.row, props.$index)">查看痕迹</el-button>
                     <el-button @click="contractHistory(props.row, props.$index)" type="primary" size="small"
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { postForm, getForm, postFormPublic, getFormPublic } from '@/api/data'
+import { postForm, getForm, postFormPublic, getFormPublic, postFormIn, getFormIn, exportDataIn } from '@/api/data'
 export default {
     name: "DigitalObjectList",
     data() {
@@ -111,30 +111,30 @@ export default {
             },
 
             resultTable: [
-                // {
-                //     doi: 'doi1',
-                //     appName: '加密',
-                //     appContent: '加密',
-                //     type: "EDC",
-                //     sourceList: '项目1',
-                //     appType: 1,
-                //     retraceList: [
-                //         { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "name": "DO1", "description": "", "source": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671,86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "type": "SDTM" },
-                //         { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
-                //         { "doi": "86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "name": "DO3", "description": "", "source": null, "type": "EDC" },
-                //     ],
-                // },
-                // {
-                //     doi: 'doi1',
-                //     appName: '加密',
-                //     appContent: '加密',
-                //     type: "EDC",
-                //     sourceList: '项目1',
-                //     appType: 2,
-                //     retraceList: [
-                //         { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
-                //     ]
-                // },
+                {
+                    doi: 'doi1',
+                    appName: '加密',
+                    appContent: '加密',
+                    type: "EDC",
+                    sourceList: '项目1',
+                    appType: 1,
+                    retraceList: [
+                        { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "name": "DO1", "description": "", "source": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671,86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "type": "SDTM" },
+                        { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
+                        { "doi": "86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "name": "DO3", "description": "", "source": null, "type": "EDC" },
+                    ],
+                },
+                {
+                    doi: 'doi1',
+                    appName: '加密',
+                    appContent: '加密',
+                    type: "EDC",
+                    sourceList: '项目1',
+                    appType: 2,
+                    retraceList: [
+                        { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
+                    ]
+                },
             ],
 
             doTypeList: [
@@ -186,7 +186,7 @@ export default {
         };
     },
     mounted() {
-        this.getData({})
+        // this.getData({})
     },
     methods: {
         clickPage(page) {
@@ -249,6 +249,13 @@ export default {
                 for(let doi of sourceList) {
                     _this.getDoSource(doi, retraceList)
                 }
+            })
+        },
+
+        downloadDo(row, index) {
+            let _this = this;
+            postFormIn("/repository/getEntityLinkByDoi", {doi: row.doi}, _this, function(res) {
+                window.open(res.data.url)
             })
         },
 

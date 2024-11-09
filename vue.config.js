@@ -24,6 +24,12 @@ module.exports = defineConfig({
                 ws: true,
                 changeOrigin: true
             },
+            '/backendIn': {
+                target: process.env.BACKEND_IN_URL,
+                pathRewrite: {'^/backendIn': ''},
+                ws: true,
+                changeOrigin: true
+            },
         },
     },
 })

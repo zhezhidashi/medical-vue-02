@@ -71,10 +71,10 @@ export default {
                 } else {
                     _this.projectForm.leadingInstitutionDoiList = item.leadingInstitution.split(",");
                 }
-                if (item.involveInsDoi === undefined || item.involveInsDoi === null || item.involveInsDoi === "") {
+                if (item.involvedInstitutionDoi === undefined || item.involvedInstitutionDoi === null || item.involvedInstitutionDoi === "") {
                     _this.projectForm.involvedInstitutionDoiList = [];
                 } else {
-                    _this.projectForm.involvedInstitutionDoiList = item.involveInsDoi.split(",");
+                    _this.projectForm.involvedInstitutionDoiList = item.involvedInstitutionDoi.split(",");
                 }
                 if (item.brand === undefined || item.brand === null || item.brand === "") {
                     _this.projectForm.brandList = [];

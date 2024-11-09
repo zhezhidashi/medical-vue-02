@@ -92,10 +92,10 @@ export default {
                     } else {
                         dataItem.leadingInstitutionDoiList = item.leadingInstitution.split(",");
                     }
-                    if (item.involveInsDoi === undefined || item.involveInsDoi === null || item.involveInsDoi === "") {
+                    if (item.involvedInstitutionDoi === undefined || item.involvedInstitutionDoi === null || item.involvedInstitutionDoi === "") {
                         dataItem.involvedInstitutionDoiList = [];
                     } else {
-                        dataItem.involvedInstitutionDoiList = item.involveInsDoi.split(",");
+                        dataItem.involvedInstitutionDoiList = item.involvedInstitutionDoi.split(",");
                     }
                     if (item.brand === undefined || item.brand === null || item.brand === "") {
                         dataItem.brandList = [];
