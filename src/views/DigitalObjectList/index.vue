@@ -111,30 +111,30 @@ export default {
             },
 
             resultTable: [
-                {
-                    doi: 'doi1',
-                    appName: '加密',
-                    appContent: '加密',
-                    type: "EDC",
-                    sourceList: '项目1',
-                    appType: 1,
-                    retraceList: [
-                        { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "name": "DO1", "description": "", "source": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671,86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "type": "SDTM" },
-                        { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
-                        { "doi": "86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "name": "DO3", "description": "", "source": null, "type": "EDC" },
-                    ],
-                },
-                {
-                    doi: 'doi1',
-                    appName: '加密',
-                    appContent: '加密',
-                    type: "EDC",
-                    sourceList: '项目1',
-                    appType: 2,
-                    retraceList: [
-                        { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
-                    ]
-                },
+                // {
+                //     doi: 'doi1',
+                //     appName: '加密',
+                //     appContent: '加密',
+                //     type: "EDC",
+                //     sourceList: '项目1',
+                //     appType: 1,
+                //     retraceList: [
+                //         { "doi": "86.879.5876633518\/do.711bb34f-d908-439f-a010-4d7e7641e671", "name": "DO1", "description": "", "source": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671,86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "type": "SDTM" },
+                //         { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
+                //         { "doi": "86.879.5876633518\/do.791bb34f-d908-439f-a010-4d7e7641e671", "name": "DO3", "description": "", "source": null, "type": "EDC" },
+                //     ],
+                // },
+                // {
+                //     doi: 'doi1',
+                //     appName: '加密',
+                //     appContent: '加密',
+                //     type: "EDC",
+                //     sourceList: '项目1',
+                //     appType: 2,
+                //     retraceList: [
+                //         { "doi": "86.879.5876633518\/do.321bb34f-d908-439f-a010-4d7e7641e671", "name": "DO2", "description": "", "source": null, "type": "EDC" },
+                //     ]
+                // },
             ],
 
             doTypeList: [
@@ -186,7 +186,7 @@ export default {
         };
     },
     mounted() {
-        // this.getData({})
+        this.getData({})
     },
     methods: {
         clickPage(page) {
