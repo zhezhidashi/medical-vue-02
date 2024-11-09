@@ -128,7 +128,7 @@ export default {
         // 获取机构组网信息
         getForm('/networkGroups/getInstitutionName', _this, function (res) {
             postForm('/networkGroups/getInstitutionsByGid', { name: res.data }, _this, function (res) {
-                if (res.code === 200) {
+                if (res.code === 200 && res.data.list.length !== 0) {
                     _this.hasNetwork = 2;
                     let network = res.data.list[0];
                     _this.networkDescription.publicRootAddress = network.ipWithPort;
