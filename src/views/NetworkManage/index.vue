@@ -79,7 +79,7 @@ export default {
             // 是否组网，0是查询中，1是未组网，2是已组网
             hasNetwork: 0,
             loading: false,
-            
+
             // 未组网
             applyNetworkForm: {
                 publicRootAddress: "",
@@ -126,21 +126,19 @@ export default {
     mounted() {
         let _this = this;
         // 获取机构组网信息
-        getForm('/networkGroups/getInstitutionName', _this, function (res) {
-            postForm('/networkGroups/getInstitutionsByGid', { name: res.data }, _this, function (res) {
-                if (res.code === 200 && res.data.list.length !== 0) {
-                    _this.hasNetwork = 2;
-                    let network = res.data.list[0];
-                    _this.networkDescription.publicRootAddress = network.ipWithPort;
-                    _this.networkDescription.name = network.name
-                    _this.networkDescription.institutionDoi = network.doi
-                    _this.networkDescription.institutionCode = network.institutionCode
-                    _this.networkDescription.description = network.description
-                }
-                else {
-                    _this.hasNetwork = 1;
-                }
-            })
+        postForm('/networkGroups/get', {}, _this, function (res) {
+            if (res.code === 200) {
+                _this.hasNetwork = 2;
+                let network = res.data;
+                _this.networkDescription.publicRootAddress = network.publicRootAddress + ":" + network.publicRootPort;
+                _this.networkDescription.name = network.institutionName
+                _this.networkDescription.institutionDoi = network.institutionDoi
+                _this.networkDescription.institutionCode = network.institution_code
+                _this.networkDescription.description = network.description
+            }
+            else {
+                _this.hasNetwork = 1;
+            }
         })
     },
     methods: {

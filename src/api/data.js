@@ -35,7 +35,7 @@ export const postForm = (requestUrl, params, This, callback) => {
     }).then(({ data: res }) => {
         nprogress.done()
         console.log('postForm 的 response: ', requestUrl, res);
-        if (res.code === 200 || requestUrl === "/networkGroups/getInstitutionsByGid") { 
+        if (res.code === 200 || requestUrl === "/networkGroups/get") { 
             callback(res) 
         }
         else {
