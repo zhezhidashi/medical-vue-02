@@ -160,6 +160,8 @@ export default {
         getApproveStatus() {
             let _this = this;
             postForm('/doApplication/getInstApplication', {}, _this, function (res) {
+                if(res.data === null || res.data === undefined) return;
+                
                 for(let item of res.data.records) {
                     if(item.appStatus === 3) {
                         _this.approvedDoNumber++;
