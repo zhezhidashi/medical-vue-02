@@ -86,7 +86,7 @@ export default {
             },
             pieChartsOptions2: {
                 legend: {
-                    data: ["待审批数字对象数量", "已审批数字对象数量"],
+                    data: ["待审批数字对象请求", "已审批数字对象请求"],
                     orient: "vertical",
                     right: "0%",
                     top: "10%",
@@ -103,11 +103,11 @@ export default {
                     data: [
                         {
                             value: 0,
-                            name: "待审批数字对象数量"
+                            name: "待审批数字对象请求"
                         },
                         {
                             value: 0,
-                            name: "已审批数字对象数量"
+                            name: "已审批数字对象请求"
                         },
                     ],
                 },
@@ -146,17 +146,21 @@ export default {
         },
         getAllocateStatus() {
             let _this = this;
-            postForm('/registry/query', {}, _this, function (res) {
-                _this.doNumber = res.data.total;
-                for (let item of res.data.records) {
-                    if (item.institutionName === "" || item.institutionName === undefined || item.institutionName === null) {
-                        _this.allocatingDoNumber++;
-                    }
-                    else {
-                        _this.allocatedDoNumber++;
-                    }
+            postForm('/networkGroups/get', {}, _this, function (res) {
+                if (res.data !== null) {
+                    postFormPublic("/relationship/api/search", { institutionDoi: res.data.institutionDoi, pageNo: 1, pageSize: 100000 }, _this, function (res) {
+                        _this.doNumber = res.data.list.length;
+                        for(let item of res.data.list) {
+                            if (item.projectDoi === null || item.projectDoi === undefined || item.projectDoi === "") {
+                                _this.allocatingDoNumber++;
+                            }
+                            else {
+                                _this.allocatedDoNumber++;
+                            }
+                        }
+                        _this.initEcharts1();
+                    })
                 }
-                _this.initEcharts1();
             })
         },
         getApproveStatus() {
@@ -165,10 +169,10 @@ export default {
                 if (res.data !== null && res.data !== undefined) {
                     for (let item of res.data.records) {
                         if (item.appStatus === 3) {
-                            _this.approvedDoNumber++;
+                            _this.approvingDoNumber++;
                         }
                         else {
-                            _this.approvingDoNumber++;
+                            _this.approvedDoNumber++;
                         }
                     }
                 }
