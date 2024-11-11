@@ -12,23 +12,21 @@ module.exports = defineConfig({
     lintOnSave: false,
     devServer: {
         proxy: {
-            '/api': {
-                // target: 'http://47.93.215.112:8080',
-                target: process.env.BACKEND_URL,
-                pathRewrite: {'^/api': ''},
-                ws: true,
-                changeOrigin: true
-            },
-            '/ganache': {
-                // target: 'http://
-                target: process.env.GANACHE_URL,
-                pathRewrite: {'^/ganache': ''},
+            '/backendOut': {
+                target: process.env.BACKEND_OUT_URL,
+                pathRewrite: {'^/backendOut': ''},
                 ws: true,
                 changeOrigin: true
             },
             '/public': {
                 target: process.env.PUBLIC_URL,
                 pathRewrite: {'^/public': ''},
+                ws: true,
+                changeOrigin: true
+            },
+            '/backendIn': {
+                target: process.env.BACKEND_IN_URL,
+                pathRewrite: {'^/backendIn': ''},
                 ws: true,
                 changeOrigin: true
             },

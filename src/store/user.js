@@ -5,12 +5,9 @@ export default {
         username: "",
         userType: "",
         proid: "",
-        officeid: "",
-        userid: "",
+        userId: "",
         insName: "",
-        // 用于展示的普通用户的用户名
-        normalUsername: "",
-        normalUid: "",
+        projectDoi: "",
     },
     mutations: {
         setToken(state, val) {
@@ -90,27 +87,16 @@ export default {
         getInsName(state) {
             state.insName = state.insName || Cookie.get("insName")
         },
-        setNormalUsername(state, val) {
-            state.normalUsername = val
-            Cookie.set('normalUsername', val)
+        setProjectDoi(state, val) {
+            state.projectDoi = val
+            Cookie.set('projectDoi', val)
         },
-        clearNormalUsername(state) {
-            state.normalUsername = ''
-            Cookie.remove('normalUsername')
+        clearProjectDoi(state) {
+            state.projectDoi = ''
+            Cookie.remove('projectDoi')
         },
-        getNormalUsername(state) {
-            state.normalUsername = state.normalUsername || Cookie.get("normalUsername")
-        },
-        setNormalUid(state, val) {
-            state.normalUid = val
-            Cookie.set('normalUid', val)
-        },
-        clearNormalUid(state) {
-            state.normalUid = ''
-            Cookie.remove('normalUid')
-        },
-        getNormalUid(state) {
-            state.normalUid = state.normalUid || Cookie.get("normalUid")
+        getProjectDoi(state) {
+            state.projectDoi = state.projectDoi || Cookie.get("projectDoi")
         },
     }
 }

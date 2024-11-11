@@ -46,124 +46,12 @@ const routes = [
                 component: () => import('@/views/Login')
             },
             {
-                path: '/NetworkingApply',
-                name: 'NetworkingApply',
-                meta: {
-                    title: '组网申请'
-                },
-                component: () => import('@/views/NetworkingApply')
-            },
-            {
-                path: '/ProjectsApply',
-                name: 'ProjectsApply',
-                meta: {
-                    title: '项目管理'
-                },
-                component: () => import('@/views/ProjectsApply')
-            },
-            {
-                path: '/ProjectsList',
-                name: 'ProjectsList',
-                meta: {
-                    title: '项目详情'
-                },
-                component: () => import('@/views/ProjectsList')
-            },
-            {
-                path: '/AccountManage',
-                name: 'AccountManage',
-                meta: {
-                    title: '账号管理'
-                },
-                component: () => import('@/views/AccountManage')
-            },
-            {
-                path: '/RelationshipSystem',
-                name: 'RelationshipSystem',
-                meta: {
-                    title: '流转追溯系统'
-                },
-                component: () => import('@/views/RelationshipSystem')
-            },
-            {
-                path: '/DigitalObjectApplyUser',
-                name: 'DigitalObjectApplyUser',
-                meta: {
-                    title: '数字对象申请'
-                },
-                component: () => import('@/views/DigitalObjectApplyUser')
-            },
-            {
-                path: '/DigitalObjectApproval',
-                name: 'DigitalObjectApproval',
-                meta: {
-                    title: '数字对象审批'
-                },
-                component: () => import('@/views/DigitalObjectApproval')
-            },
-            {
-                path: '/DigitalObjectApplyInstitution',
-                name: 'DigitalObjectApplyInstitution',
-                meta: {
-                    title: '机构申请列表'
-                },
-                component: () => import('@/views/DigitalObjectApplyInstitution')
-            },
-            {
-                path: '/ApprovalExport',
-                name: 'ApprovalExport',
-                meta: {
-                    title: '审批通过导出'
-                },
-                component: () => import('@/views/ApprovalExport')
-            },
-            {
                 path: '/DigitalObjectList',
                 name: 'DigitalObjectList',
                 meta: {
-                    title: '数字对象检索'
+                    title: '数字对象列表'
                 },
                 component: () => import('@/views/DigitalObjectList')
-            },
-            {
-                path: '/MetadataImport',
-                name: 'MetadataImport',
-                meta: {
-                    title: '元数据导入'
-                },
-                component: () => import('@/views/MetadataImport')
-            },
-            {
-                path: '/DigitalObjectExport',
-                name: 'DigitalObjectExport',
-                meta: {
-                    title: '数字对象导出'
-                },
-                component: () => import('@/views/DigitalObjectExport')
-            },
-            {
-                path: '/DigitalObjectAllocate',
-                name: 'DigitalObjectAllocate',
-                meta: {
-                    title: '数字对象分配'
-                },
-                component: () => import('@/views/DigitalObjectAllocate')
-            },
-            {
-                path: '/PrivateKeyExport',
-                name: 'PrivateKeyExport',
-                meta: {
-                    title: '导出动态私钥'
-                },
-                component: () => import('@/views/PrivateKeyExport')
-            },
-            {
-                path: '/BlocksChainQuery',
-                name: 'BlocksChainQuery',
-                meta: {
-                    title: '账户/区块查询'
-                },
-                component: () => import('@/views/BlocksChainQuery')
             },
             {
                 path: '/RetraceSystem',
@@ -174,13 +62,13 @@ const routes = [
                 component: () => import('@/views/RetraceSystem')
             },
             {
-                path: "/TraceSystem",
-                name: "TraceSystem",
+                path: "/ProjectDetail",
+                name: 'ProjectsDetail',
                 meta: {
-                    title: "痕迹系统"
+                    title: '项目详情'
                 },
-                component: () => import('@/views/TraceSystem')
-            }
+                component: () => import('@/views/ProjectDetail')
+            },
         ]
     },
 ]

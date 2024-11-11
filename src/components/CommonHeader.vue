@@ -9,7 +9,7 @@
                 <div class="el-dropdown-link" style="display: flex; flex-direction: row; align-items: center;">
                     <div style="display: flex; flex-direction: column; font-weight: bold;">
                         <div>机构：{{ insName }} </div>
-                        <div>用户：{{ username }} </div>
+                        <div>用户：admin </div>
                     </div>
                 </div>
             </el-dropdown>
@@ -18,36 +18,32 @@
 </template>
 
 <script>
-import { getForm, postForm } from '@/api/data';
+import { getForm, postForm, getFormPublic, postFormPublic } from '@/api/data';
 export default {
     name: "CommonHeader",
     data() {
         return {
             path: '',
-            userInfoForm: {
-                username: '',
-                newPassword: '',
-                confirmPassword: '',
-                email: '',
-            },
-            modifyPasswordDialogVisible: false,
             userType: '',
             username: '',
 
-            institutionInfo: {
-                name: "",
-            },
-            // insName for exhibition
+            userId: "",
             insName: "",
         }
     },
     mounted() {
         let _this = this;
 
-        this.$store.commit('getInsName')
-        this.insName = this.$store.state.user.insName
-        this.$store.commit('getNormalUsername')
-        this.username = this.$store.state.user.normalUsername
+        this.$store.commit('getUserid')
+        this.userId = this.$store.state.user.userid
+        console.log(this.userId)
+        postFormPublic(`/institution/getInsNameByUserId?userId=${this.userId}`, {}, _this, function (res) {
+            _this.insName = res.data
+            _this.$store.commit("setInsName", _this.insName);
+
+        })
+
+        
     },
     watch: {
         $route(to, from) {
