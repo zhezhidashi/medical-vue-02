@@ -127,7 +127,7 @@ export default {
         let _this = this;
         // 获取机构组网信息
         postForm('/networkGroups/get', {}, _this, function (res) {
-            if (res.code === 200) {
+            if (res.code === 200 && res.data !== null) {
                 _this.hasNetwork = 2;
                 let network = res.data;
                 _this.networkDescription.publicRootAddress = network.publicRootAddress + ":" + network.publicRootPort;

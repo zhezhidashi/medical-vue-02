@@ -35,14 +35,16 @@ export const postForm = (requestUrl, params, This, callback) => {
     }).then(({ data: res }) => {
         nprogress.done()
         console.log('postForm 的 response: ', requestUrl, res);
-        if (res.code === 200 || requestUrl === "/networkGroups/get") { 
+        if (res.code === 200) { 
             callback(res) 
         }
         else {
-            This.$message({
-                message: res.message,
-                type: 'error'
-            });
+            if(res.code !== 239) {
+                This.$message({
+                    message: res.message,
+                    type: 'error'
+                });
+            }
             callback(res)
         }
     })
@@ -71,10 +73,12 @@ export const getForm = (requestUrl, This, callback) => {
             callback(res) 
         }
         else {
-            This.$message({
-                message: res.message,
-                type: 'error'
-            });
+            if(res.code !== 239) {
+                This.$message({
+                    message: res.message,
+                    type: 'error'
+                });
+            }
             callback(res)
         }
     })
