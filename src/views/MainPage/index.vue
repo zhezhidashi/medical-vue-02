@@ -161,6 +161,9 @@ export default {
                         _this.initEcharts1();
                     })
                 }
+                else{
+                    _this.initEcharts1();
+                }
             })
         },
         getApproveStatus() {
