@@ -118,7 +118,7 @@ export default {
         this.user.username = this.$store.state.user.username;
         this.user.userType = this.$store.state.user.userType;
         if (this.user.userType === 'user') {
-            this.$router.push({path: "/ProjectsListNormalUser"});
+            this.$router.push({ path: "/ProjectsListNormalUser" });
         }
         this.getBasicData()
     },
@@ -146,7 +146,7 @@ export default {
             let _this = this;
             postForm('/registry/query', {}, _this, function (res) {
                 _this.doNumber = res.data.total;
-                for(let item of res.data.records) {
+                for (let item of res.data.records) {
                     if (item.institutionName === "" || item.institutionName === undefined || item.institutionName === null) {
                         _this.allocatingDoNumber++;
                     }
@@ -160,14 +160,14 @@ export default {
         getApproveStatus() {
             let _this = this;
             postForm('/doApplication/getInstApplication', {}, _this, function (res) {
-                if(res.data === null || res.data === undefined) return;
-                
-                for(let item of res.data.records) {
-                    if(item.appStatus === 3) {
-                        _this.approvedDoNumber++;
-                    }
-                    else {
-                        _this.approvingDoNumber++;
+                if (res.data !== null || res.data !== undefined) {
+                    for (let item of res.data.records) {
+                        if (item.appStatus === 3) {
+                            _this.approvedDoNumber++;
+                        }
+                        else {
+                            _this.approvingDoNumber++;
+                        }
                     }
                 }
                 _this.initEcharts2();
