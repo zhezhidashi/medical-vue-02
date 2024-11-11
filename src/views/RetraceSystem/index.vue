@@ -113,7 +113,7 @@ export default {
                         }
                     },
                     force: {
-                        repulsion: 700,
+                        repulsion: 1000,
                         // edgeLength: 280,
                     },
                     draggable: true,
@@ -132,7 +132,7 @@ export default {
             for (let idx = 0; idx < retraceList.length; idx++) {
                 this.graphEchartsOptions.series.nodes.push({
                     id: idx,
-                    name: retraceList[idx].name,
+                    name: retraceList[idx].doi,
                     category: retraceList[idx].type,
                     symbolSize: 20
                 })

@@ -26,13 +26,13 @@
             <el-table-column prop="appName" label="数字对象名称" align="center"></el-table-column>
             <el-table-column prop="appContent" label="数字对象描述" align="center"></el-table-column>
             <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
-            <el-table-column prop="sourceList" label="来源" align="center">
+            <!-- <el-table-column prop="sourceList" label="来源" align="center">
                 <template slot-scope="props">
                     <div v-for="item in props.row.sourceList" :key="item">
                         <span>{{ item }}</span>
                     </div>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop="appType" label="申请类型" align="center">
                 <template slot-scope="props">
                     <el-tag v-if="props.row.appType === 1" type="primary">指针型</el-tag>
@@ -228,7 +228,12 @@ export default {
                         appType: item.appType,
                         retraceList: [],
                     })
-                    _this.getDoSource(item.doi, _this.resultTable[doIndex].retraceList);
+                    if(item.appType === 1) {
+                        _this.getDoSource(item.doi, _this.resultTable[doIndex].retraceList);
+                    }
+                    else {
+                        _this.getDoSource(item.newDoi, _this.resultTable[doIndex].retraceList);
+                    }
                 }
             })
         },
