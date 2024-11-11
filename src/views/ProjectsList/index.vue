@@ -141,7 +141,8 @@
                     <el-input v-model="modifyProjectForm.contactEmail"></el-input>
                 </el-form-item>
                 <el-form-item label="其他牵头机构" prop="leadingInstitutionDoiList">
-                    <el-select v-model="modifyProjectForm.leadingInstitutionDoiList" multiple filterable placeholder="请选择">
+                    <el-select v-model="modifyProjectForm.leadingInstitutionDoiList" multiple filterable
+                        placeholder="请选择">
                         <el-option v-for="item in institutionList" :key="item.doi" :label="item.name"
                             :value="item.doi"></el-option>
                     </el-select>
@@ -346,10 +347,12 @@ export default {
                 // 获取所有用户 
                 postForm("/users/getUsers", { page: 1, size: 10000 }, _this, function (res) {
                     for (let item of res.data.records) {
-                        _this.userList.push({
-                            uid: item.uid,
-                            username: item.username,
-                        });
+                        if (item.type === 1) {
+                            _this.userList.push({
+                                uid: item.uid,
+                                username: item.username,
+                            });
+                        }
                         _this.uidToUsername[item.uid] = item.username
                     }
                     // 获取所有品种
@@ -575,8 +578,8 @@ export default {
             this.contractVisible = true;
             this.contractTable = [];
             let _this = this;
-            getForm(`/getContractListByPid/${row.pid}`, _this, function(res) {
-                for(let item of res.data) {
+            getForm(`/getContractListByPid/${row.pid}`, _this, function (res) {
+                for (let item of res.data) {
                     _this.contractTable.push({
                         number: item.number,
                         time: new Date(item.time).toLocaleString(),
