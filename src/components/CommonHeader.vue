@@ -106,6 +106,7 @@ export default {
             })
         },
         modifyUserInfo() {
+            this.userInfoForm.username = this.username
             this.modifyPasswordDialogVisible = true;
         },
         modifyUserInfoCancel() {

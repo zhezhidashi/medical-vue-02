@@ -120,7 +120,9 @@ export default {
         if (this.user.userType === 'user') {
             this.$router.push({ path: "/ProjectsListNormalUser" });
         }
-        this.getBasicData()
+        else {
+            this.getBasicData()
+        }
     },
     methods: {
         getBasicData() {
