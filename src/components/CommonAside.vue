@@ -2,11 +2,11 @@
     <div style="width: 200px;">
         <el-menu :default-active="activeIndex" class="el-menu-demo" 
             @select="handleSelect" :unique-opened="false"
-            text-color="#000080" active-text-color="#FF4040"
-            background-color="#F0F8FF" >
-            <el-menu-item index="1">项目详情</el-menu-item>
-            <el-menu-item index="2">数字对象封装</el-menu-item>
-            <el-menu-item index="3">数字对象列表</el-menu-item>
+            text-color="#000000" active-text-color="#bd4747"
+            background-color="rgb(246, 247, 249)">
+            <el-menu-item index="1" style="font-size: 18px;">项目详情</el-menu-item>
+            <el-menu-item index="2" style="font-size: 18px;">数字对象封装</el-menu-item>
+            <el-menu-item index="3" style="font-size: 18px;">数字对象列表</el-menu-item>
         </el-menu>
     </div>
 </template>
@@ -59,7 +59,7 @@ export default {
             else if (key === '2') {
                 this.$store.commit('getInsName')
                 let insName = this.$store.state.user.insName
-                window.open("http://8.130.160.66:8085/Login?insName=" + insName)
+                window.open("http://8.130.160.66:8086/Login?insName=" + insName)
             }
             else if (key === '3') {
                 this.$router.push('/DigitalObjectList')

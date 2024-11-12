@@ -1,13 +1,13 @@
 <template>
     <el-container style="">
-        <el-header style="height: 70px; padding: 10px; background-color: #ececec;">
+        <el-header style="height: 86px; padding: 10px;">
             <common-header></common-header>
         </el-header>
         <el-container>
-            <el-aside width="auto" style="background-color: #F0F8FF; min-height: 100vh;">
+            <el-aside width="auto" style="background-color: rgb(246, 247, 249); min-height: 100vh;">
                 <common-aside></common-aside>
             </el-aside>
-            <el-main style="padding: 0; margin: 0;">
+            <el-main style="padding: 0; margin: 0; background-color: rgb(246, 247, 249)">
                 <router-view></router-view>
             </el-main>
         </el-container>

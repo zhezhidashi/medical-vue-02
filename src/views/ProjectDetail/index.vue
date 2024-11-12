@@ -1,8 +1,8 @@
 <template>
     <div style="margin: 24px 40px 24px 40px;">
         <div style="margin-top: 24px;"></div>
-
-        <el-descriptions title="项目详情" :column="1" border>
+        
+        <el-descriptions style="font-size: 16px" title="项目详情" :column="1" border>
             <el-descriptions-item label="项目名称">{{ projectForm.name }}</el-descriptions-item>
             <el-descriptions-item label="项目标识">{{ projectForm.projectDoi }}</el-descriptions-item>
             <el-descriptions-item label="项目负责人">{{ projectForm.user }}</el-descriptions-item>
@@ -112,5 +112,14 @@ export default {
     font-weight: 500;
     width: 100%;
     border: 0px;
+}
+
+.el-descriptions-item__label.is-bordered-label {
+    color: black;
+    background-color: white;
+}
+
+.el-descriptions__body {
+    color: black;
 }
 </style>
