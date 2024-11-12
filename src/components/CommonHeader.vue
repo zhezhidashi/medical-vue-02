@@ -9,7 +9,7 @@
                 <div class="el-dropdown-link" style="display: flex; flex-direction: row; align-items: center;">
                     <div style="display: flex; flex-direction: column; font-weight: bold; color:black">
                         <div>机构：{{ insName }} </div>
-                        <div>用户：admin </div>
+                        <div>用户：user </div>
                     </div>
                 </div>
             </el-dropdown>
