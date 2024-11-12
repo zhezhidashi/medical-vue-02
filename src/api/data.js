@@ -39,7 +39,7 @@ export const postForm = (requestUrl, params, This, callback) => {
             callback(res) 
         }
         else {
-            if(res.code !== 239) {
+            if(res.code !== 239 && requestUrl !== "/doApplication/exportApproveDoiOnline") {
                 This.$message({
                     message: res.message,
                     type: 'error'
