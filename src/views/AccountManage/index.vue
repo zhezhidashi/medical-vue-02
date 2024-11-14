@@ -70,7 +70,7 @@ export default {
                 {
                     username: "admin",
                     type: 2,
-                    lastLoginTime: "2021-01-01",
+                    lastLoginTime: "2024/11/12",
                     email: "aaaaa@pku.edu.cn",
                 },
             ],

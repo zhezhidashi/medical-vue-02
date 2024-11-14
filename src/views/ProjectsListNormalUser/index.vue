@@ -140,4 +140,5 @@ export default {
     width: 100%;
     border: 0px;
 }
+
 </style>

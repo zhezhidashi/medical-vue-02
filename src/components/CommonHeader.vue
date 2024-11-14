@@ -1,21 +1,21 @@
 <template>
     <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div style="display: flex;">
-            <img src="favicon.png" style="height: 50px; margin-right: 10px;" />
-            <div style="font-size: 25px; line-height: 200%;">医学临床数据交换公网系统</div>
+        <div style="display: flex; align-items: center;">
+            <img src="navigator.png" style="height: 36px; margin: 15px;" />
+            <div style="font-size: 24px;">医学临床数据交换公网系统</div>
         </div>
         <div class="r-content" v-if="path !== '/Login'">
             <el-dropdown style="display: flex; align-items: center;">
                 <div class="el-dropdown-link" style="display: flex; flex-direction: row; align-items: center;">
-                    <div style="display: flex; flex-direction: column; font-weight: bold;">
+                    <div style="display: flex; flex-direction: column; font-weight: bold; color: black;">
                         <div>机构：{{ institutionName }}</div>
                         <div>用户：{{ username }}</div>
                     </div> 
                     <i class="el-icon-arrow-down el-icon--right"></i>
                 </div>
                 <el-dropdown-menu>
-                    <el-dropdown-item align="center" @click.native="logOut">登出</el-dropdown-item>
-                    <el-dropdown-item align="center" @click.native="modifyUserInfo">修改用户信息</el-dropdown-item>
+                    <el-dropdown-item align="center" @click.native="logOut" style="color: black;">登出</el-dropdown-item>
+                    <el-dropdown-item align="center" @click.native="modifyUserInfo" style="color: black;">修改用户信息</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -162,11 +162,51 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .el-dropdown-link {
     cursor: pointer;
-  }
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
+}
+.el-icon-arrow-down {
+font-size: 12px;
+}
+
+
+/* el-form 文字 */
+.el-form-item__label {
+    color: black;
+}
+
+/* el-button 按钮 */
+.el-button--primary, .el-button--primary:focus, .el-button--primary:hover {
+    background-color: #bd4747;
+    border-color: #bd4747;
+}
+
+/* .el-pagination 翻页 */
+.el-pagination.is-background .el-pager li:not(.disabled).active{
+    background-color: #bd4747;
+    border-color: #bd4747;
+}
+
+/* el-description 文字 */
+.el-descriptions-item__label.is-bordered-label, .el-descriptions-item__cell, .el-descriptions-item__content{
+    color: black;
+    font-size: 16px;
+    background-color: white;
+    border-color: black;
+}
+.el-descriptions__title{
+    font-size: 18px;
+}
+
+/* 上传文件时的文字 */
+.el-upload-dragger .el-upload__text em {
+    color: #bd4747;
+}
+
+/* 多选选中文字的颜色 */
+.el-select-dropdown.is-multiple .el-select-dropdown__item.selected, .el-select-dropdown__item.selected {
+    color: #bd4747;
+}
+
 </style>

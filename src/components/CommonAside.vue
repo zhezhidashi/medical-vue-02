@@ -1,7 +1,8 @@
 <template>
     <div style="width: 200px;" v-if="path !== '/Login' && path !== '/ProjectsListNormalUser'">
         <el-menu :default-active="activeIndex" class="el-menu-demo" @select="handleSelect" :unique-opened="false"
-            text-color="#000080" active-text-color="#FF4040" background-color="#F0F8FF">
+        text-color="#000000" active-text-color="#bd4747"
+        background-color="rgb(246, 247, 249)">
             <el-menu-item v-show="isAdmin" index="0">主页</el-menu-item>
             <el-menu-item v-show="isAdmin" index="1">组网管理</el-menu-item>
             <el-menu-item v-show="isAdmin" index="2">账号管理</el-menu-item>
@@ -133,4 +134,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style>
+/* 侧边栏文字大小 */
+.el-submenu__title, .el-menu-item, .el-submenu-item{
+    font-size: 18px;
+}
+</style>

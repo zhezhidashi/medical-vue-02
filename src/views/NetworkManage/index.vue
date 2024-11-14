@@ -136,7 +136,7 @@ export default {
                 _this.networkDescription.institutionCode = network.institution_code
                 _this.networkDescription.description = network.description
             }
-            else {
+            else { 
                 _this.hasNetwork = 1;
             }
         })
@@ -207,4 +207,6 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style>
+
+</style>

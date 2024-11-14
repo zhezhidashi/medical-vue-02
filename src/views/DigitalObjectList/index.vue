@@ -288,6 +288,7 @@ export default {
             this.traceTable = []
             let _this = this;
             postFormPublic(`/traceV2/getTraceInfoByDoi`, postData, _this, function(res) {
+                _this.pagesTrace = res.data.pages;
                 for(let item of res.data.list) {
                     _this.traceTable.push({
                         createTime: item.createTime,
@@ -351,5 +352,18 @@ export default {
     font-weight: 500;
     width: 100%;
     border: 0px;
+}
+
+/* el-button 按钮 */
+.el-button--primary, .el-button--primary:focus, .el-button--primary:hover {
+    background-color: #bd4747;
+    border-color: #bd4747;
+}
+
+
+/* .el-pagination 翻页 */
+.el-pagination.is-background .el-pager li:not(.disabled).active{
+    background-color: #bd4747;
+    border-color: #bd4747;
 }
 </style>
