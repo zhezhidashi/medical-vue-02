@@ -45,8 +45,8 @@
                         style="margin: 5px;" @click="downloadDo(props.row, props.$index)">下载</el-button>
                     <el-button type="primary" size="small" style="margin: 5px;" @click="retrace(props.row, props.$index)">流转追溯</el-button>
                     <el-button type="primary" size="small" style="margin: 5px;" @click="trace(props.row, props.$index)">查看痕迹</el-button>
-                    <el-button @click="contractHistory(props.row, props.$index)" type="primary" size="small"
-                        style="margin: 5px;">权限修改历史</el-button>
+                    <!-- <el-button @click="contractHistory(props.row, props.$index)" type="primary" size="small"
+                        style="margin: 5px;">权限修改历史</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -285,7 +285,28 @@ export default {
         },
 
         traceGetData(postData) {
-            this.traceTable = []
+            this.traceTable = [
+                // {
+                //     // 时间
+                //     createTime: "2024-11-14T17:55:51",
+                //     // 操作内容
+                //     operation: "访问数字对象",
+                //     // 操作标识
+                //     operationDoi: "	86.475.7249629809/op.dc43fbfa-0e47-4846-a314-7f175b21b19e",
+                //     // 账本哈希值
+                //     hashValue: "DxbacZ52pesgtehrNd5j4rozJsbyjBab6KdYGYxdZXswCLFTcf0jp7ftZcJUYKgB",
+                // },
+                // {
+                //     // 时间
+                //     createTime: "2024-11-14T17:55:04",
+                //     // 操作内容
+                //     operation: "数字对象流转入",
+                //     // 操作标识
+                //     operationDoi: "86.026.8937037484/op.330e71ec-1a11-4bb7-8e41-11722d17434b",
+                //     // 账本哈希值
+                //     hashValue: "avQEE3qjiuYQH3PAzx0Ya68rxRSVKJ7nXFWvcaNPXSmzZFPTd5tjVyZknu2OrPeK",
+                // }
+            ]
             let _this = this;
             postFormPublic(`/traceV2/getTraceInfoByDoi`, postData, _this, function(res) {
                 _this.pagesTrace = res.data.pages;
