@@ -34,16 +34,17 @@ export default {
     mounted() {
         let _this = this;
 
-        this.$store.commit('getUserid')
-        this.userId = this.$store.state.user.userid
-        console.log(this.userId)
-        postFormPublic(`/institution/getInsNameByUserId?userId=${this.userId}`, {}, _this, function (res) {
-            _this.insName = res.data
-            _this.$store.commit("setInsName", _this.insName);
+        this.delay(500).then(() => {
+            _this.$store.commit('getUserid')
+            _this.userId = _this.$store.state.user.userid
+            console.log(_this.userId)
+            postFormPublic(`/institution/getInsNameByUserId?userId=${_this.userId}`, {}, _this, function (res) {
+                _this.insName = res.data
+                _this.$store.commit("setInsName", _this.insName);
 
-        })
+            })
+        });
 
-        
     },
     watch: {
         $route(to, from) {
@@ -51,6 +52,10 @@ export default {
         }
     },
     methods: {
+        // 定义一个返回Promise的延时函数
+        delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
     },
 }
 </script>
