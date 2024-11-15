@@ -252,7 +252,16 @@ export default {
                 })
                 let sourceList = JSON.parse(item.source)
                 for(let doi of sourceList) {
-                    _this.getDoSource(doi, retraceList)
+                    // 避免两次查询同一个doi
+                    let doiExist = false;
+                    for(let item of retraceList) {
+                        if (item.doi === doi){
+                            doiExist = true;
+                        }
+                    }
+                    if (!doiExist) {
+                        _this.getDoSource(doi, retraceList)
+                    }
                 }
             })
         },
