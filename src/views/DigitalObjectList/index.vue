@@ -45,8 +45,8 @@
                         style="margin: 5px;" @click="downloadDo(props.row, props.$index)">下载</el-button>
                     <el-button type="primary" size="small" style="margin: 5px;" @click="retrace(props.row, props.$index)">流转追溯</el-button>
                     <el-button type="primary" size="small" style="margin: 5px;" @click="trace(props.row, props.$index)">查看痕迹</el-button>
-                    <!-- <el-button @click="contractHistory(props.row, props.$index)" type="primary" size="small"
-                        style="margin: 5px;">权限修改历史</el-button> -->
+                    <el-button @click="contractHistory(props.row, props.$index)" type="primary" size="small"
+                        style="margin: 5px;">权限修改历史</el-button>
                 </template>
             </el-table-column>
         </el-table>
