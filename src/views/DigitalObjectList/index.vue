@@ -32,7 +32,7 @@
                         <span>{{ item }}</span>
                     </div>
                 </template>
-            </el-table-column> -->
+</el-table-column> -->
             <el-table-column prop="appType" label="申请类型" align="center">
                 <template slot-scope="props">
                     <el-tag v-if="props.row.appType === 1" type="primary">指针型</el-tag>
@@ -41,10 +41,12 @@
             </el-table-column>
             <el-table-column label="操作" align="center" width="150">
                 <template slot-scope="props">
-                    <el-button v-if="props.row.appType === 2" type="primary" size="small"
-                        style="margin: 5px;" @click="downloadDo(props.row, props.$index)">下载</el-button>
-                    <el-button type="primary" size="small" style="margin: 5px;" @click="retrace(props.row, props.$index)">流转追溯</el-button>
-                    <el-button type="primary" size="small" style="margin: 5px;" @click="trace(props.row, props.$index)">查看痕迹</el-button>
+                    <el-button v-if="props.row.appType === 2" type="primary" size="small" style="margin: 5px;"
+                        @click="downloadDo(props.row, props.$index)">下载</el-button>
+                    <el-button type="primary" size="small" style="margin: 5px;"
+                        @click="retrace(props.row, props.$index)">流转追溯</el-button>
+                    <el-button type="primary" size="small" style="margin: 5px;"
+                        @click="trace(props.row, props.$index)">查看痕迹</el-button>
                     <el-button @click="contractHistory(props.row, props.$index)" type="primary" size="small"
                         style="margin: 5px;">权限修改历史</el-button>
                 </template>
@@ -57,6 +59,17 @@
         </div>
 
         <el-dialog title="数字对象痕迹" :visible.sync="traceVisible" width="80%" :before-close="cancelWithoutConfirm">
+            <el-form :model="searchForm" label-width="auto" class="SearchForm">
+                <el-form-item prop="createTimeRange" label="时间" class="SearchFormTimePicker">
+                    <el-date-picker type="daterange" v-model="traceSearchForm.createTimeRange"
+                        range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="searchTrace" type="primary">查询</el-button>
+                </el-form-item>
+            </el-form>
+            
             <el-table :data="traceTable" stripe border style="width: 95%;">
                 <el-table-column prop="createTime" label="时间" align="center"></el-table-column>
                 <el-table-column prop="operation" label="操作内容" align="center"></el-table-column>
@@ -142,8 +155,8 @@ export default {
                 { name: "SDTM", value: "SDTM" },
                 { name: "ADAM", value: "ADAM" },
                 { name: "代码", value: "代码" },
-                { name: "结构化数据", value: "结构化数据" },
-                { name: "非结构化数据", value: "非结构化数据" }
+                { name: "结构化文件", value: "结构化文件" },
+                { name: "非结构化文件", value: "非结构化文件" }
             ],
 
             traceVisible: false,
@@ -152,6 +165,12 @@ export default {
                 doi: "",
                 pageSize: 10,
                 pageNo: 1,
+                createTimeStart: "",
+                createTimeEnd: "",
+            },
+
+            traceSearchForm: {
+                createTimeRange: "",
             },
 
             traceTable: [
@@ -228,7 +247,7 @@ export default {
                         appType: item.appType,
                         retraceList: [],
                     })
-                    if(item.appType === 1) {
+                    if (item.appType === 1) {
                         _this.getDoSource(item.doi, _this.resultTable[doIndex].retraceList);
                     }
                     else {
@@ -241,7 +260,7 @@ export default {
         // 递归获取source
         getDoSource(doi, retraceList) {
             let _this = this;
-            postFormPublic("/relationship/api/search", {doi, pageNo: 1, pageSize: 1}, _this, function (res) {
+            postFormPublic("/relationship/api/search", { doi, pageNo: 1, pageSize: 1 }, _this, function (res) {
                 let item = res.data.list[0];
                 retraceList.push({
                     doi: item.doi,
@@ -251,11 +270,11 @@ export default {
                     type: item.type
                 })
                 let sourceList = JSON.parse(item.source)
-                for(let doi of sourceList) {
+                for (let doi of sourceList) {
                     // 避免两次查询同一个doi
                     let doiExist = false;
-                    for(let item of retraceList) {
-                        if (item.doi === doi){
+                    for (let item of retraceList) {
+                        if (item.doi === doi) {
                             doiExist = true;
                         }
                     }
@@ -268,7 +287,7 @@ export default {
 
         downloadDo(row, index) {
             let _this = this;
-            postFormIn("/repository/getEntityLinkByDoi", {doi: row.doi}, _this, function(res) {
+            postFormIn("/repository/getEntityLinkByDoi", { doi: row.doi }, _this, function (res) {
                 window.open(res.data.url)
             })
         },
@@ -317,9 +336,9 @@ export default {
                 // }
             ]
             let _this = this;
-            postFormPublic(`/traceV2/getTraceInfoByDoi`, postData, _this, function(res) {
+            postFormPublic(`/traceV2/getTraceInfoByDoi`, postData, _this, function (res) {
                 _this.pagesTrace = res.data.pages;
-                for(let item of res.data.list) {
+                for (let item of res.data.list) {
                     _this.traceTable.push({
                         createTime: item.createTime,
                         operation: item.operation,
@@ -328,6 +347,17 @@ export default {
                     })
                 }
             })
+        },
+
+        searchTrace() {
+            if (this.traceSearchForm.createTimeRange && this.traceSearchForm.createTimeRange.length > 1) {
+                // this.tracePostData.createTimeStart = this.searchForm.createTimeStart[0];
+                // this.tracePostData.createTimeEnd = this.searchForm.createTimeEnd[1] + 86399999;
+                this.tracePostData.createTimeStart = this.traceSearchForm.createTimeRange[0];
+                this.tracePostData.createTimeEnd = this.traceSearchForm.createTimeRange[1];
+            }
+            console.log("@@@", this.tracePostData)
+            this.traceGetData(this.tracePostData);
         },
 
         contractHistory(row, index) {
@@ -343,8 +373,8 @@ export default {
         contractGetData(postData) {
             this.contractTable = []
             let _this = this;
-            postFormPublic(`/smartContract/list`, postData, _this, function(res) {
-                for(let item of res.data.list) {
+            postFormPublic(`/smartContract/list`, postData, _this, function (res) {
+                for (let item of res.data.list) {
                     _this.contractTable.push(item)
                 }
             })
@@ -385,14 +415,16 @@ export default {
 }
 
 /* el-button 按钮 */
-.el-button--primary, .el-button--primary:focus, .el-button--primary:hover {
+.el-button--primary,
+.el-button--primary:focus,
+.el-button--primary:hover {
     background-color: #bd4747;
     border-color: #bd4747;
 }
 
 
 /* .el-pagination 翻页 */
-.el-pagination.is-background .el-pager li:not(.disabled).active{
+.el-pagination.is-background .el-pager li:not(.disabled).active {
     background-color: #bd4747;
     border-color: #bd4747;
 }
