@@ -49,7 +49,7 @@ export default {
                 legend: [
                     {
                         // 定义图例
-                        data: ["EDC", 'SDTM', 'ADAM', '代码', '结构化数据', '非结构化数据']
+                        data: ["EDC", 'SDTM', 'ADAM', '代码', '结构化文件', '非结构化文件']
                     },
                 ],
                 series: {
@@ -73,11 +73,11 @@ export default {
                             itemStyle: { color: 'lightgreen' },
                         },
                         {
-                            name: '结构化数据',
+                            name: '结构化文件',
                             itemStyle: { color: 'orange' },
                         },
                         {
-                            name: '非结构化数据',
+                            name: '非结构化文件',
                             itemStyle: { color: 'grey' },
                         },
                     ],

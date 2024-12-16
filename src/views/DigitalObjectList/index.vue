@@ -107,8 +107,8 @@ export default {
                 { name: "SDTM", value: "SDTM" },
                 { name: "ADAM", value: "ADAM" },
                 { name: "代码", value: "代码" },
-                { name: "结构化数据", value: "结构化数据" },
-                { name: "非结构化数据", value: "非结构化数据" }
+                { name: "结构化文件", value: "结构化文件" },
+                { name: "非结构化文件", value: "非结构化文件" }
             ],
 
             traceVisible: false,
