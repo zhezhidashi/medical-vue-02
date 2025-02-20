@@ -59,7 +59,7 @@ export default {
             else if (key === '2') {
                 this.$store.commit('getInsName')
                 let insName = this.$store.state.user.insName
-                window.open("http://8.130.160.66:8086/Login?insName=" + insName)
+                window.open("http://8.130.160.66:8086/Login?insName=" + insName, "_self")
             }
             else if (key === '3') {
                 this.$router.push('/DigitalObjectList')
