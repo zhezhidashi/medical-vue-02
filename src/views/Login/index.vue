@@ -29,6 +29,7 @@
 
 <script>
 import { postForm, loginRequest } from '@/api/data';
+import { backendOutIp, backendOutPort } from '@/../public/backend-out-env.js'
 export default {
     name: "Login",
     data() {
@@ -54,21 +55,30 @@ export default {
         let userid = this.$route.query.userid;
         this.$store.commit("setUserid", userid);
 
+        // 看是A机构还是B机构，只能从B机构跳转到A机构
+        let insType = this.$route.query.insType;
 
-        loginRequest('/login', { username: "abc", password: "456" }, _this, function (res) {
-            let postData = {
-                description: proid,
-                page: 1,
-                size: 1
-            }
-            // 查询projectDoi
-            postForm('/projectInfos/getProjectInfo', postData, _this, function (res) {
-                for (let item of res.data.records) {
-                    _this.$store.commit("setProjectDoi", item.projectDoi)
+
+        if (userid === "85998b3446f4479bb1528171fbd36cd0" && insType !== "A") {
+            window.open(`http://47.93.215.112:8085/Login?proid=${proid}&officeid=${officeid}&userid=${userid}&insType=A`, "_self")
+        }
+        else {
+            loginRequest('/login', { username: "abc", password: "456" }, _this, function (res) {
+                let postData = {
+                    description: proid,
+                    page: 1,
+                    size: 1
                 }
-                _this.$router.push('/ProjectDetail')
+                // 查询projectDoi
+                postForm('/projectInfos/getProjectInfo', postData, _this, function (res) {
+                    for (let item of res.data.records) {
+                        _this.$store.commit("setProjectDoi", item.projectDoi)
+                    }
+                    _this.$router.push('/ProjectDetail')
+                })
             })
-        })
+        }
+
 
         // if(userid === "8ead3a16f61c4362852b750cd49c95d2") {
         //     _this.$store.commit("setNormalUsername", "pku-user-001")
@@ -95,7 +105,7 @@ export default {
         //     _this.$store.commit("setInsName", "中日友好医院");
         // }
 
-        
+
     },
     methods: {},
 }
