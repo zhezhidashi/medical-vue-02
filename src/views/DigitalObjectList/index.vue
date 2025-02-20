@@ -102,9 +102,6 @@ export default {
             resultTable: [
             ],
 
-            // 做 retraceList 的时候，记录一下查询过的 doi，防止重复查询
-            retraceDoiList: [],
-
             doTypeList: [
                 { name: "EDC", value: "EDC" },
                 { name: "SDTM", value: "SDTM" },
@@ -165,7 +162,6 @@ export default {
 
         getData(postData) {
             this.resultTable = [];
-            this.retraceDoiList = [];
             this.$store.commit('getProjectDoi');
 
             let _this = this;
