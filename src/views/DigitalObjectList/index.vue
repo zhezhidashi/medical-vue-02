@@ -102,6 +102,9 @@ export default {
             resultTable: [
             ],
 
+            // 做 retraceList 的时候，直接做一个doi和值的映射
+            retraceDoiMap: {},
+
             doTypeList: [
                 { name: "EDC", value: "EDC" },
                 { name: "SDTM", value: "SDTM" },
@@ -162,6 +165,7 @@ export default {
 
         getData(postData) {
             this.resultTable = [];
+            this.retraceDoiMap = {};
             this.$store.commit('getProjectDoi');
 
             let _this = this;
@@ -179,13 +183,14 @@ export default {
                         type: item.type,
                         retraceList: [],
                     })
-                    _this.getDoSource(item.doi, _this.resultTable[doIndex].retraceList);
+                    _this.retraceDoiMap.doIndex = [item.doi];
+                    _this.getDoSource(item.doi, _this.resultTable[doIndex].retraceList, doIndex);
                 }
             })
         },
 
         // 递归获取source
-        getDoSource(doi, retraceList) {
+        getDoSource(doi, retraceList, doIndex) {
             let _this = this;
             postFormPublic("/relationship/api/search", { doi, pageNo: 1, pageSize: 1 }, _this, function (res) {
                 let item = res.data.list[0];
@@ -200,13 +205,16 @@ export default {
                 for (let doi of sourceList) {
                     // 避免两次查询同一个doi
                     let doiExist = false;
-                    for(let item of retraceList) {
-                        if (item.doi === doi){
+                    
+                    for(let item of _this.retraceDoiMap.doIndex) {
+                        if(item === doi) {
                             doiExist = true;
+                            break;
                         }
                     }
                     if (!doiExist) {
-                        _this.getDoSource(doi, retraceList)
+                        _this.retraceDoiMap.doIndex.push(doi);
+                        _this.getDoSource(doi, retraceList, doIndex)
                     }
                 }
             })
