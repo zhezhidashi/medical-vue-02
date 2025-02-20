@@ -124,6 +124,7 @@ export default {
     },
     mounted() {
         this.retraceList = this.$route.params.retraceList;
+        console.log("***", this.retraceList);
         this.initEcharts(this.retraceList);
     },
     methods: {

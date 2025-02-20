@@ -102,6 +102,9 @@ export default {
             resultTable: [
             ],
 
+            // 做 retraceList 的时候，记录一下查询过的 doi，防止重复查询
+            retraceDoiList: [],
+
             doTypeList: [
                 { name: "EDC", value: "EDC" },
                 { name: "SDTM", value: "SDTM" },
@@ -162,6 +165,7 @@ export default {
 
         getData(postData) {
             this.resultTable = [];
+            this.retraceDoiList = [];
             this.$store.commit('getProjectDoi');
 
             let _this = this;
@@ -176,8 +180,7 @@ export default {
                         name: item.name,
                         description: item.description,
                         sourceList: JSON.parse(item.source),
-                        // 后面这个记着改回来
-                        type: item.type === "DM" ? "SDTM" : item.type,
+                        type: item.type,
                         retraceList: [],
                     })
                     _this.getDoSource(item.doi, _this.resultTable[doIndex].retraceList);
@@ -195,7 +198,7 @@ export default {
                     name: item.name,
                     description: item.description,
                     source: JSON.parse(item.source),
-                    type: item.type === "DM" ? "SDTM" : item.type,
+                    type: item.type,
                 })
                 let sourceList = JSON.parse(item.source)
                 for (let doi of sourceList) {
