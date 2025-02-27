@@ -46,6 +46,22 @@ const routes = [
                 component: () => import('@/views/Login')
             },
             {
+                path: '/DigitalObjectSearch',
+                name: 'DigitalObjectSearch',
+                meta: {
+                    title: '数字对象检索'
+                },
+                component: () => import('@/views/DigitalObjectSearch')
+            },
+            {
+                path: '/DigitalObjectApproval',
+                name: 'DigitalObjectApproval',
+                meta: {
+                    title: '数字对象审批'
+                },
+                component: () => import('@/views/DigitalObjectApproval')
+            },
+            {
                 path: '/DigitalObjectList',
                 name: 'DigitalObjectList',
                 meta: {

@@ -60,12 +60,31 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .el-dropdown-link {
     cursor: pointer;
 }
 
 .el-icon-arrow-down {
     font-size: 12px;
+}
+
+.el-button--primary {
+    background-color: #bd4747;
+    border-color: #bd4747;
+}
+.el-button--primary:focus {
+    background-color: #bd4747;
+    border-color: #bd4747;
+}
+
+.el-button--primary:hover {
+    background-color: #bd4747;
+    border-color: #bd4747;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active{
+    background-color: #bd4747;
+    border-color: #bd4747;
 }
 </style>
