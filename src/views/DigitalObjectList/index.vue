@@ -44,6 +44,17 @@
         </div>
 
         <el-dialog title="数字对象痕迹" :visible.sync="traceVisible" width="95%" :before-close="cancelWithoutConfirm">
+            <el-form :model="traceSearchForm" label-width="auto" class="SearchForm">
+                <el-form-item prop="createTimeRange" label="时间" class="SearchFormTimePicker">
+                    <el-date-picker value-format="timestamp" type="daterange" v-model="traceSearchForm.createTimeRange"
+                        range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="searchTrace" type="primary">查询</el-button>
+                </el-form-item>
+            </el-form>
+            
             <el-table :data="traceTable" stripe border style="width: 95%;">
                 <el-table-column prop="createTime" label="时间" align="center"></el-table-column>
                 <el-table-column prop="operation" label="操作内容" align="center"></el-table-column>
@@ -120,6 +131,10 @@ export default {
                 doi: "",
                 pageSize: 10,
                 pageNo: 1,
+            },
+
+            traceSearchForm: {
+                createTimeRange: "",
             },
 
             traceTable: [
@@ -236,6 +251,14 @@ export default {
                 doi: row.doi,
                 pageSize: 10,
                 pageNo: 1,
+            }
+            this.traceGetData(this.tracePostData);
+        },
+
+        searchTrace() {
+            if (this.traceSearchForm.createTimeRange && this.traceSearchForm.createTimeRange.length > 1) {
+                this.tracePostData.createTimeStart = new Date(this.traceSearchForm.createTimeRange[0]);
+                this.tracePostData.createTimeEnd = new Date(this.traceSearchForm.createTimeRange[1] + 86399999);
             }
             this.traceGetData(this.tracePostData);
         },
