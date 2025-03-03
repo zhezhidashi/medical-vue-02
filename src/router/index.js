@@ -46,12 +46,12 @@ const routes = [
                 component: () => import('@/views/Login')
             },
             {
-                path: '/DigitalObjectSearch',
-                name: 'DigitalObjectSearch',
+                path: '/DigitalObjectApply',
+                name: 'DigitalObjectApply',
                 meta: {
-                    title: '数字对象检索'
+                    title: '数字对象申请'
                 },
-                component: () => import('@/views/DigitalObjectSearch')
+                component: () => import('@/views/DigitalObjectApply')
             },
             {
                 path: '/DigitalObjectApproval',

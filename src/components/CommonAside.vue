@@ -6,7 +6,7 @@
             background-color="rgb(246, 247, 249)">
             <el-menu-item index="1" style="font-size: 18px;">项目详情</el-menu-item>
             <el-menu-item index="2" style="font-size: 18px;">数字对象封装</el-menu-item>
-            <el-menu-item index="3" style="font-size: 18px;">数字对象搜索</el-menu-item>
+            <el-menu-item index="3" style="font-size: 18px;">数字对象申请</el-menu-item>
             <el-menu-item index="4" style="font-size: 18px;">数字对象审批</el-menu-item>
             <el-menu-item index="5" style="font-size: 18px;">数字对象列表</el-menu-item>
         </el-menu>
@@ -32,7 +32,7 @@ export default {
         else if (this.path === '/ProjectDetail') {
             this.activeIndex = '1'
         }
-        else if (this.path === '/DigitalObjectSearch') {
+        else if (this.path === '/DigitalObjectApply') {
             this.activeIndex = '3'
         }
         else if (this.path === '/DigitalObjectApproval') {
@@ -70,7 +70,7 @@ export default {
                 window.open("http://8.130.160.66:8086/Login?insName=" + insName, "_self")
             }
             else if (key === '3') {
-                this.$router.push('/DigitalObjectSearch')
+                this.$router.push('/DigitalObjectApply')
             }
             else if (key === '4') {
                 this.$router.push('/DigitalObjectApproval')

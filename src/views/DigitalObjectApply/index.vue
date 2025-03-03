@@ -75,7 +75,7 @@
 <script>
 import { postForm, getForm, postFormPublic, getFormPublic } from '@/api/data'
 export default {
-    name: "DigitalObjectList",
+    name: "DigitalObjectApply",
     data() {
         return {
             pages: 1,
