@@ -1,16 +1,16 @@
 <template>
     <div style="text-align: center; margin: 24px 40px 24px 40px;">
         <el-form :model="searchForm" label-width="auto" class="SearchForm" :rules="doSearchRules">
-            <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
+            <el-form-item prop="doi" label="追溯对象标识" class="SearchFormItem">
                 <el-input v-model="searchForm.doi"></el-input>
             </el-form-item>
-            <el-form-item prop="name" label="数字对象名称" class="SearchFormItem">
+            <el-form-item prop="name" label="追溯对象名称" class="SearchFormItem">
                 <el-input v-model="searchForm.name"></el-input>
             </el-form-item>
-            <el-form-item prop="description" label="数字对象描述" class="SearchFormItem">
+            <el-form-item prop="description" label="追溯对象描述" class="SearchFormItem">
                 <el-input v-model="searchForm.description"></el-input>
             </el-form-item>
-            <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
+            <el-form-item prop="type" label="追溯对象类型" class="SearchFormItem">
                 <el-select placeholder="请选择" filterable v-model="searchForm.type">
                     <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value"
                         :key="index"></el-option>
@@ -28,10 +28,10 @@
         <el-divider></el-divider>
 
         <el-table :data="resultTable" stripe border style="width: 100%;">
-            <el-table-column prop="doi" label="数字对象标识" align="center"></el-table-column>
-            <el-table-column prop="name" label="数字对象名称" align="center"></el-table-column>
-            <el-table-column prop="description" label="数字对象描述" align="center"></el-table-column>
-            <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
+            <el-table-column prop="doi" label="追溯对象标识" align="center"></el-table-column>
+            <el-table-column prop="name" label="追溯对象名称" align="center"></el-table-column>
+            <el-table-column prop="description" label="追溯对象描述" align="center"></el-table-column>
+            <el-table-column prop="type" label="追溯对象类型" align="center"></el-table-column>
             <el-table-column prop="institutionName" label="所属机构" align="center"></el-table-column>
             <el-table-column prop="institutionDoi" label="所属机构标识" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
@@ -46,7 +46,7 @@
             </el-pagination>
         </div>
 
-        <el-dialog title="数字对象申请" :visible.sync="applyVisible" width="80%" :before-close="applyCancel"
+        <el-dialog title="追溯对象申请" :visible.sync="applyVisible" width="80%" :before-close="applyCancel"
             style="text-align: left;">
             <el-form :model="applyForm" label-width="auto" :rules="applyRules">
                 <el-form-item label="申请类型" prop="appType">
@@ -110,7 +110,7 @@ export default {
 
             doSearchRules: {
                 // institutionDoi: [
-                //     { required: true, message: '请选择数字对象所属机构', trigger: 'change' }
+                //     { required: true, message: '请选择追溯对象所属机构', trigger: 'change' }
                 // ],
             },
 
@@ -143,7 +143,7 @@ export default {
                     { required: true, message: '请选择申请类型', trigger: 'change' }
                 ],
                 appFile: [
-                    { required: true, message: '请选择数字对象所属项目', trigger: 'change' }
+                    { required: true, message: '请选择追溯对象所属项目', trigger: 'change' }
                 ],
             },
         };

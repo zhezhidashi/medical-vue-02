@@ -5,16 +5,16 @@
             <el-collapse-item :title="collapseTitle" name="1">
 
                 <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                    <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
+                    <el-form-item prop="doi" label="追溯对象标识" class="SearchFormItem">
                         <el-input v-model="searchForm.doi"></el-input>
                     </el-form-item>
-                    <el-form-item prop="appName" label="数字对象名字" class="SearchFormItem">
+                    <el-form-item prop="appName" label="追溯对象名字" class="SearchFormItem">
                         <el-input v-model="searchForm.appName"></el-input>
                     </el-form-item>
-                    <el-form-item prop="appContent" label="数字对象描述" class="SearchFormItem">
+                    <el-form-item prop="appContent" label="追溯对象描述" class="SearchFormItem">
                         <el-input v-model="searchForm.appContent"></el-input>
                     </el-form-item>
-                    <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
+                    <el-form-item prop="type" label="追溯对象类型" class="SearchFormItem">
                         <el-select placeholder="请选择" filterable v-model="searchForm.type">
                             <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value"
                                 :key="index"></el-option>
@@ -29,10 +29,10 @@
         <div style="margin-top: 24px;"></div>
 
         <el-table :data="approvalTable" style="width: 100%;" stripe border>
-            <el-table-column prop="doi" label="数字对象标识" align="center"></el-table-column>
-            <el-table-column prop="appName" label="数字对象名称" align="center"></el-table-column>
-            <el-table-column prop="appContent" label="数字对象描述" align="center"></el-table-column>
-            <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
+            <el-table-column prop="doi" label="追溯对象标识" align="center"></el-table-column>
+            <el-table-column prop="appName" label="追溯对象名称" align="center"></el-table-column>
+            <el-table-column prop="appContent" label="追溯对象描述" align="center"></el-table-column>
+            <el-table-column prop="type" label="追溯对象类型" align="center"></el-table-column>
             <el-table-column prop="appType" label="申请类型" align="center">
                 <template slot-scope="props">
                     <el-tag v-if="props.row.appType === 1" type="primary">指针型</el-tag>
@@ -215,7 +215,7 @@ export default {
                         type: 'success'
                     });
                     
-                    // 审批通过的数字对象流转【打通】
+                    // 审批通过的追溯对象流转【打通】
                     postForm("/doApplication/exportApproveDoiOnline", {idList: [postData.id]}, _this, function(res) {
                         _this.approvalDialogVisible = false;
                         _this.getData(_this.searchForm);

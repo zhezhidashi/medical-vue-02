@@ -35,13 +35,13 @@ export default {
         return {
             // 项目列表
             projectForm: {
-                name: "111",
-                projectDoi: "111",
-                user: "111",
-                contactEmail: "111",
-                leadingInstitutionDoiList: ["123", "1234"],
-                involvedInstitutionDoiList: ["123", "1234"],
-                brandList: ["感冒灵", "板蓝根"],
+                name: "",
+                projectDoi: "",
+                user: "",
+                contactEmail: "",
+                leadingInstitutionDoiList: [],
+                involvedInstitutionDoiList: [],
+                brandList: [],
             }
         };
     },

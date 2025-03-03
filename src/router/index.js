@@ -89,7 +89,7 @@ const routes = [
                 path: '/DigitalObjectApproval',
                 name: 'DigitalObjectApproval',
                 meta: {
-                    title: '数字对象审批'
+                    title: '追溯对象审批'
                 },
                 component: () => import('@/views/DigitalObjectApproval')
             },
@@ -97,7 +97,7 @@ const routes = [
                 path: '/DigitalObjectList',
                 name: 'DigitalObjectList',
                 meta: {
-                    title: '数字对象列表'
+                    title: '追溯对象列表'
                 },
                 component: () => import('@/views/DigitalObjectList')
             },
@@ -105,7 +105,7 @@ const routes = [
                 path: '/DigitalObjectSearch',
                 name: 'DigitalObjectSearch',
                 meta: {
-                    title: '数字对象检索'
+                    title: '追溯对象检索'
                 },
                 component: () => import('@/views/DigitalObjectSearch')
             },
@@ -113,7 +113,7 @@ const routes = [
                 path: '/DigitalObjectAllocate',
                 name: 'DigitalObjectAllocate',
                 meta: {
-                    title: '数字对象分配'
+                    title: '追溯对象分配'
                 },
                 component: () => import('@/views/DigitalObjectAllocate')
             },

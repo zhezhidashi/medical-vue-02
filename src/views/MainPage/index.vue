@@ -12,7 +12,7 @@
                     <div style="text-align: center; font-size: 25px; line-height: 200%;">{{ projectNumber }}</div>
                 </el-card>
                 <el-card style="width: 28%; height: 100px;">
-                    <div style="text-align: center;">数字对象数量</div>
+                    <div style="text-align: center;">追溯对象数量</div>
                     <div style="text-align: center; font-size: 25px; line-height: 200%;">{{ doNumber }}</div>
                 </el-card>
             </div>
@@ -44,70 +44,70 @@ export default {
             userNumber: 0,
             // 项目数量
             projectNumber: 0,
-            // 数字对象数量
+            // 追溯对象数量
             doNumber: 0,
 
-            // 待分配数字对象数量
+            // 待分配追溯对象数量
             allocatingDoNumber: 0,
-            // 已分配数字对象数量
+            // 已分配追溯对象数量
             allocatedDoNumber: 0,
-            // 待审批数字对象数量
+            // 待审批追溯对象数量
             approvingDoNumber: 0,
-            // 已审批数字对象数量
+            // 已审批追溯对象数量
             approvedDoNumber: 0,
 
             pieChartsOptions1: {
                 legend: {
-                    data: ["待分配数字对象数量", "已分配数字对象数量"],
+                    data: ["待分配追溯对象数量", "已分配追溯对象数量"],
                     orient: "vertical",
                     right: "0%",
                     top: "10%",
                 },
                 title: {
-                    text: "数字对象分配情况",
+                    text: "追溯对象分配情况",
                     left: "center",
                 },
                 series: {
-                    name: "数字对象分配情况",
+                    name: "追溯对象分配情况",
                     type: "pie",
                     radius: "65%",
                     center: ["50%", "60%"],
                     data: [
                         {
                             value: 0,
-                            name: "待分配数字对象数量"
+                            name: "待分配追溯对象数量"
                         },
                         {
                             value: 0,
-                            name: "已分配数字对象数量"
+                            name: "已分配追溯对象数量"
                         },
                     ],
                 },
             },
             pieChartsOptions2: {
                 legend: {
-                    data: ["待审批数字对象请求", "已审批数字对象请求"],
+                    data: ["待审批追溯对象请求", "已审批追溯对象请求"],
                     orient: "vertical",
                     right: "0%",
                     top: "10%",
                 },
                 title: {
-                    text: "数字对象审批情况",
+                    text: "追溯对象审批情况",
                     left: "center",
                 },
                 series: {
-                    name: "数字对象审批情况",
+                    name: "追溯对象审批情况",
                     type: "pie",
                     radius: "65%",
                     center: ["50%", "60%"],
                     data: [
                         {
                             value: 0,
-                            name: "待审批数字对象请求"
+                            name: "待审批追溯对象请求"
                         },
                         {
                             value: 0,
-                            name: "已审批数字对象请求"
+                            name: "已审批追溯对象请求"
                         },
                     ],
                 },

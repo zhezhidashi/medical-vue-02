@@ -1,22 +1,22 @@
 <template>
     <div style="width: 200px;" v-if="path !== '/Login' && path !== '/ProjectsListNormalUser'">
         <el-menu :default-active="activeIndex" class="el-menu-demo" @select="handleSelect" :unique-opened="false"
-        text-color="#000000" active-text-color="#bd4747"
+        text-color="#000000"
         background-color="rgb(246, 247, 249)">
             <el-menu-item v-show="isAdmin" index="0">主页</el-menu-item>
             <el-menu-item v-show="isAdmin" index="1">组网管理</el-menu-item>
             <el-menu-item v-show="isAdmin" index="2">账号管理</el-menu-item>
             <el-menu-item v-show="isAdmin" index="3">项目管理</el-menu-item>
             <el-submenu v-show="isAdmin" index="4">
-                <template slot="title">数字对象管理</template>
-                <el-menu-item index="4-1">数字对象分配</el-menu-item>
-                <el-menu-item index="4-2">数字对象审批</el-menu-item>
+                <template slot="title">追溯对象管理</template>
+                <el-menu-item index="4-1">追溯对象分配</el-menu-item>
+                <el-menu-item index="4-2">追溯对象审批</el-menu-item>
             </el-submenu>
 
             <el-menu-item v-show="!isAdmin" index="5">返回参与项目列表</el-menu-item>
             <el-menu-item v-show="!isAdmin" index="6">项目详情</el-menu-item>
-            <el-menu-item v-show="!isAdmin" index="7">数字对象检索</el-menu-item>
-            <el-menu-item v-show="!isAdmin" index="8">数字对象列表</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="7">追溯对象检索</el-menu-item>
+            <el-menu-item v-show="!isAdmin" index="8">追溯对象列表</el-menu-item>
 
         </el-menu>
     </div>

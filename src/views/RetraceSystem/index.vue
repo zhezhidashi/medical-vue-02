@@ -5,11 +5,11 @@
                 style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 100%; margin-top: 24px;">
                 <el-card style="width: 90%; margin-bottom: 24px;">
 
-                    <el-descriptions title="数字对象详情" :column="1">
-                        <el-descriptions-item label="数字对象标识">{{ retraceList[doIndex].doi }}</el-descriptions-item>
-                        <el-descriptions-item label="数字对象名称">{{ retraceList[doIndex].name }}</el-descriptions-item>
-                        <el-descriptions-item label="数字对象描述">{{ retraceList[doIndex].description }}</el-descriptions-item>
-                        <el-descriptions-item label="数字对象类型">{{ retraceList[doIndex].type }}</el-descriptions-item>
+                    <el-descriptions title="追溯对象详情" :column="1">
+                        <el-descriptions-item label="追溯对象标识">{{ retraceList[doIndex].doi }}</el-descriptions-item>
+                        <el-descriptions-item label="追溯对象名称">{{ retraceList[doIndex].name }}</el-descriptions-item>
+                        <el-descriptions-item label="追溯对象描述">{{ retraceList[doIndex].description }}</el-descriptions-item>
+                        <el-descriptions-item label="追溯对象类型">{{ retraceList[doIndex].type }}</el-descriptions-item>
                     </el-descriptions>
                 </el-card>
                 <el-card style="width: 90%; margin-bottom: 24px;">
@@ -26,7 +26,7 @@ export default {
     name: "RetraceSystem",
     data() {
         return {
-            // 数字对象详情
+            // 追溯对象详情
             retraceList: [
                 {
                     doi: "",

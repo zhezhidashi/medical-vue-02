@@ -1,16 +1,16 @@
 <template>
     <div style="text-align: center; margin: 24px 40px 24px 40px;">
         <el-form :model="searchForm" label-width="auto" class="SearchForm">
-            <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
+            <el-form-item prop="doi" label="追溯对象标识" class="SearchFormItem">
                 <el-input v-model="searchForm.doi"></el-input>
             </el-form-item>
-            <el-form-item prop="appName" label="数字对象名称" class="SearchFormItem">
+            <el-form-item prop="appName" label="追溯对象名称" class="SearchFormItem">
                 <el-input v-model="searchForm.appName"></el-input>
             </el-form-item>
-            <el-form-item prop="appContent" label="数字对象描述" class="SearchFormItem">
+            <el-form-item prop="appContent" label="追溯对象描述" class="SearchFormItem">
                 <el-input v-model="searchForm.appContent"></el-input>
             </el-form-item>
-            <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
+            <el-form-item prop="type" label="追溯对象类型" class="SearchFormItem">
                 <el-select placeholder="请选择" filterable v-model="searchForm.type">
                     <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value"
                         :key="index"></el-option>
@@ -22,10 +22,10 @@
         <el-divider></el-divider>
 
         <el-table :data="resultTable" stripe border style="width: 100%;">
-            <el-table-column prop="doi" label="数字对象标识" align="center"></el-table-column>
-            <el-table-column prop="appName" label="数字对象名称" align="center"></el-table-column>
-            <el-table-column prop="appContent" label="数字对象描述" align="center"></el-table-column>
-            <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
+            <el-table-column prop="doi" label="追溯对象标识" align="center"></el-table-column>
+            <el-table-column prop="appName" label="追溯对象名称" align="center"></el-table-column>
+            <el-table-column prop="appContent" label="追溯对象描述" align="center"></el-table-column>
+            <el-table-column prop="type" label="追溯对象类型" align="center"></el-table-column>
             <!-- <el-table-column prop="sourceList" label="来源" align="center">
                 <template slot-scope="props">
                     <div v-for="item in props.row.sourceList" :key="item">
@@ -58,7 +58,7 @@
             </el-pagination>
         </div>
 
-        <el-dialog title="数字对象痕迹" :visible.sync="traceVisible" width="80%" :before-close="cancelWithoutConfirm">
+        <el-dialog title="追溯对象痕迹" :visible.sync="traceVisible" width="80%" :before-close="cancelWithoutConfirm">
             <el-form :model="traceSearchForm" label-width="auto" class="SearchForm">
                 <el-form-item prop="createTimeRange" label="时间" class="SearchFormTimePicker">
                     <el-date-picker value-format="timestamp" type="daterange" v-model="traceSearchForm.createTimeRange"
@@ -318,7 +318,7 @@ export default {
                 //     // 时间
                 //     createTime: "2024-11-14T17:55:51",
                 //     // 操作内容
-                //     operation: "访问数字对象",
+                //     operation: "访问追溯对象",
                 //     // 操作标识
                 //     operationDoi: "	86.475.7249629809/op.dc43fbfa-0e47-4846-a314-7f175b21b19e",
                 //     // 账本哈希值
@@ -328,7 +328,7 @@ export default {
                 //     // 时间
                 //     createTime: "2024-11-14T17:55:04",
                 //     // 操作内容
-                //     operation: "数字对象流转入",
+                //     operation: "追溯对象流转入",
                 //     // 操作标识
                 //     operationDoi: "86.026.8937037484/op.330e71ec-1a11-4bb7-8e41-11722d17434b",
                 //     // 账本哈希值
@@ -411,20 +411,5 @@ export default {
     font-weight: 500;
     width: 100%;
     border: 0px;
-}
-
-/* el-button 按钮 */
-.el-button--primary,
-.el-button--primary:focus,
-.el-button--primary:hover {
-    background-color: #bd4747;
-    border-color: #bd4747;
-}
-
-
-/* .el-pagination 翻页 */
-.el-pagination.is-background .el-pager li:not(.disabled).active {
-    background-color: #bd4747;
-    border-color: #bd4747;
 }
 </style>

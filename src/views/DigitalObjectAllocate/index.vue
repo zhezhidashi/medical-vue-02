@@ -3,16 +3,16 @@
         <el-collapse v-model="activeNames" @change="collapseChange">
             <el-collapse-item :title="collapseTitle" name="1">
                 <el-form :model="searchForm" label-width="auto" class="SearchForm">
-                    <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
+                    <el-form-item prop="doi" label="追溯对象标识" class="SearchFormItem">
                         <el-input v-model="searchForm.doi"></el-input>
                     </el-form-item>
-                    <el-form-item prop="name" label="数字对象名称" class="SearchFormItem">
+                    <el-form-item prop="name" label="追溯对象名称" class="SearchFormItem">
                         <el-input v-model="searchForm.name"></el-input>
                     </el-form-item>
-                    <el-form-item prop="description" label="数字对象描述" class="SearchFormItem">
+                    <el-form-item prop="description" label="追溯对象描述" class="SearchFormItem">
                         <el-input v-model="searchForm.description"></el-input>
                     </el-form-item>
-                    <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
+                    <el-form-item prop="type" label="追溯对象类型" class="SearchFormItem">
                         <el-select placeholder="请选择" filterable v-model="searchForm.type">
                             <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value"
                                 :key="index"></el-option>
@@ -26,10 +26,10 @@
         <el-divider></el-divider>
 
         <el-table :data="resultTable" stripe border style="width: 100%;">
-            <el-table-column prop="doi" label="数字对象标识" align="center"></el-table-column>
-            <el-table-column prop="name" label="数字对象名称" align="center"></el-table-column>
-            <el-table-column prop="description" label="数字对象描述" align="center"></el-table-column>
-            <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
+            <el-table-column prop="doi" label="追溯对象标识" align="center"></el-table-column>
+            <el-table-column prop="name" label="追溯对象名称" align="center"></el-table-column>
+            <el-table-column prop="description" label="追溯对象描述" align="center"></el-table-column>
+            <el-table-column prop="type" label="追溯对象类型" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
                     <el-button @click="allocate(props.row, props.$index)" type="primary" size="small">分配项目</el-button>
@@ -81,11 +81,11 @@ export default {
             searchForm: {
                 // DOI
                 doi: '',
-                // 数字对象名称
+                // 追溯对象名称
                 name: '',
-                // 数字对象类型
+                // 追溯对象类型
                 type: '',
-                // 数字对象描述
+                // 追溯对象描述
                 description: '',
             },
 

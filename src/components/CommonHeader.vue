@@ -2,7 +2,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex; align-items: center;">
             <img src="navigator.png" style="height: 36px; margin: 15px;" />
-            <div style="font-size: 24px;">医学临床数据交换系统</div>
+            <div style="font-size: 24px;">中药饮片追溯系统</div>
         </div>
         <div class="r-content" v-if="path !== '/Login'">
             <el-dropdown style="display: flex; align-items: center;">
@@ -178,14 +178,14 @@ font-size: 12px;
 
 /* el-button 按钮 */
 .el-button--primary, .el-button--primary:focus, .el-button--primary:hover {
-    background-color: #bd4747;
-    border-color: #bd4747;
+    /* background-color: #bd4747; */
+    /* border-color: #bd4747; */
 }
 
 /* .el-pagination 翻页 */
 .el-pagination.is-background .el-pager li:not(.disabled).active{
-    background-color: #bd4747;
-    border-color: #bd4747;
+    /* background-color: #bd4747; */
+    /* border-color: #bd4747; */
 }
 
 /* el-description 文字 */
@@ -201,12 +201,12 @@ font-size: 12px;
 
 /* 上传文件时的文字 */
 .el-upload-dragger .el-upload__text em {
-    color: #bd4747;
+    /* color: #bd4747; */
 }
 
 /* 多选选中文字的颜色 */
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected, .el-select-dropdown__item.selected {
-    color: #bd4747;
+    /* color: #bd4747; */
 }
 
 </style>
