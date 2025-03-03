@@ -2,7 +2,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex; align-items: center;">
             <img src="navigator.png" style="height: 36px; margin: 15px;" />
-            <div style="font-size: 24px;">医学临床数据交换公网系统</div>
+            <div style="font-size: 24px;">医学临床数据交换系统</div>
         </div>
         <div class="r-content" v-if="path !== '/Login'">
             <el-dropdown style="display: flex; align-items: center;">

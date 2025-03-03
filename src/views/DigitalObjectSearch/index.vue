@@ -199,10 +199,13 @@ export default {
                         name: item.name,
                         description: item.description,
                         type: item.type,
+                        // type: "SDTM",
                         institutionName: item.institutionName,
+                        // institutionName: "中日友好医院",
                         institutionDoi: item.institutionDoi,
                         source: item.source,
                     })
+                    // break;
                 }
             })
         },

@@ -32,7 +32,7 @@
                         <span>{{ item }}</span>
                     </div>
                 </template>
-</el-table-column> -->
+            </el-table-column> -->
             <el-table-column prop="appType" label="申请类型" align="center">
                 <template slot-scope="props">
                     <el-tag v-if="props.row.appType === 1" type="primary">指针型</el-tag>
@@ -59,9 +59,9 @@
         </div>
 
         <el-dialog title="数字对象痕迹" :visible.sync="traceVisible" width="80%" :before-close="cancelWithoutConfirm">
-            <el-form :model="searchForm" label-width="auto" class="SearchForm">
+            <el-form :model="traceSearchForm" label-width="auto" class="SearchForm">
                 <el-form-item prop="createTimeRange" label="时间" class="SearchFormTimePicker">
-                    <el-date-picker type="daterange" v-model="traceSearchForm.createTimeRange"
+                    <el-date-picker value-format="timestamp" type="daterange" v-model="traceSearchForm.createTimeRange"
                         range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
@@ -351,12 +351,11 @@ export default {
 
         searchTrace() {
             if (this.traceSearchForm.createTimeRange && this.traceSearchForm.createTimeRange.length > 1) {
-                // this.tracePostData.createTimeStart = this.searchForm.createTimeStart[0];
-                // this.tracePostData.createTimeEnd = this.searchForm.createTimeEnd[1] + 86399999;
-                this.tracePostData.createTimeStart = this.traceSearchForm.createTimeRange[0];
-                this.tracePostData.createTimeEnd = this.traceSearchForm.createTimeRange[1];
+                if (this.traceSearchForm.createTimeRange && this.traceSearchForm.createTimeRange.length > 1) {
+                    this.tracePostData.createTimeStart = new Date(this.traceSearchForm.createTimeRange[0]);
+                    this.tracePostData.createTimeEnd = new Date(this.traceSearchForm.createTimeRange[1] + 86399999);
+                }
             }
-            console.log("@@@", this.tracePostData)
             this.traceGetData(this.tracePostData);
         },
 

@@ -45,11 +45,11 @@
                     <div v-for="item in scope.row.leadingInstitutionDoiList" :key="item">{{ item }}</div>
                 </template>
             </el-table-column>
-            <el-table-column prop="involvedInstitutionDoiList" label="参与机构" align="center">
+            <!-- <el-table-column prop="involvedInstitutionDoiList" label="参与机构" align="center">
                 <template slot-scope="scope">
                     <div v-for="item in scope.row.involvedInstitutionDoiList" :key="item">{{ item }}</div>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop="brandList" label="品种" align="center">
                 <template slot-scope="scope">
                     <div v-for="item in scope.row.brandList" :key="item">{{ item }}</div>
