@@ -1,7 +1,7 @@
 <template>
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <div style="display: flex; align-items: center;">
-            <img src="navigator.png" style="height: 36px; margin: 15px;" />
+            <img src="navigator.png" style="height: 65px; margin-left:15px; margin-right: 15px;" />
             <div style="font-size: 24px;">中药饮片追溯系统</div>
         </div>
         <div class="r-content" v-if="path !== '/Login'">
