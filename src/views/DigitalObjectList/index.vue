@@ -257,30 +257,17 @@ export default {
             })
         },
 
-        // 递归获取source
         getDoSource(doi, retraceList) {
             let _this = this;
-            postFormPublic("/relationship/api/search", { doi, pageNo: 1, pageSize: 1 }, _this, function (res) {
-                let item = res.data.list[0];
-                retraceList.push({
-                    doi: item.doi,
-                    name: item.name,
-                    description: item.description,
-                    source: JSON.parse(item.source),
-                    type: item.type
-                })
-                let sourceList = JSON.parse(item.source)
-                for (let doi of sourceList) {
-                    // 避免两次查询同一个doi
-                    let doiExist = false;
-                    for (let item of retraceList) {
-                        if (item.doi === doi) {
-                            doiExist = true;
-                        }
-                    }
-                    if (!doiExist) {
-                        _this.getDoSource(doi, retraceList)
-                    }
+            postFormPublic("/relationship/retrace", { doi }, _this, function (res) {
+                for(let item of res.data.retraceList) {
+                    retraceList.push({
+                        doi: item.doi,
+                        name: item.name,
+                        description: item.description,
+                        source: JSON.parse(item.source),
+                        type: item.type
+                    })
                 }
             })
         },
