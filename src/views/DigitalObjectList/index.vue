@@ -113,9 +113,6 @@ export default {
             resultTable: [
             ],
 
-            // 做 retraceList 的时候，直接做一个doi和值的映射
-            retraceDoiMap: {},
-
             doTypeList: [
                 { name: "EDC", value: "EDC" },
                 { name: "SDTM", value: "SDTM" },
@@ -198,39 +195,23 @@ export default {
                         type: item.type,
                         retraceList: [],
                     })
-                    _this.retraceDoiMap.doIndex = [item.doi];
-                    _this.getDoSource(item.doi, _this.resultTable[doIndex].retraceList, doIndex);
+                    _this.getDoSource(item.doi, _this.resultTable[doIndex].retraceList);
                 }
             })
         },
 
         // 递归获取source
-        getDoSource(doi, retraceList, doIndex) {
+        getDoSource(doi, retraceList) {
             let _this = this;
-            postFormPublic("/relationship/api/search", { doi, pageNo: 1, pageSize: 1 }, _this, function (res) {
-                let item = res.data.list[0];
-                retraceList.push({
-                    doi: item.doi,
-                    name: item.name,
-                    description: item.description,
-                    source: JSON.parse(item.source),
-                    type: item.type,
-                })
-                let sourceList = JSON.parse(item.source)
-                for (let doi of sourceList) {
-                    // 避免两次查询同一个doi
-                    let doiExist = false;
-                    
-                    for(let item of _this.retraceDoiMap.doIndex) {
-                        if(item === doi) {
-                            doiExist = true;
-                            break;
-                        }
-                    }
-                    if (!doiExist) {
-                        _this.retraceDoiMap.doIndex.push(doi);
-                        _this.getDoSource(doi, retraceList, doIndex)
-                    }
+            postFormPublic("/relationship/retrace", { doi }, _this, function (res) {
+                for(let item of res.data.retraceList) {
+                    retraceList.push({
+                        doi: item.doi,
+                        name: item.name,
+                        description: item.description,
+                        source: item.source,
+                        type: item.type
+                    })
                 }
             })
         },
