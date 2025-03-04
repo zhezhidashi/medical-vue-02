@@ -67,7 +67,15 @@ export default {
             else if (key === '2') {
                 this.$store.commit('getInsName')
                 let insName = this.$store.state.user.insName
-                window.open("http://8.130.160.66:8086/Login?insName=" + insName, "_self")
+                this.$store.commit('getUserid');
+                let userid = this.$store.state.user.userid
+                if (userid === "85998b3446f4479bb1528171fbd36cd0") {
+                    window.open("http://8.130.160.66:8086/Login?insName=" + insName, "_self")
+                }
+                else{
+                    window.open("http://8.130.160.66:8085/Login?insName=" + insName, "_self")
+                }
+                
             }
             else if (key === '3') {
                 this.$router.push('/DigitalObjectApply')

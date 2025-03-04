@@ -1,7 +1,7 @@
 <template>
     <div style="margin: 24px 40px 24px 40px;">
         <div style="margin-top: 24px;"></div>
-        
+
         <el-descriptions style="font-size: 16px" title="项目详情" :column="1" border>
             <el-descriptions-item label="项目名称">{{ projectForm.name }}</el-descriptions-item>
             <el-descriptions-item label="项目标识">{{ projectForm.projectDoi }}</el-descriptions-item>
@@ -35,14 +35,15 @@ export default {
         return {
             // 项目列表
             projectForm: {
-                pid: 1,
-                name: "111",
-                projectDoi: "111",
-                user: "111",
-                contactEmail: "111",
-                // leadingInstitutionDoiList: ["123", "1234"],
-                // involvedInstitutionDoiList: ["123", "1234"],
-                brandList: ["感冒灵", "板蓝根"],
+                projectForm: {
+                    name: "",
+                    projectDoi: "",
+                    user: "",
+                    contactEmail: "",
+                    leadingInstitutionDoiList: [],
+                    involvedInstitutionDoiList: [],
+                    brandList: [],
+                }
             }
         };
     },
