@@ -84,7 +84,7 @@ export default {
                 this.$router.push('/DigitalObjectApproval')
             }
             else if (key === '5') {
-                his.$store.commit('getUserid');
+                this.$store.commit('getUserid');
                 let userid = this.$store.state.user.userid
                 if (userid === "85998b3446f4479bb1528171fbd36cd0") {
                     this.$router.push('/DigitalObjectOwn')
