@@ -1,16 +1,16 @@
 <template>
     <div style="text-align: center; margin: 24px 40px 24px 40px;">
         <el-form :model="searchForm" label-width="auto" class="SearchForm">
-            <el-form-item prop="doi" label="追溯对象标识" class="SearchFormItem">
+            <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
                 <el-input v-model="searchForm.doi"></el-input>
             </el-form-item>
-            <el-form-item prop="appName" label="追溯对象名称" class="SearchFormItem">
+            <el-form-item prop="appName" label="数字对象名称" class="SearchFormItem">
                 <el-input v-model="searchForm.appName"></el-input>
             </el-form-item>
-            <el-form-item prop="appContent" label="追溯对象描述" class="SearchFormItem">
+            <el-form-item prop="appContent" label="数字对象描述" class="SearchFormItem">
                 <el-input v-model="searchForm.appContent"></el-input>
             </el-form-item>
-            <el-form-item prop="type" label="追溯对象类型" class="SearchFormItem">
+            <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
                 <el-select placeholder="请选择" filterable v-model="searchForm.type">
                     <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value"
                         :key="index"></el-option>
@@ -22,10 +22,10 @@
         <el-divider></el-divider>
 
         <el-table :data="resultTable" stripe border style="width: 100%;">
-            <el-table-column prop="doi" label="追溯对象标识" align="center"></el-table-column>
-            <el-table-column prop="appName" label="追溯对象名称" align="center"></el-table-column>
-            <el-table-column prop="appContent" label="追溯对象描述" align="center"></el-table-column>
-            <el-table-column prop="type" label="追溯对象类型" align="center"></el-table-column>
+            <el-table-column prop="doi" label="数字对象标识" align="center"></el-table-column>
+            <el-table-column prop="appName" label="数字对象名称" align="center"></el-table-column>
+            <el-table-column prop="appContent" label="数字对象描述" align="center"></el-table-column>
+            <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
             <!-- <el-table-column prop="sourceList" label="来源" align="center">
                 <template slot-scope="props">
                     <div v-for="item in props.row.sourceList" :key="item">
@@ -33,12 +33,12 @@
                     </div>
                 </template>
             </el-table-column> -->
-            <el-table-column prop="appType" label="申请类型" align="center">
+            <!-- <el-table-column prop="appType" label="申请类型" align="center">
                 <template slot-scope="props">
                     <el-tag v-if="props.row.appType === 1" type="primary">指针型</el-tag>
                     <el-tag v-if="props.row.appType === 2" type="success">实体型</el-tag>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column label="操作" align="center" width="150">
                 <template slot-scope="props">
                     <el-button type="primary" size="small" style="margin: 5px;"
@@ -56,7 +56,7 @@
             </el-pagination>
         </div>
 
-        <el-dialog title="追溯对象痕迹" :visible.sync="traceVisible" width="80%" :before-close="cancelWithoutConfirm">
+        <el-dialog title="数字对象痕迹" :visible.sync="traceVisible" width="80%" :before-close="cancelWithoutConfirm">
             <el-form :model="traceSearchForm" label-width="auto" class="SearchForm">
                 <el-form-item prop="createTimeRange" label="时间" class="SearchFormTimePicker">
                     <el-date-picker value-format="timestamp" type="daterange" v-model="traceSearchForm.createTimeRange"
