@@ -35,15 +35,13 @@ export default {
         return {
             // 项目列表
             projectForm: {
-                projectForm: {
-                    name: "",
-                    projectDoi: "",
-                    user: "",
-                    contactEmail: "",
-                    leadingInstitutionDoiList: [],
-                    involvedInstitutionDoiList: [],
-                    brandList: [],
-                }
+                name: "",
+                projectDoi: "",
+                user: "",
+                contactEmail: "",
+                leadingInstitutionDoiList: [],
+                involvedInstitutionDoiList: [],
+                brandList: [],
             }
         };
     },
@@ -82,6 +80,7 @@ export default {
                     } else {
                         _this.projectForm.brandList = item.brand.split(",");
                     }
+                    console.log("@@@", _this.projectForm)
                 }
             })
         },

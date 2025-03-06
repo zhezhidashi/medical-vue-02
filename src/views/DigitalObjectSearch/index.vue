@@ -1,6 +1,6 @@
 <template>
     <div style="text-align: center; margin: 24px 40px 24px 40px;">
-        <el-form :model="searchForm" label-width="auto" class="SearchForm" :rules="doSearchRules">
+        <el-form :model="searchForm" label-width="auto" class="SearchForm">
             <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
                 <el-input v-model="searchForm.doi"></el-input>
             </el-form-item>
@@ -16,10 +16,10 @@
                         :key="index"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item prop="institutionDoi" label="所属机构" class="SearchFormItem">
-                <el-select placeholder="请选择" filterable v-model="searchForm.institutionDoi">
+            <el-form-item prop="institutionName" label="所属机构" class="SearchFormItem">
+                <el-select placeholder="请选择" filterable v-model="searchForm.institutionName">
                     <el-option v-for="(item, index) in institutionList" :label="item.name"
-                        :value="item.doi" :key="index"></el-option>
+                        :value="item.name" :key="index"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -33,7 +33,6 @@
             <el-table-column prop="description" label="数字对象描述" align="center"></el-table-column>
             <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
             <el-table-column prop="institutionName" label="所属机构" align="center"></el-table-column>
-            <el-table-column prop="institutionDoi" label="所属机构标识" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
                     <el-button type="primary" size="small" @click="apply(props.row, props.$index)">申请</el-button>
@@ -75,7 +74,7 @@
 <script>
 import { postForm, getForm, postFormPublic, getFormPublic } from '@/api/data'
 export default {
-    name: "DigitalObjectApply",
+    name: "DigitalObjectSearch",
     data() {
         return {
             pages: 1,
@@ -90,7 +89,7 @@ export default {
                 description: '',
                 // 项目DOI，这个从 $store 中获取
                 projectDoi: "",
-                institutionDoi: '',
+                institutionName: '',
                 pageNo: 1,
                 pageSize: 10,
             },
@@ -104,27 +103,13 @@ export default {
             ],
 
             institutionList: [
-                // { name: "机构1", doi: "123" },
-                // { name: "机构2", doi: "124" }
+                { name: "中日友好医院"},
+                { name: "正大天晴药业集团股份有限公司"},
+                { name: "复旦大学附属华东医院"},
+                { name: "数据分析机构"},
             ],
 
-            doSearchRules: {
-                // institutionDoi: [
-                //     { required: true, message: '请选择数字对象所属机构', trigger: 'change' }
-                // ],
-            },
-
-            resultTable: [
-                {
-                    doi: 'doi1',
-                    name: '加密',
-                    description: '加密',
-                    type: "EDC",
-                    institutionName: '456789',
-                    institutionDoi: "123",
-                    source: "",
-                },
-            ],
+            resultTable: [],
 
             applyVisible: false,
             applyForm: {
@@ -151,6 +136,7 @@ export default {
     mounted() {
         // 获取基础数据
         this.getBasicData();
+        this.getData(this.searchForm);
     },
     methods: {
         clickPage(page) {
@@ -164,7 +150,7 @@ export default {
                 doi: this.searchForm.doi,
                 description: this.searchForm.description,
                 type: this.searchForm.type,
-                institutionDoi: this.searchForm.institutionDoi,
+                institutionName: this.searchForm.institutionName,
                 pageSize: 10,
                 pageNo: this.currentPage
             }
@@ -176,36 +162,23 @@ export default {
             // 获取项目DOI
             this.$store.commit('getProjectDoi');
             this.searchForm.projectDoi = this.$store.state.user.projectDoi
-            this.institutionList = [],
-            // 获取机构信息
-            postFormPublic("/institution/insList/list", { pageNo: 1, pageSize: 10000 }, _this, function (res) {
-                for (let item of res.data.list) {
-                    _this.institutionList.push({
-                        name: item.name,
-                        doi: item.doi
-                    })
-                }
-                _this.getData(_this.searchForm)
-            })
         },
 
         getData(postData) {
             let _this = this;
             this.resultTable = []
             postFormPublic("/relationship/api/search", postData, _this, function (res) {
+                _this.pages = res.data.pages;
                 for(let item of res.data.list) {
                     _this.resultTable.push({
                         doi: item.doi,
                         name: item.name,
                         description: item.description,
                         type: item.type,
-                        // type: "SDTM",
                         institutionName: item.institutionName,
-                        // institutionName: "中日友好医院",
                         institutionDoi: item.institutionDoi,
                         source: item.source,
                     })
-                    // break;
                 }
             })
         },

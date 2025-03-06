@@ -1,16 +1,16 @@
 <template>
     <div style="text-align: center; margin: 24px 40px 24px 40px;">
         <el-form :model="searchForm" label-width="auto" class="SearchForm">
-            <el-form-item prop="doi" label="数字对象标识" class="SearchFormItem">
+            <el-form-item prop="doi" label="追溯对象标识" class="SearchFormItem">
                 <el-input v-model="searchForm.doi"></el-input>
             </el-form-item>
-            <el-form-item prop="name" label="数字对象名称" class="SearchFormItem">
-                <el-input v-model="searchForm.name"></el-input>
+            <el-form-item prop="appName" label="追溯对象名称" class="SearchFormItem">
+                <el-input v-model="searchForm.appName"></el-input>
             </el-form-item>
-            <el-form-item prop="description" label="数字对象描述" class="SearchFormItem">
-                <el-input v-model="searchForm.description"></el-input>
+            <el-form-item prop="appContent" label="追溯对象描述" class="SearchFormItem">
+                <el-input v-model="searchForm.appContent"></el-input>
             </el-form-item>
-            <el-form-item prop="type" label="数字对象类型" class="SearchFormItem">
+            <el-form-item prop="type" label="追溯对象类型" class="SearchFormItem">
                 <el-select placeholder="请选择" filterable v-model="searchForm.type">
                     <el-option v-for="(item, index) in doTypeList" :label="item.name" :value="item.value"
                         :key="index"></el-option>
@@ -22,10 +22,23 @@
         <el-divider></el-divider>
 
         <el-table :data="resultTable" stripe border style="width: 100%;">
-            <el-table-column prop="doi" label="数字对象标识" align="center"></el-table-column>
-            <el-table-column prop="name" label="数字对象名称" align="center"></el-table-column>
-            <el-table-column prop="description" label="数字对象描述" align="center"></el-table-column>
-            <el-table-column prop="type" label="数字对象类型" align="center"></el-table-column>
+            <el-table-column prop="doi" label="追溯对象标识" align="center"></el-table-column>
+            <el-table-column prop="appName" label="追溯对象名称" align="center"></el-table-column>
+            <el-table-column prop="appContent" label="追溯对象描述" align="center"></el-table-column>
+            <el-table-column prop="type" label="追溯对象类型" align="center"></el-table-column>
+            <!-- <el-table-column prop="sourceList" label="来源" align="center">
+                <template slot-scope="props">
+                    <div v-for="item in props.row.sourceList" :key="item">
+                        <span>{{ item }}</span>
+                    </div>
+                </template>
+            </el-table-column> -->
+            <el-table-column prop="appType" label="申请类型" align="center">
+                <template slot-scope="props">
+                    <el-tag v-if="props.row.appType === 1" type="primary">指针型</el-tag>
+                    <el-tag v-if="props.row.appType === 2" type="success">实体型</el-tag>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" align="center" width="150">
                 <template slot-scope="props">
                     <el-button type="primary" size="small" style="margin: 5px;"
@@ -43,7 +56,7 @@
             </el-pagination>
         </div>
 
-        <el-dialog title="数字对象痕迹" :visible.sync="traceVisible" width="95%" :before-close="cancelWithoutConfirm">
+        <el-dialog title="追溯对象痕迹" :visible.sync="traceVisible" width="80%" :before-close="cancelWithoutConfirm">
             <el-form :model="traceSearchForm" label-width="auto" class="SearchForm">
                 <el-form-item prop="createTimeRange" label="时间" class="SearchFormTimePicker">
                     <el-date-picker value-format="timestamp" type="daterange" v-model="traceSearchForm.createTimeRange"
@@ -89,7 +102,7 @@
 <script>
 import { postForm, getForm, postFormPublic, getFormPublic, postFormIn, getFormIn, exportDataIn } from '@/api/data'
 export default {
-    name: "DigitalObjectList",
+    name: "DigitalObjectOwn",
     data() {
         return {
             pages: 1,
@@ -103,15 +116,12 @@ export default {
 
             searchForm: {
                 doi: '',
-                name: '',
-                description: '',
+                appName: '',
+                appContent: '',
                 type: '',
-                pageSize: 10,
-                pageNo: 1,
             },
 
-            resultTable: [
-            ],
+            resultTable: [],
 
             doTypeList: [
                 { name: "EDC", value: "EDC" },
@@ -128,14 +138,15 @@ export default {
                 doi: "",
                 pageSize: 10,
                 pageNo: 1,
+                createTimeStart: "",
+                createTimeEnd: "",
             },
 
             traceSearchForm: {
                 createTimeRange: "",
             },
 
-            traceTable: [
-            ],
+            traceTable: [],
 
             contractVisible: false,
 
@@ -145,12 +156,11 @@ export default {
                 pageNo: 1,
             },
 
-            contractTable: [
-            ],
+            contractTable: [],
         };
     },
     mounted() {
-        this.getData(this.searchForm)
+        this.getData({})
     },
     methods: {
         clickPage(page) {
@@ -176,23 +186,20 @@ export default {
         },
 
         getData(postData) {
-            this.resultTable = [];
-            this.retraceDoiMap = {};
-            this.$store.commit('getProjectDoi');
-
             let _this = this;
-            postData.projectDoi = _this.$store.state.user.projectDoi;
-
-            postFormPublic("/relationship/api/search", postData, _this, function (res) {
+            this.resultTable = [];
+            postForm('/doApplication/getUserApplication', postData, _this, function (res) {
                 _this.pages = res.data.pages;
-                for (let doIndex = 0; doIndex < res.data.list.length; doIndex++) {
-                    let item = res.data.list[doIndex]
+                for (let doIndex = 0; doIndex < res.data.records.length; doIndex++) {
+                    let item = res.data.records[doIndex]
                     _this.resultTable.push({
-                        doi: item.doi,
-                        name: item.name,
-                        description: item.description,
+                        appId: item.appId,
+                        doi: item.appType === 1 ? item.doi : item.newDoi,
+                        appName: item.appName,
+                        appContent: item.appContent,
                         sourceList: JSON.parse(item.source),
                         type: item.type,
+                        appType: item.appType,
                         retraceList: [],
                     })
                     _this.getDoSource(item.doi, _this.resultTable[doIndex].retraceList);
@@ -235,16 +242,9 @@ export default {
             this.traceGetData(this.tracePostData);
         },
 
-        searchTrace() {
-            if (this.traceSearchForm.createTimeRange && this.traceSearchForm.createTimeRange.length > 1) {
-                this.tracePostData.createTimeStart = new Date(this.traceSearchForm.createTimeRange[0]);
-                this.tracePostData.createTimeEnd = new Date(this.traceSearchForm.createTimeRange[1] + 86399999);
-            }
-            this.traceGetData(this.tracePostData);
-        },
-
         traceGetData(postData) {
-            this.traceTable = []
+            this.traceTable = [
+            ]
             let _this = this;
             postFormPublic(`/traceV2/getTraceInfoByDoi`, postData, _this, function (res) {
                 _this.pagesTrace = res.data.pages;
@@ -257,6 +257,16 @@ export default {
                     })
                 }
             })
+        },
+
+        searchTrace() {
+            if (this.traceSearchForm.createTimeRange && this.traceSearchForm.createTimeRange.length > 1) {
+                if (this.traceSearchForm.createTimeRange && this.traceSearchForm.createTimeRange.length > 1) {
+                    this.tracePostData.createTimeStart = new Date(this.traceSearchForm.createTimeRange[0]);
+                    this.tracePostData.createTimeEnd = new Date(this.traceSearchForm.createTimeRange[1] + 86399999);
+                }
+            }
+            this.traceGetData(this.tracePostData);
         },
 
         contractHistory(row, index) {
@@ -312,5 +322,4 @@ export default {
     width: 100%;
     border: 0px;
 }
-
 </style>
