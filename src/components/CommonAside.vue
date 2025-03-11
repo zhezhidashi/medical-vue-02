@@ -70,10 +70,10 @@ export default {
                 this.$store.commit('getUserid');
                 let userid = this.$store.state.user.userid
                 if (userid === "85998b3446f4479bb1528171fbd36cd0") {
-                    window.open("http://8.130.160.66:8086/Login?insName=" + insName, "_self")
+                    window.open("http://8.130.160.66:8086/Login?insName=" + insName)
                 }
                 else {
-                    window.open("http://8.130.160.66:8085/Login?insName=" + insName, "_self")
+                    window.open("http://8.130.160.66:8085/Login?insName=" + insName)
                 }
                 
             }
