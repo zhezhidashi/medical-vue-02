@@ -69,13 +69,14 @@ export default {
                 let insName = this.$store.state.user.insName
                 this.$store.commit('getUserid');
                 let userid = this.$store.state.user.userid
+                this.$store.commit('getProjectDoi');
+                let projectDoi = this.$store.state.user.projectDoi;
                 if (userid === "85998b3446f4479bb1528171fbd36cd0") {
-                    window.open("http://8.130.160.66:8086/Login?insName=" + insName)
+                    window.open(`http://8.130.160.66:8086/Login?insName=${insName}&projectDoi=${projectDoi}`)
                 }
                 else {
-                    window.open("http://8.130.160.66:8085/Login?insName=" + insName)
+                    window.open(`http://8.130.160.66:8085/Login?insName=${insName}&projectDoi=${projectDoi}`)
                 }
-                
             }
             else if (key === '3') {
                 this.$router.push('/DigitalObjectSearch')
@@ -84,13 +85,15 @@ export default {
                 this.$router.push('/DigitalObjectApproval')
             }
             else if (key === '5') {
-                this.$store.commit('getUserid');
-                let userid = this.$store.state.user.userid
-                if (userid === "85998b3446f4479bb1528171fbd36cd0") {
-                    this.$router.push('/DigitalObjectOwn')
-                } else {
-                    this.$router.push('/DigitalObjectList')
-                }
+                this.$router.push('/DigitalObjectList')
+
+                // this.$store.commit('getUserid');
+                // let userid = this.$store.state.user.userid
+                // if (userid === "85998b3446f4479bb1528171fbd36cd0") {
+                //     this.$router.push('/DigitalObjectOwn')
+                // } else {
+                //     this.$router.push('/DigitalObjectList')
+                // }
             }
         },
     },

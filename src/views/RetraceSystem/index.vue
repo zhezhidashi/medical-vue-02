@@ -22,11 +22,13 @@
 
 <script>
 import * as echarts from "echarts";
+import { postFormPublic } from "@/api/data";
 export default {
     name: "RetraceSystem",
     data() {
         return {
             // 数字对象详情
+            doi: "",
             retraceList: [
                 {
                     doi: "",
@@ -122,14 +124,37 @@ export default {
             }
         };
     },
-    mounted() {
-        this.retraceList = this.$route.params.retraceList;
-        console.log("***", this.retraceList);
-        this.initEcharts(this.retraceList);
+    async mounted() {
+        this.doi = this.$route.query.doi;
+        // 查询数字对象详情
+        await this.getData();
+        // 查询流转追溯图
+        await this.initEcharts(this.retraceList);
     },
     methods: {
+        // 查询数字对象详情
+        async getData() {
+            let postData = {
+                doi: this.doi,
+            }
+            let _this = this;
+            this.retraceList = [];
+            await postFormPublic("/relationship/retrace", postData, this, (res) => {
+                for (let doIndex = 0; doIndex < res.data.retraceList.length; doIndex++) {
+                    let item = res.data.retraceList[doIndex];
+                    _this.retraceList.push({
+                        doi: item.doi,
+                        name: item.name,
+                        description: item.description,
+                        source: JSON.parse(item.source),
+                        type: item.type
+                    })
+                }
+            });
+        },
+
         // 绘制追溯图
-        initEcharts(retraceList) {
+        async initEcharts(retraceList) {
             for (let idx = 0; idx < retraceList.length; idx++) {
                 this.graphEchartsOptions.series.nodes.push({
                     id: idx,

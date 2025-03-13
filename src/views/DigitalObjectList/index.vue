@@ -32,8 +32,8 @@
                         @click="retrace(props.row, props.$index)">流转追溯</el-button>
                     <el-button type="primary" size="small" style="margin: 5px;"
                         @click="trace(props.row, props.$index)">查看痕迹</el-button>
-                    <el-button @click="contractHistory(props.row, props.$index)" type="primary" size="small"
-                        style="margin: 5px;">权限修改历史</el-button>
+                    <!-- <el-button @click="contractHistory(props.row, props.$index)" type="primary" size="small"
+                        style="margin: 5px;">权限修改历史</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -54,7 +54,7 @@
                     <el-button @click="searchTrace" type="primary">查询</el-button>
                 </el-form-item>
             </el-form>
-            
+
             <el-table :data="traceTable" stripe border style="width: 95%;">
                 <el-table-column prop="createTime" label="时间" align="center"></el-table-column>
                 <el-table-column prop="operation" label="操作内容" align="center"></el-table-column>
@@ -92,7 +92,7 @@ export default {
     name: "DigitalObjectList",
     data() {
         return {
-            pages: 1,
+            pages: 0,
             currentPage: 1,
 
             pagesTrace: 1,
@@ -106,7 +106,7 @@ export default {
                 name: '',
                 description: '',
                 type: '',
-                pageSize: 10,
+                pageSize: 1000,
                 pageNo: 1,
             },
 
@@ -182,45 +182,38 @@ export default {
 
             let _this = this;
             postData.projectDoi = _this.$store.state.user.projectDoi;
-
-            postFormPublic("/relationship/api/search", postData, _this, function (res) {
-                _this.pages = res.data.pages;
-                for (let doIndex = 0; doIndex < res.data.list.length; doIndex++) {
-                    let item = res.data.list[doIndex]
+            _this.pages = 0;
+            postForm('/doApplication/getUserApplication', postData, _this, function (res) {
+                _this.pages += res.data.pages;
+                for (let item of res.data.records) {
                     _this.resultTable.push({
-                        doi: item.doi,
-                        name: item.name,
-                        description: item.description,
-                        sourceList: JSON.parse(item.source),
+                        doi: item.appType === 1 ? item.doi : item.newDoi,
+                        name: item.appName,
+                        description: item.appContent,
                         type: item.type,
-                        retraceList: [],
-                    })
-                    _this.getDoSource(item.doi, _this.resultTable[doIndex].retraceList);
-                }
-            })
-        },
-
-        getDoSource(doi, retraceList) {
-            let _this = this;
-            postFormPublic("/relationship/retrace", { doi }, _this, function (res) {
-                for(let item of res.data.retraceList) {
-                    retraceList.push({
-                        doi: item.doi,
-                        name: item.name,
-                        description: item.description,
-                        source: JSON.parse(item.source),
-                        type: item.type
                     })
                 }
-            })
+                postFormPublic("/relationship/api/search", postData, _this, function (res) {
+                        _this.pages += res.data.pages;
+                        for (let doIndex = 0; doIndex < res.data.list.length; doIndex++) {
+                            let item = res.data.list[doIndex]
+                            _this.resultTable.push({
+                                doi: item.doi,
+                                name: item.name,
+                                description: item.description,
+                                type: item.type,
+                            })
+                        }
+                    })
+            });
         },
 
         retrace(row, index) {
             this.$router.push({
                 path: "/RetraceSystem",
                 name: "RetraceSystem",
-                params: {
-                    retraceList: row.retraceList
+                query: {
+                    doi: row.doi
                 }
             })
         },
@@ -312,5 +305,4 @@ export default {
     width: 100%;
     border: 0px;
 }
-
 </style>

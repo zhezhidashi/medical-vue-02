@@ -20,26 +20,29 @@ export const backend_out_port = backendOutPort
 
 
 // post请求
-export const postForm = (requestUrl, params, This, callback) => {
+export const postForm = async (requestUrl, params, This, callback) => {
     nprogress.start();
     console.log('postForm 的表单', requestUrl, params)
     store.commit('getToken')
     const TokenValue = store.state.user.token;
-    axios.request({
-        url: backendUrl + requestUrl,
-        method: 'post',
-        data: params,
-        headers: {
-            Authorization: "Bearer " + TokenValue
-        }
-    }).then(({ data: res }) => {
+    try {
+        const response = await axios.request({
+            url: backendUrl + requestUrl,
+            method: 'post',
+            data: params,
+            headers: {
+                Authorization: "Bearer " + TokenValue
+            }
+        })
+        const res = response.data;
         nprogress.done()
-        console.log('postForm 的 response: ', requestUrl, res);
-        if (res.code === 200) { 
-            callback(res) 
+
+        if (res.code === 200) {
+            console.log('postForm 的返回', requestUrl, res);
+            callback(res)
         }
         else {
-            if(res.code !== 239 && requestUrl !== "/doApplication/exportApproveDoiOnline") {
+            if (res.code !== 239 && requestUrl !== "/doApplication/exportApproveDoiOnline") {
                 This.$message({
                     message: res.message,
                     type: 'error'
@@ -47,11 +50,11 @@ export const postForm = (requestUrl, params, This, callback) => {
             }
             callback(res)
         }
-    })
-    .catch((err) => {
+
+    } catch (err) {
         nprogress.done()
         console.log('postForm 的 error: ', backendUrl + requestUrl, err);
-    })
+    }
 }
 
 // get请求
@@ -69,11 +72,11 @@ export const getForm = (requestUrl, This, callback) => {
     }).then(({ data: res }) => {
         nprogress.done()
         console.log('getForm 的 response: ', requestUrl, res);
-        if (res.code === 200) { 
-            callback(res) 
+        if (res.code === 200) {
+            callback(res)
         }
         else {
-            if(res.code !== 239) {
+            if (res.code !== 239) {
                 This.$message({
                     message: res.message,
                     type: 'error'
@@ -82,10 +85,10 @@ export const getForm = (requestUrl, This, callback) => {
             callback(res)
         }
     })
-    .catch((err) => {
-        nprogress.done()
-        console.log('getForm 的 error: ', requestUrl, err);
-    })
+        .catch((err) => {
+            nprogress.done()
+            console.log('getForm 的 error: ', requestUrl, err);
+        })
 }
 
 // 登录
@@ -99,22 +102,22 @@ export const loginRequest = (requestUrl, params, This, callback) => {
     }).then(({ data: res }) => {
         nprogress.done()
         console.log('postForm 的 response: ', requestUrl, res);
-        if (res.code === 200) { 
-            if(res.data.userType === 1) {
+        if (res.code === 200) {
+            if (res.data.userType === 1) {
                 // store.commit('setToken', res.data.accessToken)
                 store.commit('setToken', res.data.accessToken)
                 store.commit('setUsername', params.username)
                 store.commit('setUserType', 'user')
-                callback({code: 200, message: '登录成功'})
+                callback({ code: 200, message: '登录成功' })
             }
             else {
                 // store.commit('setToken', res.data.accessToken)
                 store.commit('setToken', res.data.accessToken)
                 store.commit('setUsername', params.username)
                 store.commit('setUserType', 'admin')
-                callback({code: 200, message: '登录成功'})
+                callback({ code: 200, message: '登录成功' })
             }
-            callback(res) 
+            callback(res)
         }
         else {
             This.$message({
@@ -123,26 +126,28 @@ export const loginRequest = (requestUrl, params, This, callback) => {
             });
         }
     })
-    .catch((err) => {
-        nprogress.done()
-        console.log('loginRequest 的 error: ', requestUrl, err);
-    })
+        .catch((err) => {
+            nprogress.done()
+            console.log('loginRequest 的 error: ', requestUrl, err);
+        })
 }
 
-
 // 第三方平台post请求
-export const postFormPublic = (requestUrl, params, This, callback) => {
+export const postFormPublic = async (requestUrl, params, This, callback) => {
     nprogress.start();
     console.log('postFormPublic 的表单', requestUrl, params)
-    axios.request({
-        url: publicUrl + requestUrl,
-        method: 'post',
-        data: params,
-    }).then(({ data: res }) => {
+    try {
+        const response = await axios.request({
+            url: publicUrl + requestUrl,
+            method: 'post',
+            data: params,
+        })
+        const res = response.data;
         nprogress.done()
-        console.log('postFormPublic 的 response: ', publicUrl + requestUrl, res);
-        if (res.code === 200) { 
-            callback(res) 
+        
+        if (res.code === 200) {
+            console.log('postFormPublic 的 response: ', publicUrl + requestUrl, res);
+            callback(res)
         }
         else {
             This.$message({
@@ -151,11 +156,11 @@ export const postFormPublic = (requestUrl, params, This, callback) => {
             });
             callback(res)
         }
-    })
-    .catch((err) => {
+
+    } catch (err) {
         nprogress.done()
         console.log('postFormPublic 的 error: ', publicUrl + requestUrl, err);
-    })
+    }
 }
 
 // 第三方平台的get请求
@@ -167,8 +172,8 @@ export const getFormPublic = (requestUrl, This, callback) => {
     }).then(({ data: res }) => {
         nprogress.done()
         console.log('getFormPublic 的 response: ', publicUrl + requestUrl, res);
-        if (res.code === 200) { 
-            callback(res) 
+        if (res.code === 200) {
+            callback(res)
         }
         else {
             This.$message({
@@ -178,10 +183,10 @@ export const getFormPublic = (requestUrl, This, callback) => {
             callback(res)
         }
     })
-    .catch((err) => {
-        nprogress.done()
-        console.log('getFormPublic 的 error: ', publicUrl + requestUrl, err);
-    })
+        .catch((err) => {
+            nprogress.done()
+            console.log('getFormPublic 的 error: ', publicUrl + requestUrl, err);
+        })
 }
 
 
@@ -196,8 +201,8 @@ export const postFormIn = (requestUrl, params, This, callback) => {
     }).then(({ data: res }) => {
         nprogress.done()
         console.log('postFormIn 的 response: ', backendIn + requestUrl, res);
-        if (res.code === 200) { 
-            callback(res) 
+        if (res.code === 200) {
+            callback(res)
         }
         else {
             This.$message({
@@ -207,10 +212,10 @@ export const postFormIn = (requestUrl, params, This, callback) => {
             callback(res)
         }
     })
-    .catch((err) => {
-        nprogress.done()
-        console.log('postFormIn 的 error: ', backendIn + requestUrl, err);
-    })
+        .catch((err) => {
+            nprogress.done()
+            console.log('postFormIn 的 error: ', backendIn + requestUrl, err);
+        })
 }
 
 // 内网平台的get请求
@@ -222,8 +227,8 @@ export const getFormIn = (requestUrl, This, callback) => {
     }).then(({ data: res }) => {
         nprogress.done()
         console.log('getFormIn 的 response: ', backendIn + requestUrl, res);
-        if (res.code === 200) { 
-            callback(res) 
+        if (res.code === 200) {
+            callback(res)
         }
         else {
             This.$message({
@@ -233,10 +238,10 @@ export const getFormIn = (requestUrl, This, callback) => {
             callback(res)
         }
     })
-    .catch((err) => {
-        nprogress.done()
-        console.log('getFormIn 的 error: ', backendIn + requestUrl, err);
-    })
+        .catch((err) => {
+            nprogress.done()
+            console.log('getFormIn 的 error: ', backendIn + requestUrl, err);
+        })
 }
 
 // 导出数据
@@ -254,8 +259,8 @@ export const exportDataIn = (requestUrl, params, This, callback) => {
         console.log('内网 exportData 的 response: ', backendIn, res);
         callback(res)
     })
-    .catch((err) => {
-        nprogress.done()
-        console.log('内网 exportData 的 error: ', backendIn + requestUrl, err);
-    })
+        .catch((err) => {
+            nprogress.done()
+            console.log('内网 exportData 的 error: ', backendIn + requestUrl, err);
+        })
 }

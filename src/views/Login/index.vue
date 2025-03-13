@@ -94,7 +94,7 @@ export default {
         // }
         // else if (userid === "cad5417cf1924e57b9ff89708a6cc380") {
         //     _this.$store.commit("setNormalUsername", "pku-user-004")
-        //     _this.$store.commit("setInsName", "数据分析方");
+        //     _this.$store.commit("setInsName", "数据分析机构");
         // }
         // else if (userid === "69431cf525f54dca9bd004433199f782") {
         //     _this.$store.commit("setNormalUsername", "pku-user-005")
