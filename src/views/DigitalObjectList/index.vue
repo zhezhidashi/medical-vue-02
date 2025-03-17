@@ -182,9 +182,9 @@ export default {
 
             let _this = this;
             postData.projectDoi = _this.$store.state.user.projectDoi;
-            _this.pages = 0;
+            _this.pages = 1;
             postForm('/doApplication/getUserApplication', postData, _this, function (res) {
-                _this.pages += res.data.pages;
+                // _this.pages += res.data.pages;
                 for (let item of res.data.records) {
                     _this.resultTable.push({
                         doi: item.appType === 1 ? item.doi : item.newDoi,
@@ -194,7 +194,7 @@ export default {
                     })
                 }
                 postFormPublic("/relationship/api/search", postData, _this, function (res) {
-                        _this.pages += res.data.pages;
+                        // _this.pages += res.data.pages;
                         for (let doIndex = 0; doIndex < res.data.list.length; doIndex++) {
                             let item = res.data.list[doIndex]
                             _this.resultTable.push({
