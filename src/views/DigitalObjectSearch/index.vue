@@ -35,7 +35,10 @@
             <el-table-column prop="institutionName" label="所属机构" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
-                    <el-button type="primary" size="small" @click="apply(props.row, props.$index)">申请</el-button>
+                    <el-button v-if="props.row.status === 1" type="primary" size="small" @click="apply(props.row, props.$index)">申请</el-button>
+                    <el-tag v-if="props.row.status === 2" type="success">已申请</el-tag>
+                    <el-tag v-if="props.row.status === 3" type="success">已通过</el-tag>
+                    <el-tag v-if="props.row.status === 4" type="danger">已拒绝</el-tag>
                 </template>
             </el-table-column>
         </el-table>
@@ -178,6 +181,7 @@ export default {
                         institutionName: item.institutionName,
                         institutionDoi: item.institutionDoi,
                         source: item.source,
+                        status: item.status,
                     })
                 }
             })

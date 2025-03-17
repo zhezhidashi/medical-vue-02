@@ -71,11 +71,13 @@ export default {
                 let userid = this.$store.state.user.userid
                 this.$store.commit('getProjectDoi');
                 let projectDoi = this.$store.state.user.projectDoi;
+                this.$store.commit('getProid');
+                let proid = this.$store.state.user.proid;
                 if (userid === "85998b3446f4479bb1528171fbd36cd0") {
-                    window.open(`http://8.130.160.66:8086/Login?insName=${insName}&projectDoi=${projectDoi}`)
+                    window.open(`http://8.130.160.66:8086/Login?insName=${insName}&projectDoi=${projectDoi}&proid=${proid}`)
                 }
                 else {
-                    window.open(`http://8.130.160.66:8085/Login?insName=${insName}&projectDoi=${projectDoi}`)
+                    window.open(`http://8.130.160.66:8085/Login?insName=${insName}&projectDoi=${projectDoi}&proid=${proid}`)
                 }
             }
             else if (key === '3') {
