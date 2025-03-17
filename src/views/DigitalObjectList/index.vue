@@ -185,6 +185,7 @@ export default {
             _this.pages = 1;
             postForm('/doApplication/getUserApplication', postData, _this, function (res) {
                 // _this.pages += res.data.pages;
+                res.data.records.reverse();
                 for (let item of res.data.records) {
                     _this.resultTable.push({
                         doi: item.appType === 1 ? item.doi : item.newDoi,
