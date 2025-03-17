@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { postForm } from '@/api/data'
+import { postForm, postFormPublic } from '@/api/data'
 export default {
     name: "DigitalObjectApproval",
     data() {

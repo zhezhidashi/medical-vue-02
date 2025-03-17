@@ -37,7 +37,7 @@
                 <template slot-scope="props">
                     <el-button v-if="props.row.status === 1" type="primary" size="small"
                         @click="apply(props.row, props.$index)">申请</el-button>
-                    <el-tag v-if="props.row.status === 2" type="success">已申请</el-tag>
+                    <el-tag v-if="props.row.status === 2" type="info">已申请</el-tag>
                     <el-tag v-if="props.row.status === 3" type="success">已通过</el-tag>
                     <el-tag v-if="props.row.status === 4" type="danger">已拒绝</el-tag>
                 </template>
