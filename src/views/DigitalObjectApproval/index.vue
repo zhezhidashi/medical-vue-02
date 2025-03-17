@@ -112,6 +112,7 @@ export default {
             ],
 
             approvalForm: {
+                doi: undefined,
                 appId: undefined,
                 status: undefined,
             },
@@ -181,7 +182,8 @@ export default {
             console.log(row, index);
             this.approvalDialogVisible = true;
             this.approvalForm.appId = row.appId;
-            this.approvalForm.status = undefined;
+            this.approvalForm.status = row.status;
+            this.approvalForm.doi = row.doi;
         },
         // 取消审批
         approvalCancel() {
@@ -220,7 +222,14 @@ export default {
                         _this.approvalDialogVisible = false;
                         _this.getData(_this.searchForm);
                     })
-                    
+
+                    // 修改数字对象状态
+                    if (postData.status === 1) {
+                        postFormPublic('/relationship/api/updateStatus', { doi: _this.approvalForm.doi, status: 3 }, _this, function (res) { })
+                    }
+                    else if (postData.status === 2) {
+                        postFormPublic('/relationship/api/updateStatus', { doi: _this.approvalForm.doi, status: 4 }, _this, function (res) { })
+                    }
                 }
             })
         }

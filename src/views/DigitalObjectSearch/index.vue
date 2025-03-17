@@ -18,8 +18,8 @@
             </el-form-item>
             <el-form-item prop="institutionName" label="所属机构" class="SearchFormItem">
                 <el-select placeholder="请选择" filterable v-model="searchForm.institutionName">
-                    <el-option v-for="(item, index) in institutionList" :label="item.name"
-                        :value="item.name" :key="index"></el-option>
+                    <el-option v-for="(item, index) in institutionList" :label="item.name" :value="item.name"
+                        :key="index"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -35,7 +35,8 @@
             <el-table-column prop="institutionName" label="所属机构" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="props">
-                    <el-button v-if="props.row.status === 1" type="primary" size="small" @click="apply(props.row, props.$index)">申请</el-button>
+                    <el-button v-if="props.row.status === 1" type="primary" size="small"
+                        @click="apply(props.row, props.$index)">申请</el-button>
                     <el-tag v-if="props.row.status === 2" type="success">已申请</el-tag>
                     <el-tag v-if="props.row.status === 3" type="success">已通过</el-tag>
                     <el-tag v-if="props.row.status === 4" type="danger">已拒绝</el-tag>
@@ -59,8 +60,7 @@
                 </el-form-item>
                 <el-form-item label="申请文件" prop="appFile">
                     <el-upload drag action="/backendOut/file/upload"
-                        :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }"
-                        :on-success="uploadSuccess">
+                        :headers="{ 'Authorization': 'Bearer ' + $store.state.user.token }" :on-success="uploadSuccess">
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                     </el-upload>
@@ -106,10 +106,10 @@ export default {
             ],
 
             institutionList: [
-                { name: "中日友好医院"},
-                { name: "正大天晴药业集团股份有限公司"},
-                { name: "复旦大学附属华东医院"},
-                { name: "数据分析机构"},
+                { name: "中日友好医院" },
+                { name: "正大天晴药业集团股份有限公司" },
+                { name: "复旦大学附属华东医院" },
+                { name: "数据分析机构" },
             ],
 
             resultTable: [],
@@ -172,7 +172,7 @@ export default {
             this.resultTable = []
             postFormPublic("/relationship/api/search", postData, _this, function (res) {
                 _this.pages = res.data.pages;
-                for(let item of res.data.list) {
+                for (let item of res.data.list) {
                     _this.resultTable.push({
                         doi: item.doi,
                         name: item.name,
@@ -236,7 +236,7 @@ export default {
 
             let _this = this;
 
-            if(this.applyForm.appFile === "" || this.applyForm.appType === "") {
+            if (this.applyForm.appFile === "" || this.applyForm.appType === "") {
                 this.$message({
                     type: 'warning',
                     message: '请填写完整信息'
@@ -251,6 +251,9 @@ export default {
                         type: 'success'
                     });
                     _this.applyVisible = false;
+
+                    // 修改数字对象状态
+                    postFormPublic('/relationship/api/updateStatus', { doi: _this.applyForm.doi, status: 2 }, _this, function (res) { })
                 }
             })
         },
